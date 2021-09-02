@@ -18,6 +18,8 @@
 #include <QProgressDialog>
 #include <exception>
 
+#include <QGLFormat>
+
 #include "parser/gcodeviewparse.h"
 
 #include "drawers/origindrawer.h"
