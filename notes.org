@@ -1,0 +1,12 @@
+cd cnc
+git clone https://github.com/Denvi/Candle.git
+cd Candle/src/
+
+sudo apt-get install build-essential 
+sudo apt-get install qt5-default 
+sudo apt-get install qtcreator
+sudo apt-get install libqt5serialport5-dev libqt5serialport5
+
+qmake candle.pro 
+make
+./Candle

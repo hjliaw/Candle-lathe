@@ -1,0 +1,3 @@
+* font too small (at least on screen size at 1920x1080)
+* jog button a bit small
+* ideally with a scalable screen layout and svg icons for tablet
