@@ -688,12 +688,17 @@ void frmMain::updateControlsState() {
     ui->cmdFilePause->ensurePolished();
     ui->cmdFileAbort->ensurePolished();
 
+	// HJL hide Machine Pos, not working, manually edit ui file 
+	//hidden_MPos.setVisible(false);
+	
     // Heightmap
     m_heightMapBorderDrawer.setVisible(ui->chkHeightMapBorderShow->isChecked() && m_heightMapMode);
     m_heightMapGridDrawer.setVisible(ui->chkHeightMapGridShow->isChecked() && m_heightMapMode);
     m_heightMapInterpolationDrawer.setVisible(ui->chkHeightMapInterpolationShow->isChecked() && m_heightMapMode);
 
-    ui->grpProgram->setTitle(m_heightMapMode ? tr("Heightmap") : tr("G-code program"));
+    //ui->grpProgram->setTitle(m_heightMapMode ? tr("Heightmap") : tr("G-code program"));
+	ui->grpProgram->setTitle("");
+	
     ui->grpProgram->setProperty("overrided", m_heightMapMode);
     style()->unpolish(ui->grpProgram);
     ui->grpProgram->ensurePolished();
@@ -981,7 +986,7 @@ void frmMain::onSerialPortReadyRead()
             }
 
             // Update work coordinates
-            int prec = m_settings->units() == 0 ? 3 : 4;
+            int prec = m_settings->units() == 0 ? 2 : 3;
             ui->txtWPosX->setText(QString::number(ui->txtMPosX->text().toDouble() - workOffset.x(), 'f', prec));
             ui->txtWPosY->setText(QString::number(ui->txtMPosY->text().toDouble() - workOffset.y(), 'f', prec));
             ui->txtWPosZ->setText(QString::number(ui->txtMPosZ->text().toDouble() - workOffset.z(), 'f', prec));

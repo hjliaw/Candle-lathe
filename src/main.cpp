@@ -90,6 +90,9 @@ int main(int argc, char *argv[])
 
     a.setStyleSheet(a.styleSheet() + "QWidget {font-size: 14pt}");
 
+	// empty title hack
+	a.setStyleSheet("QGroupBox{padding-top:15px; margin-top:-15px}");
+
     frmMain w;
     w.show();
 
