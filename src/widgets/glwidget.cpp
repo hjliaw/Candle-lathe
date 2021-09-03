@@ -84,21 +84,25 @@ void GLWidget::fitDrawable(ShaderDrawable *drawable)
 {
     stopViewAnimation();
 
+	// HJ: even mill mode has the quirks that fit doesn;t really work
+	// likely because of x_pan = y_pan = 0 
     if (drawable != NULL) {
         updateExtremes(drawable);
 
-        double a = m_ySize / 2 / 0.25 * 1.3
+		qDebug() << "x:" << m_xSize << " y:" << m_ySize << " z:" << m_zSize;  
+		
+        double a = m_ySize / 2 / 0.25 * 1.3                + (m_zMax - m_zMin) / 2;
+        double b = m_xSize / 2 / 0.25 * 1.3 / ((double)this->width() / this->height())
                 + (m_zMax - m_zMin) / 2;
-        double b = m_xSize / 2 / 0.25 * 1.3
-                / ((double)this->width() / this->height())
-                + (m_zMax - m_zMin) / 2;
+		
         m_distance = qMax(a, b);
-
         if (m_distance == 0) m_distance = 200;
 
-        m_xLookAt = (m_xMax - m_xMin) / 2 + m_xMin;
-        m_zLookAt = -((m_yMax - m_yMin) / 2 + m_yMin);
-        m_yLookAt = (m_zMax - m_zMin) / 2 + m_zMin;
+		// why y-z flipped and middle one has minus sign ?
+        m_xLookAt =   (m_xMax - m_xMin) / 2 + m_xMin;
+        m_yLookAt =   (m_yMax - m_yMin) / 2 + m_yMin;
+        m_zLookAt =   (m_zMax - m_zMin) / 2 + m_zMin;
+		
     } else {
         m_distance = 200;
         m_xLookAt = 0;
@@ -121,6 +125,10 @@ void GLWidget::fitDrawable(ShaderDrawable *drawable)
     m_yPan = 0;
     m_zoom = 1;
 
+	m_xPan = -0.5;  // HJ hack 
+    m_yPan = +0.5;
+	m_zoom = 0.5;
+		
     updateProjection();
     updateView();
 }

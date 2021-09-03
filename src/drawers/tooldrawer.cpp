@@ -11,6 +11,7 @@ ToolDrawer::ToolDrawer()
     m_rotationAngle = 0;
 }
 
+
 bool ToolDrawer::updateData()
 {
     const int arcs = 4;
@@ -21,51 +22,54 @@ bool ToolDrawer::updateData()
 
     // Prepare vertex
     VertexData vertex;
-    vertex.color = Util::colorToVector(m_color);//QVector3D(1.0, 0.6, 0.0);
+    vertex.color = Util::colorToVector(m_color);  //QVector3D(1.0, 0.6, 0.0);
     vertex.start = QVector3D(sNan, sNan, sNan);
 
+	// this was for mill, change for lathe mode, which is +x toward zero
+	// xy -> zy
+	
     // Draw lines
     for (int i = 0; i < arcs; i++) {
-        double x = m_toolPosition.x() + m_toolDiameter / 2 * cos(m_rotationAngle / 180 * M_PI + (2 * M_PI / arcs) * i);
+        double z = m_toolPosition.z() + m_toolDiameter / 2 * cos(m_rotationAngle / 180 * M_PI + (2 * M_PI / arcs) * i);
         double y = m_toolPosition.y() + m_toolDiameter / 2 * sin(m_rotationAngle / 180 * M_PI + (2 * M_PI / arcs) * i);
 
         // Side lines
-        vertex.position = QVector3D(x, y, m_toolPosition.z() + m_endLength);
+        vertex.position = QVector3D(m_toolPosition.x() + m_endLength, y, z);
         m_lines.append(vertex);
-        vertex.position = QVector3D(x, y, m_toolPosition.z() + m_toolLength);
+        vertex.position = QVector3D(m_toolPosition.x() + m_toolLength, y, z);
         m_lines.append(vertex);
 
         // Bottom lines
         vertex.position = QVector3D(m_toolPosition.x(), m_toolPosition.y(), m_toolPosition.z());
         m_lines.append(vertex);
-        vertex.position = QVector3D(x, y, m_toolPosition.z() + m_endLength);
+        vertex.position = QVector3D(m_toolPosition.x() + m_endLength, y, z);
         m_lines.append(vertex);
 
         // Top lines
-        vertex.position = QVector3D(m_toolPosition.x(), m_toolPosition.y(), m_toolPosition.z() + m_toolLength);
+        vertex.position = QVector3D(m_toolPosition.x()+m_toolLength, m_toolPosition.y(), m_toolPosition.z() );
         m_lines.append(vertex);
-        vertex.position = QVector3D(x, y, m_toolPosition.z() + m_toolLength);
+        vertex.position = QVector3D(m_toolPosition.x()+ m_toolLength, y, z );
         m_lines.append(vertex);
 
-        // Zero Z lines
-        vertex.position = QVector3D(m_toolPosition.x(), m_toolPosition.y(), 0);
+        // Zero Z- lines  -> X
+        vertex.position = QVector3D(0,  m_toolPosition.y(), m_toolPosition.z());
         m_lines.append(vertex);
-        vertex.position = QVector3D(x, y, 0);
+        vertex.position = QVector3D(0, y, z);
         m_lines.append(vertex);
     }
 
-    // Draw circles
+    // Draw circles  Q: orientation ?
     // Bottom
-    m_lines += createCircle(QVector3D(m_toolPosition.x(), m_toolPosition.y(), m_toolPosition.z() + m_endLength),
+    m_lines += createCircle(QVector3D(m_toolPosition.x() + m_endLength, m_toolPosition.y(), m_toolPosition.z() ),
                             m_toolDiameter / 2, 20, vertex.color);
 
     // Top
-    m_lines += createCircle(QVector3D(m_toolPosition.x(), m_toolPosition.y(), m_toolPosition.z() + m_toolLength),
+    m_lines += createCircle(QVector3D(m_toolPosition.x() + m_toolLength, m_toolPosition.y(), m_toolPosition.z()),
                             m_toolDiameter / 2, 20, vertex.color);
 
-    // Zero Z circle
+    // Zero Z circle  -> X
     if (m_endLength == 0) {
-        m_lines += createCircle(QVector3D(m_toolPosition.x(), m_toolPosition.y(), 0),
+        m_lines += createCircle(QVector3D( 0, m_toolPosition.y(), m_toolPosition.z()),
                                 m_toolDiameter / 2, 20, vertex.color);
     }
 

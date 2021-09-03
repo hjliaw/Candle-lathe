@@ -714,9 +714,12 @@ void frmMain::updateControlsState() {
     ui->chkTestMode->setVisible(!m_heightMapMode);
     ui->chkAutoScroll->setVisible(ui->splitter->sizes()[1] && !m_heightMapMode);
 
-    ui->tblHeightMap->setVisible(m_heightMapMode);
-    ui->tblProgram->setVisible(!m_heightMapMode);
+    //ui->tblHeightMap->setVisible(m_heightMapMode);
+    //ui->tblProgram->setVisible(!m_heightMapMode);
+    ui->tblHeightMap->setVisible(false);
+    ui->tblProgram->setVisible(false);
 
+	
     ui->widgetHeightMap->setEnabled(!m_processingFile && m_programModel.rowCount() > 1);
     ui->cmdHeightMapMode->setEnabled(!ui->txtHeightMap->text().isEmpty());
 
