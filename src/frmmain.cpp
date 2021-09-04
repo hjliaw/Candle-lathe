@@ -471,7 +471,7 @@ void frmMain::loadSettings()
     ui->grpHeightMap->setChecked(set.value("heightmapPanel", true).toBool());
     ui->grpSpindle->setChecked(set.value("spindlePanel", true).toBool());
     ui->grpOverriding->setChecked(set.value("feedPanel", true).toBool());
-    ui->grpJog->setChecked(set.value("jogPanel", true).toBool());
+    //ui->grpJog->setChecked(set.value("jogPanel", true).toBool());
 
     // Restore last commands list
     ui->cboCommand->addItems(set.value("recentCommands", QStringList()).toStringList());
@@ -530,7 +530,7 @@ void frmMain::saveSettings()
     set.setValue("heightmapPanel", ui->grpHeightMap->isChecked());
     set.setValue("spindlePanel", ui->grpSpindle->isChecked());
     set.setValue("feedPanel", ui->grpOverriding->isChecked());
-    set.setValue("jogPanel", ui->grpJog->isChecked());
+    //set.setValue("jogPanel", ui->grpJog->isChecked());
     set.setValue("keyboardControl", ui->chkKeyboardControl->isChecked());
     set.setValue("autoCompletion", m_settings->autoCompletion());
     set.setValue("units", m_settings->units());
@@ -2808,12 +2808,14 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
             case Qt::Key_2:
                 if (event->type() == QEvent::KeyPress) emit ui->cmdYMinus->pressed(); else emit ui->cmdYMinus->released();
                 break;
+				/* simplify for lathe mode
             case Qt::Key_9:
                 if (event->type() == QEvent::KeyPress) emit ui->cmdZPlus->pressed(); else emit ui->cmdZPlus->released();
                 break;
             case Qt::Key_3:
                 if (event->type() == QEvent::KeyPress) emit ui->cmdZMinus->pressed(); else emit ui->cmdZMinus->released();
                 break;
+				*/
             }
         }
 
@@ -2960,13 +2962,15 @@ void frmMain::on_chkKeyboardControl_toggled(bool checked)
 
 void frmMain::updateJogTitle()
 {
-    if (ui->grpJog->isChecked() || !ui->chkKeyboardControl->isChecked()) {
-        ui->grpJog->setTitle(tr("Jog"));
-    } else if (ui->chkKeyboardControl->isChecked()) {
-        ui->grpJog->setTitle(tr("Jog") + QString(tr(" (%1/%2)"))
-                             .arg(ui->cboJogStep->currentText().toDouble() > 0 ? ui->cboJogStep->currentText() : tr("C"))
-                             .arg(ui->cboJogFeed->currentText()));
-    }
+	// simplified view has no title
+	
+    // if (ui->grpJog->isChecked() || !ui->chkKeyboardControl->isChecked()) {
+    //     ui->grpJog->setTitle(tr("Jog"));
+    // } else if (ui->chkKeyboardControl->isChecked()) {
+    //     ui->grpJog->setTitle(tr("Jog") + QString(tr(" (%1/%2)"))
+    //                          .arg(ui->cboJogStep->currentText().toDouble() > 0 ? ui->cboJogStep->currentText() : tr("C"))
+    //                          .arg(ui->cboJogFeed->currentText()));
+    // }
 }
 
 void frmMain::on_tblProgram_customContextMenuRequested(const QPoint &pos)
@@ -3908,53 +3912,57 @@ void frmMain::jogStep()
     }
 }
 
+// re-map for lathe mode  x->z, y->x (inversed)
+
 void frmMain::on_cmdYPlus_pressed()
-{
-    m_jogVector += QVector3D(0, 1, 0);
-    jogStep();
-}
-
-void frmMain::on_cmdYPlus_released()
-{
-    m_jogVector -= QVector3D(0, 1, 0);
-    jogStep();
-}
-
-void frmMain::on_cmdYMinus_pressed()
-{
-    m_jogVector += QVector3D(0, -1, 0);
-    jogStep();
-}
-
-void frmMain::on_cmdYMinus_released()
-{
-    m_jogVector -= QVector3D(0, -1, 0);
-    jogStep();
-}
-
-void frmMain::on_cmdXPlus_pressed()
-{
-    m_jogVector += QVector3D(1, 0, 0);
-    jogStep();
-}
-
-void frmMain::on_cmdXPlus_released()
-{
-    m_jogVector -= QVector3D(1, 0, 0);
-    jogStep();
-}
-
-void frmMain::on_cmdXMinus_pressed()
 {
     m_jogVector += QVector3D(-1, 0, 0);
     jogStep();
 }
 
-void frmMain::on_cmdXMinus_released()
+void frmMain::on_cmdYPlus_released()
 {
     m_jogVector -= QVector3D(-1, 0, 0);
     jogStep();
 }
+
+void frmMain::on_cmdYMinus_pressed()
+{
+    m_jogVector += QVector3D(+1, 0, 0);
+    jogStep();
+}
+
+void frmMain::on_cmdYMinus_released()
+{
+    m_jogVector -= QVector3D(+1, 0, 0);
+    jogStep();
+}
+
+void frmMain::on_cmdXPlus_pressed()
+{
+    m_jogVector += QVector3D(0, 0, 1);
+    jogStep();
+}
+
+void frmMain::on_cmdXPlus_released()
+{
+    m_jogVector -= QVector3D(0, 0, 1);
+    jogStep();
+}
+
+void frmMain::on_cmdXMinus_pressed()
+{
+    m_jogVector += QVector3D(0, 0, -1);
+    jogStep();
+}
+
+void frmMain::on_cmdXMinus_released()
+{
+    m_jogVector -= QVector3D(0, 0, -1);
+    jogStep();
+}
+
+// HJL: no change here (buttons not visible)
 
 void frmMain::on_cmdZPlus_pressed()
 {

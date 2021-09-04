@@ -509,28 +509,30 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
     double x = 10;
     double y = this->height() - 60;
 
-	// y-space was 15, 3 digits
-    painter.drawText(QPoint(x, y),      QString("X  %1 : %2").arg(m_xMin, 0, 'f', 2).arg(m_xMax, 0, 'f', 2));
-    painter.drawText(QPoint(x, y + 20), QString("Y  %1 : %2").arg(m_yMin, 0, 'f', 2).arg(m_yMax, 0, 'f', 2));
-    painter.drawText(QPoint(x, y + 40), QString("Z  %1 : %2").arg(m_zMin, 0, 'f', 2).arg(m_zMax, 0, 'f', 2));
-    painter.drawText(QPoint(x, y + 60), QString("%1 / %2 / %3").arg(m_xSize, 0, 'f', 2).arg(m_ySize, 0, 'f', 2).arg(m_zSize, 0, 'f', 2));
+	// y-space was 15, 3 digits (HJL: too busy on a small screen)
+    // painter.drawText(QPoint(x, y),      QString("X  %1 : %2").arg(m_xMin, 0, 'f', 2).arg(m_xMax, 0, 'f', 2));
+    // painter.drawText(QPoint(x, y + 20), QString("Y  %1 : %2").arg(m_yMin, 0, 'f', 2).arg(m_yMax, 0, 'f', 2));
+    // painter.drawText(QPoint(x, y + 40), QString("Z  %1 : %2").arg(m_zMin, 0, 'f', 2).arg(m_zMax, 0, 'f', 2));
+    // painter.drawText(QPoint(x, y + 60), QString("%1 / %2 / %3").arg(m_xSize, 0, 'f', 2).arg(m_ySize, 0, 'f', 2).arg(m_zSize, 0
+	//																													, 'f', 2));
 
     QFontMetrics fm(painter.font());
 
-    painter.drawText(QPoint(x, fm.height() + 10), m_parserStatus);
-    painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
-    painter.drawText(QPoint(x, fm.height() * 3 + 10), m_pinState);
+    //painter.drawText(QPoint(x, fm.height() + 10), m_parserStatus);
+    //painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
+    //painter.drawText(QPoint(x, fm.height() * 3 + 10), m_pinState);
 
-    QString str = QString(tr("Vertices: %1")).arg(vertices);
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 36), str);
-    str = QString("FPS: %1").arg(m_fps);
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 54), str);
+	QString str;
+    //QString str = QString(tr("Vertices: %1")).arg(vertices);
+    //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 36), str);
+    //str = QString("FPS: %1").arg(m_fps);
+	//painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 54), str);
 
     str = m_spendTime.toString("hh:mm:ss") + " / " + m_estimatedTime.toString("hh:mm:ss");
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y), str);
+    painter.drawText(QPoint(this->width() - fm.width(str) - 10, this->height() ), str);
 
-    str = m_bufferState;
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 18), str);
+    //str = m_bufferState;
+    //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 18), str);
 
     m_frames++;
 
