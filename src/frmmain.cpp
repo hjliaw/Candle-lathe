@@ -697,7 +697,7 @@ void frmMain::updateControlsState() {
     m_heightMapInterpolationDrawer.setVisible(ui->chkHeightMapInterpolationShow->isChecked() && m_heightMapMode);
 
     //ui->grpProgram->setTitle(m_heightMapMode ? tr("Heightmap") : tr("G-code program"));
-	ui->grpProgram->setTitle("");
+	//ui->grpProgram->setTitle("");   qframe has no title
 	
     ui->grpProgram->setProperty("overrided", m_heightMapMode);
     style()->unpolish(ui->grpProgram);
