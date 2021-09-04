@@ -187,7 +187,7 @@ QSlider::handle:horizontal:hover {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>561</width>
+          <width>621</width>
           <height>480</height>
          </rect>
         </property>
@@ -203,7 +203,7 @@ QSlider::handle:horizontal:hover {
           <height>300</height>
          </size>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_17" stretch="0,0,0,0,0,1,0">
+        <layout class="QVBoxLayout" name="verticalLayout_17" stretch="1,0">
          <property name="spacing">
           <number>7</number>
          </property>
@@ -219,136 +219,6 @@ QSlider::handle:horizontal:hover {
          <property name="bottomMargin">
           <number>8</number>
          </property>
-         <item>
-          <widget class="QToolButton" name="cmdIsometric">
-           <property name="minimumSize">
-            <size>
-             <width>30</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Isometric view</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/images/cube.png</normaloff>:/images/cube.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="cmdTop">
-           <property name="minimumSize">
-            <size>
-             <width>30</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Top view</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/images/cubeTop.png</normaloff>:/images/cubeTop.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="cmdFront">
-           <property name="minimumSize">
-            <size>
-             <width>30</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Front view</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/images/cubeFront.png</normaloff>:/images/cubeFront.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="cmdLeft">
-           <property name="minimumSize">
-            <size>
-             <width>30</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Left view</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/images/cubeLeft.png</normaloff>:/images/cubeLeft.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QToolButton" name="cmdFit">
-           <property name="minimumSize">
-            <size>
-             <width>30</width>
-             <height>30</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Fit</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset resource="images.qrc">
-             <normaloff>:/images/fit_1.png</normaloff>:/images/fit_1.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </widget>
-         </item>
          <item>
           <widget class="QSplitter" name="splitter">
            <property name="orientation">
@@ -535,9 +405,9 @@ QSlider::handle:horizontal:hover {
        <widget class="QFrame" name="grpJog">
         <property name="geometry">
          <rect>
-          <x>560</x>
+          <x>613</x>
           <y>10</y>
-          <width>234</width>
+          <width>181</width>
           <height>314</height>
          </rect>
         </property>
@@ -773,12 +643,15 @@ QSlider::handle:horizontal:hover {
                 <property name="editable">
                  <bool>true</bool>
                 </property>
+                <property name="currentText">
+                 <string>Cont</string>
+                </property>
                 <property name="insertPolicy">
                  <enum>QComboBox::NoInsert</enum>
                 </property>
                 <item>
                  <property name="text">
-                  <string>Continuously</string>
+                  <string>Cont</string>
                  </property>
                 </item>
                 <item>
@@ -1438,8 +1311,8 @@ QSlider::handle:horizontal:hover {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>542</width>
-               <height>477</height>
+               <width>235</width>
+               <height>471</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -2316,7 +2189,7 @@ padding-right: 8;</string>
                 </property>
                 <item>
                  <property name="text">
-                  <string>Continuously</string>
+                  <string>Cont</string>
                  </property>
                 </item>
                 <item>
@@ -3325,11 +3198,6 @@ padding-right: 8;</string>
   <tabstop>cmdFileSend</tabstop>
   <tabstop>cmdFilePause</tabstop>
   <tabstop>cmdFileAbort</tabstop>
-  <tabstop>cmdTop</tabstop>
-  <tabstop>cmdIsometric</tabstop>
-  <tabstop>cmdFront</tabstop>
-  <tabstop>cmdLeft</tabstop>
-  <tabstop>cmdFit</tabstop>
   <tabstop>tblHeightMap</tabstop>
  </tabstops>
  <resources>

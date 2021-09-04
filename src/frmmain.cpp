@@ -116,11 +116,12 @@ frmMain::frmMain(QWidget *parent) :
     ui->cmdYMinus->setBackColor(ui->cmdXMinus->backColor());
     ui->cmdYPlus->setBackColor(ui->cmdXMinus->backColor());
 
-    ui->cmdFit->setParent(ui->glwVisualizer);
-    ui->cmdIsometric->setParent(ui->glwVisualizer);
-    ui->cmdTop->setParent(ui->glwVisualizer);
-    ui->cmdFront->setParent(ui->glwVisualizer);
-    ui->cmdLeft->setParent(ui->glwVisualizer);
+	// removed
+    //ui->cmdFit->setParent(ui->glwVisualizer);
+    //ui->cmdIsometric->setParent(ui->glwVisualizer);
+    //ui->cmdTop->setParent(ui->glwVisualizer);
+    //ui->cmdFront->setParent(ui->glwVisualizer);
+    //ui->cmdLeft->setParent(ui->glwVisualizer);
 
     ui->cmdHeightMapBorderAuto->setMinimumHeight(ui->chkHeightMapBorderShow->sizeHint().height());
     ui->cmdHeightMapCreate->setMinimumHeight(ui->cmdFileOpen->sizeHint().height());
@@ -1416,7 +1417,7 @@ void frmMain::onTimerStateQuery()
 
 void frmMain::onVisualizatorRotationChanged()
 {
-    ui->cmdIsometric->setChecked(false);
+	//    ui->cmdIsometric->setChecked(false);
 }
 
 void frmMain::onScroolBarAction(int action)
@@ -1433,12 +1434,12 @@ void frmMain::onJogTimer()
 
 void frmMain::placeVisualizerButtons()
 {
-    ui->cmdIsometric->move(ui->glwVisualizer->width() - ui->cmdIsometric->width() - 8, 8);
-    ui->cmdTop->move(ui->cmdIsometric->geometry().left() - ui->cmdTop->width() - 8, 8);
-    ui->cmdLeft->move(ui->glwVisualizer->width() - ui->cmdLeft->width() - 8, ui->cmdIsometric->geometry().bottom() + 8);
-    ui->cmdFront->move(ui->cmdLeft->geometry().left() - ui->cmdFront->width() - 8, ui->cmdIsometric->geometry().bottom() + 8);
-//    ui->cmdFit->move(ui->cmdTop->geometry().left() - ui->cmdFit->width() - 10, 10);
-    ui->cmdFit->move(ui->glwVisualizer->width() - ui->cmdFit->width() - 8, ui->cmdLeft->geometry().bottom() + 8);
+	//    ui->cmdIsometric->move(ui->glwVisualizer->width() - ui->cmdIsometric->width() - 8, 8);
+	//    ui->cmdTop->move(ui->cmdIsometric->geometry().left() - ui->cmdTop->width() - 8, 8);
+	//    ui->cmdLeft->move(ui->glwVisualizer->width() - ui->cmdLeft->width() - 8, ui->cmdIsometric->geometry().bottom() + 8);
+	//    ui->cmdFront->move(ui->cmdLeft->geometry().left() - ui->cmdFront->width() - 8, ui->cmdIsometric->geometry().bottom() + 8);
+	//    ui->cmdFit->move(ui->cmdTop->geometry().left() - ui->cmdFit->width() - 10, 10);
+	//    ui->cmdFit->move(ui->glwVisualizer->width() - ui->cmdFit->width() - 8, ui->cmdLeft->geometry().bottom() + 8);
 }
 
 void frmMain::showEvent(QShowEvent *se)
@@ -1839,10 +1840,10 @@ void frmMain::clearTable()
     m_programModel.insertRow(0);
 }
 
-void frmMain::on_cmdFit_clicked()
-{
-    ui->glwVisualizer->fitDrawable(m_currentDrawer);
-}
+//void frmMain::on_cmdFit_clicked()
+//{
+//   ui->glwVisualizer->fitDrawable(m_currentDrawer);
+//}
 
 void frmMain::on_cmdFileSend_clicked()
 {
@@ -2263,18 +2264,18 @@ void frmMain::applySettings() {
                 .arg(normal.name()).arg(highlight.name())
                 .arg(base.name()));
 
-    ui->cmdFit->setIcon(QIcon(":/images/fit_1.png"));
-    ui->cmdIsometric->setIcon(QIcon(":/images/cube.png"));
-    ui->cmdFront->setIcon(QIcon(":/images/cubeFront.png"));
-    ui->cmdLeft->setIcon(QIcon(":/images/cubeLeft.png"));
-    ui->cmdTop->setIcon(QIcon(":/images/cubeTop.png"));
+	//ui->cmdFit->setIcon(QIcon(":/images/fit_1.png"));
+    //ui->cmdIsometric->setIcon(QIcon(":/images/cube.png"));
+    //ui->cmdFront->setIcon(QIcon(":/images/cubeFront.png"));
+    //ui->cmdLeft->setIcon(QIcon(":/images/cubeLeft.png"));
+    //ui->cmdTop->setIcon(QIcon(":/images/cubeTop.png"));
 
     if (!light) {
-        Util::invertButtonIconColors(ui->cmdFit);
-        Util::invertButtonIconColors(ui->cmdIsometric);
-        Util::invertButtonIconColors(ui->cmdFront);
-        Util::invertButtonIconColors(ui->cmdLeft);
-        Util::invertButtonIconColors(ui->cmdTop);
+        //Util::invertButtonIconColors(ui->cmdFit);
+        //Util::invertButtonIconColors(ui->cmdIsometric);
+        //Util::invertButtonIconColors(ui->cmdFront);
+        //Util::invertButtonIconColors(ui->cmdLeft);
+        //Util::invertButtonIconColors(ui->cmdTop);
     }
 
     ui->cboCommand->setMinimumHeight(ui->cboCommand->height());
@@ -2677,25 +2678,25 @@ void frmMain::on_actFileSave_triggered()
     }
 }
 
-void frmMain::on_cmdTop_clicked()
-{
-    ui->glwVisualizer->setTopView();
-}
+// void frmMain::on_cmdTop_clicked()
+// {
+//     ui->glwVisualizer->setTopView();
+// }
 
-void frmMain::on_cmdFront_clicked()
-{
-    ui->glwVisualizer->setFrontView();
-}
+// void frmMain::on_cmdFront_clicked()
+// {
+//     ui->glwVisualizer->setFrontView();
+// }
 
-void frmMain::on_cmdLeft_clicked()
-{
-    ui->glwVisualizer->setLeftView();
-}
+// void frmMain::on_cmdLeft_clicked()
+// {
+//     ui->glwVisualizer->setLeftView();
+// }
 
-void frmMain::on_cmdIsometric_clicked()
-{
-    ui->glwVisualizer->setIsometricView();
-}
+// void frmMain::on_cmdIsometric_clicked()
+// {
+//     ui->glwVisualizer->setIsometricView();
+// }
 
 void frmMain::on_actAbout_triggered()
 {
@@ -3912,7 +3913,7 @@ void frmMain::jogStep()
     }
 }
 
-// re-map for lathe mode  x->z, y->x (inversed)
+// HJL: re-map for lathe mode  x->z, y->x (inversed)
 
 void frmMain::on_cmdYPlus_pressed()
 {
