@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="72"
+   height="72"
+   viewBox="0 0 19.05 19.043333"
+   version="1.1"
+   id="svg5114"
+   inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
+   sodipodi:docname="stop_small.svg"
+   inkscape:export-filename="C:\Users\Brenda Ellen Make\Dropbox\Brenda\Linux CNC\Presentation\Menu Help.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <defs
+     id="defs5108">
+    <linearGradient
+       inkscape:collect="always"
+       id="Button_Grey3">
+      <stop
+         style="stop-color:#c1c1c1;stop-opacity:1"
+         offset="0"
+         id="stop2444" />
+      <stop
+         id="stop2446"
+         offset="0.52059144"
+         style="stop-color:#868686;stop-opacity:1" />
+      <stop
+         style="stop-color:#5c5c5c;stop-opacity:1"
+         offset="1"
+         id="stop2448" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#Button_Grey3"
+       id="linearGradient1304"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1667012,0,0,1.1667068,263.60236,-26.526864)"
+       x1="24.9"
+       y1="34.499996"
+       x2="30.1"
+       y2="34.499996" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.61554814"
+     inkscape:cx="297.40278"
+     inkscape:cy="463.65215"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer4"
+     showgrid="false"
+     inkscape:window-width="1852"
+     inkscape:window-height="1009"
+     inkscape:window-x="68"
+     inkscape:window-y="34"
+     inkscape:window-maximized="1"
+     showguides="false"
+     inkscape:guide-bbox="true"
+     objecttolerance="13"
+     gridtolerance="12"
+     guidetolerance="28"
+     inkscape:snap-perpendicular="true"
+     inkscape:lockguides="false"
+     inkscape:snap-path-clip="true"
+     inkscape:snap-tangential="true"
+     units="px"
+     viewbox-height="285.65"
+     inkscape:showpageshadow="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid9591"
+       dotted="false"
+       empspacing="8"
+       units="px"
+       spacingx="1.0583333"
+       spacingy="1.057963"
+       originy="-3.9673051"
+       originx="-51.593739" />
+    <sodipodi:guide
+       position="105.03958,132.45568"
+       orientation="1,0"
+       id="guide5994"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="299.77292,-7.8012805"
+       orientation="1,0"
+       id="guide5996"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="100.80625,242.53805"
+       orientation="1,0"
+       id="guide6002"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-47.985784,173.77047"
+       orientation="1,0"
+       id="guide6004"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="-27.252073,0.26454653"
+       orientation="0,1"
+       id="guide6006"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="304.00625,199.16157"
+       orientation="1,0"
+       id="guide6743"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="452.17292,146.31602"
+       orientation="1,0"
+       id="guide6168"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="415.13126,233.0164"
+       orientation="1,0"
+       id="guide8169"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="252.51063,260.68353"
+       orientation="0,1"
+       id="guide2730"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="348.74248,247.77022"
+       orientation="0,1"
+       id="guide4907"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="160.07293,242.53807"
+       orientation="0,1"
+       id="guide4133"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="290.24793,117.69841"
+       orientation="0,1"
+       id="guide4189"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="293.82476,78.048526"
+       orientation="1,0"
+       id="guide17450"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5111">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Menu Run"
+     style="display:inline"
+     transform="translate(-51.593738,-66.98129)">
+    <g
+       id="g2092"
+       transform="translate(9.3605435,-231.84478)"
+       style="display:inline" />
+    <g
+       id="g2407"
+       transform="translate(30.862508,-199.71246)"
+       style="display:inline" />
+    <g
+       style="stroke-width:0.05669475;stroke-miterlimit:4;stroke-dasharray:none"
+       id="g1354"
+       transform="matrix(3.1748894,0,0,3.1749045,104.69194,-862.321)">
+      <rect
+         style="fill:url(#linearGradient1304);fill-opacity:1;stroke:#000000;stroke-width:0.16667208;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="rect1302"
+         width="5.8335056"
+         height="5.8335338"
+         x="292.77002"
+         y="10.807751"
+         rx="0.72919273"
+         transform="rotate(89.999962)" />
+      <rect
+         y="294.54669"
+         x="-14.816612"
+         height="2.2801793"
+         width="2.1845808"
+         id="rect1329"
+         style="opacity:1;vector-effect:none;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.05669475;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <rect
+       y="-143.40791"
+       x="4.2333331"
+       height="178.77361"
+       width="148.65324"
+       id="rect2488"
+       style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:none;stroke-width:0.20000002;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       inkscape:export-filename="C:\Users\Brenda Ellen Make\Desktop\Torch2.png"
+       inkscape:export-xdpi="304.79999"
+       inkscape:export-ydpi="304.79999" />
+  </g>
+</svg>

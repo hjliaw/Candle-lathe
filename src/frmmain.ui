@@ -250,10 +250,10 @@ QSlider::handle:horizontal:hover {
        <widget class="QFrame" name="grpJog">
         <property name="geometry">
          <rect>
-          <x>613</x>
-          <y>3</y>
-          <width>181</width>
-          <height>241</height>
+          <x>600</x>
+          <y>-10</y>
+          <width>191</width>
+          <height>261</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -301,30 +301,33 @@ QSlider::handle:horizontal:hover {
                  <number>0</number>
                 </property>
                 <item>
-                  <widget class="StyledToolButton" name="cmdYPlus">
-					<property name="sizePolicy">
-					  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-						<horstretch>0</horstretch>
-						<verstretch>0</verstretch>
-					  </sizepolicy>
-					</property>
-					<property name="minimumSize">
-					  <size>
-						<width>50</width>
-						<height>50</height>
-					  </size>
-					</property>
-					<property name="icon">
-					  <iconset resource="images.qrc">
-                      <normaloff>:/images/jog_Xminus.svg</normaloff>:/images/jog_Xminus.svg</iconset>
-					</property>
-					<property name="iconSize">
-					  <size>
-						<width>50</width>
-						<height>50</height>
-					  </size>
-					</property>
-                  </widget>
+                 <widget class="QToolButton" name="cmdYPlus">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">border: none</string>
+                  </property>
+                  <property name="icon">
+                   <iconset resource="images.qrc">
+                    <normaloff>:/images/jog_Xminus.svg</normaloff>:/images/jog_Xminus.svg</iconset>
+                  </property>
+                  <property name="iconSize">
+                   <size>
+                    <width>50</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
@@ -334,7 +337,7 @@ QSlider::handle:horizontal:hover {
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="StyledToolButton" name="cmdStop">
+                 <widget class="QToolButton" name="cmdStop">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -350,86 +353,25 @@ QSlider::handle:horizontal:hover {
                   <property name="toolTip">
                    <string>Stop</string>
                   </property>
+                  <property name="styleSheet">
+                   <string notr="true">border: none</string>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>
                   <property name="icon">
                    <iconset resource="images.qrc">
-                    <normaloff>:/images/brake.png</normaloff>:/images/brake.png</iconset>
+                    <normaloff>:/images/stop_small.svg</normaloff>:/images/stop_small.svg</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
-                    <width>30</width>
-                    <height>30</height>
+                    <width>50</width>
+                    <height>50</height>
                    </size>
                   </property>
                  </widget>
                 </item>
                </layout>
-              </item>
-              <item row="2" column="0">
-               <widget class="StyledToolButton" name="cmdXMinus">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>50</width>
-                  <height>50</height>
-                 </size>
-                </property>
-                <property name="toolTip">
-                 <string>X-</string>
-                </property>
-                <property name="text">
-                 <string>...</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="images.qrc">
-                  <normaloff>:/images/jog_Zminus.svg</normaloff>:/images/jog_Zminus.svg</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>50</width>
-                  <height>50</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="2">
-               <widget class="StyledToolButton" name="cmdXPlus">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="minimumSize">
-                 <size>
-                  <width>50</width>
-                  <height>50</height>
-                 </size>
-                </property>
-                <property name="toolTip">
-                 <string>X+</string>
-                </property>
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="icon">
-                  <iconset resource="images.qrc">
-				  <normaloff>:/images/jog_Zplus.svg</normaloff>:/images/jog_Zplus.svg</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>50</width>
-                  <height>50</height>
-                 </size>
-                </property>
-               </widget>
               </item>
               <item row="3" column="1">
                <layout class="QHBoxLayout" name="horizontalLayout_13">
@@ -437,7 +379,7 @@ QSlider::handle:horizontal:hover {
                  <number>0</number>
                 </property>
                 <item>
-                 <widget class="StyledToolButton" name="cmdYMinus">
+                 <widget class="QToolButton" name="cmdYMinus">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                     <horstretch>0</horstretch>
@@ -452,6 +394,10 @@ QSlider::handle:horizontal:hover {
                   </property>
                   <property name="toolTip">
                    <string>Y-</string>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">border: none
+</string>
                   </property>
                   <property name="text">
                    <string/>
@@ -469,6 +415,78 @@ QSlider::handle:horizontal:hover {
                  </widget>
                 </item>
                </layout>
+              </item>
+              <item row="2" column="2">
+               <widget class="QToolButton" name="cmdXPlus">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>X+</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none
+</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset resource="images.qrc">
+                  <normaloff>:/images/jog_Zplus.svg</normaloff>:/images/jog_Zplus.svg</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QToolButton" name="cmdXMinus">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>X-</string>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">border: none
+</string>
+                </property>
+                <property name="text">
+                 <string>...</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="images.qrc">
+                  <normaloff>:/images/jog_Zminus.svg</normaloff>:/images/jog_Zminus.svg</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>50</width>
+                  <height>50</height>
+                 </size>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -586,31 +604,14 @@ QSlider::handle:horizontal:hover {
          </item>
         </layout>
        </widget>
-       <widget class="QPushButton" name="pushButton_RUN">
-        <property name="geometry">
-         <rect>
-          <x>630</x>
-          <y>260</y>
-          <width>141</width>
-          <height>31</height>
-         </rect>
+       <widget class="QToolButton" name="btnRUNSTOP">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>18</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>RUN</string>
-        </property>
-       </widget>
-       <widget class="QToolButton" name="psuhButton_STOP">
         <property name="geometry">
          <rect>
           <x>660</x>
-          <y>310</y>
+          <y>280</y>
           <width>90</width>
           <height>90</height>
          </rect>
@@ -1308,8 +1309,8 @@ QSlider::handle:horizontal:hover {
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>559</width>
-               <height>477</height>
+               <width>235</width>
+               <height>471</height>
               </rect>
              </property>
              <property name="sizePolicy">

@@ -111,10 +111,11 @@ frmMain::frmMain(QWidget *parent) :
     m_currentModel = &m_programModel;
     m_transferCompleted = true;
 
-    ui->cmdXMinus->setBackColor(QColor(153, 180, 209));
-    ui->cmdXPlus->setBackColor(ui->cmdXMinus->backColor());
-    ui->cmdYMinus->setBackColor(ui->cmdXMinus->backColor());
-    ui->cmdYPlus->setBackColor(ui->cmdXMinus->backColor());
+	// want to use toolButton
+    //ui->cmdXMinus->setBackColor(QColor(153, 180, 209));
+    //ui->cmdXPlus->setBackColor(ui->cmdXMinus->backColor());
+    //ui->cmdYMinus->setBackColor(ui->cmdXMinus->backColor());
+    //ui->cmdYPlus->setBackColor(ui->cmdXMinus->backColor());
 
 	// removed
     //ui->cmdFit->setParent(ui->glwVisualizer);
@@ -289,8 +290,7 @@ frmMain::frmMain(QWidget *parent) :
     // HJL: hack to set size, works but why do I need it ? size values do not affect outcome 
     ui->glwVisualizer->resize(500,300);
 
-	ui->psuhButton_STOP->setIcon( QIcon("images/stop.svg") );
-
+	ui->btnRUNSTOP->setIcon( QIcon("images/run_big_green.svg") );
 }
 
 frmMain::~frmMain()

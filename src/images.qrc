@@ -48,6 +48,8 @@
 		<file>images/jog_Zplus.svg</file>
 		<file>images/jog_Xminus.svg</file>
 		<file>images/jog_Xplus.svg</file>
-		<file>images/stop.svg</file>	
+		<file>images/stop_big_red.svg</file>
+		<file>images/run_big_green.svg</file>
+		<file>images/stop_small.svg</file>		
     </qresource>
 </RCC>
