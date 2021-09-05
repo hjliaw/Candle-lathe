@@ -534,6 +534,9 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
     //str = m_bufferState;
     //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 18), str);
 
+	//qDebug() << this << " w=" << this->width() << " h=" << this->height(); 
+	// why 100x30 ??
+	
     m_frames++;
 
 #ifdef GLES

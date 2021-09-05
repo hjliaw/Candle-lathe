@@ -204,13 +204,14 @@ frmMain::frmMain(QWidget *parent) :
 
     ui->glwVisualizer->addDrawable(m_originDrawer);
     ui->glwVisualizer->addDrawable(m_codeDrawer);
-    ui->glwVisualizer->addDrawable(m_probeDrawer);
+    //ui->glwVisualizer->addDrawable(m_probeDrawer);
     ui->glwVisualizer->addDrawable(&m_toolDrawer);
-    ui->glwVisualizer->addDrawable(&m_heightMapBorderDrawer);
-    ui->glwVisualizer->addDrawable(&m_heightMapGridDrawer);
-    ui->glwVisualizer->addDrawable(&m_heightMapInterpolationDrawer);
-    ui->glwVisualizer->addDrawable(&m_selectionDrawer);
-    ui->glwVisualizer->fitDrawable();
+    //ui->glwVisualizer->addDrawable(&m_heightMapBorderDrawer);
+    //ui->glwVisualizer->addDrawable(&m_heightMapGridDrawer);
+    //ui->glwVisualizer->addDrawable(&m_heightMapInterpolationDrawer);
+    //ui->glwVisualizer->addDrawable(&m_selectionDrawer);
+    //ui->glwVisualizer->fitDrawable();
+
 
     connect(ui->glwVisualizer, SIGNAL(rotationChanged()), this, SLOT(onVisualizatorRotationChanged()));
     connect(ui->glwVisualizer, SIGNAL(resized()), this, SLOT(placeVisualizerButtons()));
@@ -285,6 +286,11 @@ frmMain::frmMain(QWidget *parent) :
     if (qApp->arguments().count() > 1 && isGCodeFile(qApp->arguments().last())) {
         loadFile(qApp->arguments().last());
     }
+
+    // HJL: hack to set size, works but why do I need it ? size values do not affect outcome 
+    ui->glwVisualizer->resize();
+
+
 }
 
 frmMain::~frmMain()
@@ -409,12 +415,11 @@ void frmMain::loadSettings()
     m_settings->resize(set.value("formSettingsSize", m_settings->size()).toSize());
     QByteArray splitterState = set.value("splitter", QByteArray()).toByteArray();
 
-    if (splitterState.length() == 0) {
-        ui->splitter->setStretchFactor(0, 1);
-        ui->splitter->setStretchFactor(1, 1);
-    } else ui->splitter->restoreState(splitterState);
-
-    ui->chkAutoScroll->setVisible(ui->splitter->sizes()[1]);
+    // if (splitterState.length() == 0) {
+    //     ui->splitter->setStretchFactor(0, 1);
+    //     ui->splitter->setStretchFactor(1, 1);
+    // } else ui->splitter->restoreState(splitterState);
+    //ui->chkAutoScroll->setVisible(ui->splitter->sizes()[1]);
     resizeCheckBoxes();
 
     ui->cboCommand->setMinimumHeight(ui->cboCommand->height());
@@ -524,7 +529,7 @@ void frmMain::saveSettings()
     set.setValue("queryStateTime", m_settings->queryStateTime());
     set.setValue("autoScroll", ui->chkAutoScroll->isChecked());
     set.setValue("header", ui->tblProgram->horizontalHeader()->saveState());
-    set.setValue("splitter", ui->splitter->saveState());
+    //set.setValue("splitter", ui->splitter->saveState());
     set.setValue("formGeometry", this->saveGeometry());
     set.setValue("formSettingsSize", m_settings->size());    
     set.setValue("userCommandsPanel", ui->grpUserCommands->isChecked());
@@ -713,12 +718,12 @@ void frmMain::updateControlsState() {
     ui->cboJogFeed->setStyleSheet(ui->cboJogStep->styleSheet());
 
     ui->chkTestMode->setVisible(!m_heightMapMode);
-    ui->chkAutoScroll->setVisible(ui->splitter->sizes()[1] && !m_heightMapMode);
-
+	
+    //ui->chkAutoScroll->setVisible(ui->splitter->sizes()[1] && !m_heightMapMode);
     //ui->tblHeightMap->setVisible(m_heightMapMode);
     //ui->tblProgram->setVisible(!m_heightMapMode);
-    ui->tblHeightMap->setVisible(false);
-    ui->tblProgram->setVisible(false);
+    //ui->tblHeightMap->setVisible(false);
+    ui->tblProgram->setVisible(true);
 
 	
     ui->widgetHeightMap->setEnabled(!m_processingFile && m_programModel.rowCount() > 1);
@@ -1202,7 +1207,7 @@ void frmMain::onSerialPortReadyRead()
 
                             // Store Z in table
                             m_heightMapModel.setData(m_heightMapModel.index(row, column), z, Qt::UserRole);
-                            ui->tblHeightMap->update(m_heightMapModel.index(m_heightMapModel.rowCount() - 1 - row, column));
+                            //ui->tblHeightMap->update(m_heightMapModel.index(m_heightMapModel.rowCount() - 1 - row, column));
                             updateHeightMapInterpolationDrawer();
                         }
 
@@ -1481,11 +1486,11 @@ void frmMain::resizeEvent(QResizeEvent *re)
 
 void frmMain::resizeTableHeightMapSections()
 {
-    if (ui->tblHeightMap->horizontalHeader()->defaultSectionSize()
-            * ui->tblHeightMap->horizontalHeader()->count() < ui->glwVisualizer->width())
-        ui->tblHeightMap->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch); else {
-        ui->tblHeightMap->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-    }
+    // if (ui->tblHeightMap->horizontalHeader()->defaultSectionSize()
+    //         * ui->tblHeightMap->horizontalHeader()->count() < ui->glwVisualizer->width())
+    //     ui->tblHeightMap->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch); else {
+    //     ui->tblHeightMap->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    // }
 }
 
 void frmMain::resizeCheckBoxes()
@@ -1647,7 +1652,7 @@ void frmMain::resetHeightmap()
     m_heightMapInterpolationDrawer.setData(NULL);
 //    updateHeightMapInterpolationDrawer();
 
-    ui->tblHeightMap->setModel(NULL);
+//    ui->tblHeightMap->setModel(NULL);
     m_heightMapModel.resize(1, 1);
 
     ui->txtHeightMap->clear();
@@ -2993,20 +2998,20 @@ void frmMain::on_splitter_splitterMoved(int pos, int index)
     Q_UNUSED(pos)
     Q_UNUSED(index)
 
-    static bool tableCollapsed = ui->splitter->sizes()[1] == 0;
+		//static bool tableCollapsed = ui->splitter->sizes()[1] == 0;
 
-    if ((ui->splitter->sizes()[1] == 0) != tableCollapsed) {
-        this->setUpdatesEnabled(false);
-        ui->chkAutoScroll->setVisible(ui->splitter->sizes()[1] && !m_heightMapMode);
-        updateLayouts();
-        resizeCheckBoxes();
+    // if ((ui->splitter->sizes()[1] == 0) != tableCollapsed) {
+    //     this->setUpdatesEnabled(false);
+    //     ui->chkAutoScroll->setVisible(ui->splitter->sizes()[1] && !m_heightMapMode);
+    //     updateLayouts();
+    //     resizeCheckBoxes();
 
-        this->setUpdatesEnabled(true);
-        ui->chkAutoScroll->repaint();
+    //     this->setUpdatesEnabled(true);
+    //     ui->chkAutoScroll->repaint();
 
-        // Store collapsed state
-        tableCollapsed = ui->splitter->sizes()[1] == 0;
-    }
+    //     // Store collapsed state
+    //     tableCollapsed = ui->splitter->sizes()[1] == 0;
+    // }
 }
 
 void frmMain::updateLayouts()
@@ -3154,8 +3159,8 @@ bool frmMain::updateHeightMapGrid()
     int gridPointsY = ui->txtHeightMapGridY->value();
 
     m_heightMapModel.resize(gridPointsX, gridPointsY);
-    ui->tblHeightMap->setModel(NULL);
-    ui->tblHeightMap->setModel(&m_heightMapModel);
+    //ui->tblHeightMap->setModel(NULL);
+    //ui->tblHeightMap->setModel(&m_heightMapModel);
     resizeTableHeightMapSections();
 
     // Update interpolation
