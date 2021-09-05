@@ -44,5 +44,10 @@
         <file>images/num4.png</file>
         <file>images/handle2s1.png</file>
         <file>images/brake.png</file>
+		<file>images/jog_Zminus.svg</file>
+		<file>images/jog_Zplus.svg</file>
+		<file>images/jog_Xminus.svg</file>
+		<file>images/jog_Xplus.svg</file>
+		<file>images/stop.svg</file>	
     </qresource>
 </RCC>

@@ -1,3 +1,16 @@
 * font too small (at least on screen size at 1920x1080)
 * jog button a bit small
 * ideally with a scalable screen layout and svg icons for tablet
+
+* 20210904  re-arrnage layout for small touch screen
+** main page show 3D view and some basic control buttons
+   jog, set X as (display both radius and diameter), set Z as, Run
+   open file is handled by menu, not pretty, but ok
+** after Run is clicked, should hide/disable Jog/Set-X/Z button, and only Pause and STOP 
+   perhaps speed over-ride (feed and rapid), but ok to leave it on a separate tab
+** also want to display elapsed time and estimated time
+   TODO: estimated time is not very accurate (perhaps not considering accellration and x/z speed difference)
+** may want to display DRO/RPM on main page, but not critical
+   ezNC shows this already
+** TODOS
+*** better icons for Jog/Run/Stop

@@ -212,7 +212,6 @@ frmMain::frmMain(QWidget *parent) :
     //ui->glwVisualizer->addDrawable(&m_selectionDrawer);
     //ui->glwVisualizer->fitDrawable();
 
-
     connect(ui->glwVisualizer, SIGNAL(rotationChanged()), this, SLOT(onVisualizatorRotationChanged()));
     connect(ui->glwVisualizer, SIGNAL(resized()), this, SLOT(placeVisualizerButtons()));
     connect(&m_programModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(onTableCellChanged(QModelIndex,QModelIndex)));
@@ -288,8 +287,9 @@ frmMain::frmMain(QWidget *parent) :
     }
 
     // HJL: hack to set size, works but why do I need it ? size values do not affect outcome 
-    ui->glwVisualizer->resize();
+    ui->glwVisualizer->resize(500,300);
 
+	ui->psuhButton_STOP->setIcon( QIcon("images/stop.svg") );
 
 }
 
