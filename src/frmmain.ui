@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>480</height>
+    <width>885</width>
+    <height>580</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -161,7 +161,7 @@ color: rgb(255, 255, 255);</string>
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>
@@ -795,116 +795,112 @@ color: rgb(255, 255, 255);</string>
        <attribute name="title">
         <string>Console</string>
        </attribute>
-       <widget class="GroupBox" name="grpConsole">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>741</width>
-          <height>401</height>
-         </rect>
-        </property>
-        <property name="autoFillBackground">
-         <bool>false</bool>
-        </property>
-        <property name="title">
-         <string/>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0">
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <property name="leftMargin">
-          <number>8</number>
-         </property>
-         <property name="topMargin">
-          <number>8</number>
-         </property>
-         <property name="rightMargin">
-          <number>8</number>
-         </property>
-         <property name="bottomMargin">
-          <number>8</number>
-         </property>
-         <item>
-          <widget class="QPlainTextEdit" name="txtConsole">
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>1</height>
-            </size>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="GroupBox" name="grpConsole">
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0">
+           <property name="spacing">
+            <number>0</number>
            </property>
-           <property name="font">
-            <font>
-             <pointsize>9</pointsize>
-            </font>
+           <property name="leftMargin">
+            <number>0</number>
            </property>
-           <property name="readOnly">
-            <bool>true</bool>
+           <property name="topMargin">
+            <number>0</number>
            </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,0,0">
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
-            <widget class="ComboBox" name="cboCommand">
-             <property name="styleSheet">
-              <string notr="true">padding-top: 3;
-padding-bottom: 3;
-padding-right: 8;</string>
+            <widget class="QPlainTextEdit" name="txtConsole">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>1</height>
+              </size>
              </property>
-             <property name="editable">
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="readOnly">
               <bool>true</bool>
              </property>
-             <property name="maxVisibleItems">
-              <number>5</number>
-             </property>
-             <property name="maxCount">
-              <number>10</number>
-             </property>
-             <property name="insertPolicy">
-              <enum>QComboBox::InsertAtTop</enum>
-             </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="cmdCommandSend">
-             <property name="toolTip">
-              <string>Send command</string>
-             </property>
-             <property name="icon">
-              <iconset resource="images.qrc">
-               <normaloff>:/images/send_1.png</normaloff>:/images/send_1.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>16</width>
-               <height>16</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="cmdClearConsole">
-             <property name="toolTip">
-              <string>Clear console</string>
-             </property>
-             <property name="icon">
-              <iconset resource="images.qrc">
-               <normaloff>:/images/erase_1.png</normaloff>:/images/erase_1.png</iconset>
-             </property>
-             <property name="iconSize">
-              <size>
-               <width>16</width>
-               <height>16</height>
-              </size>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,0,0">
+             <item>
+              <widget class="ComboBox" name="cboCommand">
+               <property name="styleSheet">
+                <string notr="true">padding-top: 3;
+padding-bottom: 3;
+padding-right: 8;</string>
+               </property>
+               <property name="editable">
+                <bool>true</bool>
+               </property>
+               <property name="maxVisibleItems">
+                <number>5</number>
+               </property>
+               <property name="maxCount">
+                <number>10</number>
+               </property>
+               <property name="insertPolicy">
+                <enum>QComboBox::InsertAtTop</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="cmdCommandSend">
+               <property name="toolTip">
+                <string>Send command</string>
+               </property>
+               <property name="icon">
+                <iconset resource="images.qrc">
+                 <normaloff>:/images/send_1.png</normaloff>:/images/send_1.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="cmdClearConsole">
+               <property name="toolTip">
+                <string>Clear console</string>
+               </property>
+               <property name="icon">
+                <iconset resource="images.qrc">
+                 <normaloff>:/images/erase_1.png</normaloff>:/images/erase_1.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>16</width>
+                 <height>16</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
-         </item>
-        </layout>
-       </widget>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="tab_jog">
        <attribute name="title">
@@ -2357,7 +2353,7 @@ padding-right: 8;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>885</width>
      <height>26</height>
     </rect>
    </property>
