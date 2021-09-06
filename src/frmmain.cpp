@@ -655,6 +655,14 @@ void frmMain::updateControlsState() {
     ui->cmdFileOpen->setEnabled(!m_processingFile);
     ui->cmdFileReset->setEnabled(!m_processingFile && m_programModel.rowCount() > 1);
     ui->cmdFileSend->setEnabled(portOpened && !m_processingFile && m_programModel.rowCount() > 1);
+
+	// HJL: switch icon dynamically
+	ui->btnRUNSTOP->setEnabled(m_processingFile || (portOpened && !m_processingFile && m_programModel.rowCount() > 1));
+	if(m_processingFile )
+		ui->btnRUNSTOP->setIcon( QIcon("images/stop_big_red.svg") );
+	else
+		ui->btnRUNSTOP->setIcon( QIcon("images/run_big_green.svg") );
+	
     ui->cmdFilePause->setEnabled(m_processingFile && !ui->chkTestMode->isChecked());
     ui->cmdFileAbort->setEnabled(m_processingFile);
     ui->actFileOpen->setEnabled(!m_processingFile);
@@ -688,11 +696,14 @@ void frmMain::updateControlsState() {
     style()->unpolish(ui->cmdFileSend);
     style()->unpolish(ui->cmdFilePause);
     style()->unpolish(ui->cmdFileAbort);
+	style()->unpolish(ui->btnRUNSTOP);
+		
     ui->cmdFileOpen->ensurePolished();
     ui->cmdFileReset->ensurePolished();
     ui->cmdFileSend->ensurePolished();
     ui->cmdFilePause->ensurePolished();
     ui->cmdFileAbort->ensurePolished();
+	ui->btnRUNSTOP->ensurePolished();
 
 	// HJL hide Machine Pos, not working, manually edit ui file 
 	//hidden_MPos.setVisible(false);
@@ -1850,6 +1861,16 @@ void frmMain::clearTable()
 //   ui->glwVisualizer->fitDrawable(m_currentDrawer);
 //}
 
+void frmMain::on_btnRUNSTOP_clicked()
+{
+	if( m_processingFile ){
+		on_cmdFileAbort_clicked();
+	}
+	else{
+		on_cmdFileSend_clicked();
+	}
+		
+}
 void frmMain::on_cmdFileSend_clicked()
 {
     if (m_currentModel->rowCount() == 1) return;
