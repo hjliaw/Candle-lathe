@@ -153,7 +153,7 @@ color: rgb(255, 255, 255);</string>
       </property>
       <property name="styleSheet">
        <string notr="true">QTabBar::tab { color: rgb(140, 140, 140); }
-QTabBar::tab:selected { color: #FFFFFF; font-weight: bold; }
+QTabBar::tab:selected { color: #FFFFFF; }
 </string>
       </property>
       <property name="tabPosition">
