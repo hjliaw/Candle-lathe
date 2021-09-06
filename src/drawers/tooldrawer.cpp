@@ -30,6 +30,7 @@ bool ToolDrawer::updateData()
 	double z0  = m_toolPosition.z();
 	double d   = m_toolDiameter;
 	double a   = m_toolAngle * M_PI / 180;
+	double dx  = 0.6;
 
 	// hack for lathe bit, if angle > 0 right-hand tool  (may want second color to high light
 	
@@ -39,8 +40,14 @@ bool ToolDrawer::updateData()
 	vertex.position = QVector3D(x0 + d/tan(a),   y0, z0 + d);      m_lines.append(vertex);
 	vertex.position = QVector3D(x0 + d/tan(a)+d, y0, z0 + d);      m_lines.append(vertex);
 
-	vertex.position = QVector3D(x0 + d+d/tan(a), y0, z0 + d);      m_lines.append(vertex);
-	vertex.position = QVector3D(x0 + d,          y0, z0);          m_lines.append(vertex);
+	vertex.position = QVector3D(x0 + dx*d/tan(a),             y0, z0 + dx*d);  m_lines.append(vertex);
+	vertex.position = QVector3D(x0 + dx*d/tan(a)+dx*d/sin(a), y0, z0 + dx*d);  m_lines.append(vertex);
+
+	vertex.position = QVector3D(x0 + dx*d/tan(a)+dx*d/sin(a), y0, z0 + dx*d);  m_lines.append(vertex);
+	vertex.position = QVector3D(x0              +dx*d/sin(a), y0, z0);         m_lines.append(vertex);
+		
+	//vertex.position = QVector3D(x0 + d+d/tan(a), y0, z0 + d);      m_lines.append(vertex);
+	//vertex.position = QVector3D(x0 + d,          y0, z0);          m_lines.append(vertex);
 
 	vertex.position = QVector3D(x0 + d, y0, z0);                   m_lines.append(vertex);
 	vertex.position = QVector3D(x0,     y0, z0);                   m_lines.append(vertex);
