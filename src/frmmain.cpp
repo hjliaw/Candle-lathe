@@ -289,9 +289,11 @@ frmMain::frmMain(QWidget *parent) :
     }
 
     // HJL: hack to set size, works but why do I need it ? size values do not affect outcome 
-    ui->glwVisualizer->resize(500,300);
+	// not necessary if auto-expand
+    //ui->glwVisualizer->resize(500,300);
+	//ui->btnRUNSTOP->setIcon( QIcon("images/run_big_green.svg") );
 
-	ui->btnRUNSTOP->setIcon( QIcon("images/run_big_green.svg") );
+	// TODO: want to reduce the top margin of txtConsole
 }
 
 frmMain::~frmMain()
