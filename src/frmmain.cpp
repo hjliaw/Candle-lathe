@@ -1049,6 +1049,7 @@ void frmMain::onSerialPortReadyRead()
                     }
                     if (!drawnLines.isEmpty()) m_currentDrawer->update(drawnLines);
                 } else if (m_lastDrawnLineIndex < list.count()) {
+					// happens often with rpi3 ? why
                     qDebug() << "tool missed:" << list.at(m_lastDrawnLineIndex)->getLineNumber()
                              << m_currentModel->data(m_currentModel->index(m_fileProcessedCommandIndex, 4)).toInt()
                              << m_fileProcessedCommandIndex;
