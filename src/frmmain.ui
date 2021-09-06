@@ -152,13 +152,15 @@ color: rgb(255, 255, 255);</string>
        <bool>false</bool>
       </property>
       <property name="styleSheet">
-       <string notr="true"/>
+       <string notr="true">QTabBar::tab { color: rgb(140, 140, 140); }
+QTabBar::tab:selected { color: #FFFFFF; font-weight: bold; }
+</string>
       </property>
       <property name="tabPosition">
        <enum>QTabWidget::South</enum>
       </property>
       <property name="tabShape">
-       <enum>QTabWidget::Rounded</enum>
+       <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
        <number>0</number>
@@ -180,7 +182,7 @@ color: rgb(255, 255, 255);</string>
         </size>
        </property>
        <attribute name="title">
-        <string>View</string>
+        <string>3D_View</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <property name="leftMargin">
@@ -2024,7 +2026,7 @@ padding-right: 8;</string>
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>559</width>
+               <width>228</width>
                <height>286</height>
               </rect>
              </property>
