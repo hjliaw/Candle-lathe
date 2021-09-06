@@ -25,14 +25,14 @@
 #include "drawers/origindrawer.h"
 #include "drawers/gcodedrawer.h"
 #include "drawers/tooldrawer.h"
-#include "drawers/heightmapborderdrawer.h"
-#include "drawers/heightmapgriddrawer.h"
-#include "drawers/heightmapinterpolationdrawer.h"
+//#include "drawers/heightmapborderdrawer.h"
+//#include "drawers/heightmapgriddrawer.h"
+//#include "drawers/heightmapinterpolationdrawer.h"
 #include "drawers/shaderdrawable.h"
 #include "drawers/selectiondrawer.h"
 
 #include "tables/gcodetablemodel.h"
-#include "tables/heightmaptablemodel.h"
+//#include "tables/heightmaptablemodel.h"
 
 #include "utils/interpolation.h"
 
@@ -88,7 +88,7 @@ public:
     double toolZPosition();
 
 private slots:
-    void updateHeightMapInterpolationDrawer(bool reset = false);
+    //void updateHeightMapInterpolationDrawer(bool reset = false);
     void placeVisualizerButtons();
 
     void onSerialPortReadyRead();
@@ -149,25 +149,25 @@ private slots:
     void on_tblProgram_customContextMenuRequested(const QPoint &pos);
     void on_splitter_splitterMoved(int pos, int index);
     void on_actRecentClear_triggered();
-    void on_grpHeightMap_toggled(bool arg1);
-    void on_chkHeightMapBorderShow_toggled(bool checked);
-    void on_txtHeightMapBorderX_valueChanged(double arg1);
-    void on_txtHeightMapBorderWidth_valueChanged(double arg1);
-    void on_txtHeightMapBorderY_valueChanged(double arg1);
-    void on_txtHeightMapBorderHeight_valueChanged(double arg1);
-    void on_chkHeightMapGridShow_toggled(bool checked);
-    void on_txtHeightMapGridX_valueChanged(double arg1);
-    void on_txtHeightMapGridY_valueChanged(double arg1);
-    void on_txtHeightMapGridZBottom_valueChanged(double arg1);
-    void on_txtHeightMapGridZTop_valueChanged(double arg1);
-    void on_cmdHeightMapMode_toggled(bool checked);
-    void on_chkHeightMapInterpolationShow_toggled(bool checked);
-    void on_cmdHeightMapLoad_clicked();
-    void on_txtHeightMapInterpolationStepX_valueChanged(double arg1);
-    void on_txtHeightMapInterpolationStepY_valueChanged(double arg1);
-    void on_chkHeightMapUse_clicked(bool checked);
-    void on_cmdHeightMapCreate_clicked();
-    void on_cmdHeightMapBorderAuto_clicked();
+    //void on_grpHeightMap_toggled(bool arg1);
+    //void on_chkHeightMapBorderShow_toggled(bool checked);
+    //void on_txtHeightMapBorderX_valueChanged(double arg1);
+    //void on_txtHeightMapBorderWidth_valueChanged(double arg1);
+    //void on_txtHeightMapBorderY_valueChanged(double arg1);
+    //void on_txtHeightMapBorderHeight_valueChanged(double arg1);
+    //void on_chkHeightMapGridShow_toggled(bool checked);
+    //void on_txtHeightMapGridX_valueChanged(double arg1);
+    //void on_txtHeightMapGridY_valueChanged(double arg1);
+    //void on_txtHeightMapGridZBottom_valueChanged(double arg1);
+    //void on_txtHeightMapGridZTop_valueChanged(double arg1);
+    //void on_cmdHeightMapMode_toggled(bool checked);
+    //void on_chkHeightMapInterpolationShow_toggled(bool checked);
+    //void on_cmdHeightMapLoad_clicked();
+    //void on_txtHeightMapInterpolationStepX_valueChanged(double arg1);
+    //void on_txtHeightMapInterpolationStepY_valueChanged(double arg1);
+    //void on_chkHeightMapUse_clicked(bool checked);
+    //void on_cmdHeightMapCreate_clicked();
+    //void on_cmdHeightMapBorderAuto_clicked();
     void on_cmdFileAbort_clicked();
     void on_cmdSpindle_clicked(bool checked);   
 
@@ -220,9 +220,9 @@ private:
     GcodeDrawer *m_currentDrawer;
 
     ToolDrawer m_toolDrawer;
-    HeightMapBorderDrawer m_heightMapBorderDrawer;
-    HeightMapGridDrawer m_heightMapGridDrawer;
-    HeightMapInterpolationDrawer m_heightMapInterpolationDrawer;
+    //HeightMapBorderDrawer m_heightMapBorderDrawer;
+    //HeightMapGridDrawer m_heightMapGridDrawer;
+    //HeightMapInterpolationDrawer m_heightMapInterpolationDrawer;
 
     SelectionDrawer m_selectionDrawer;
 
@@ -230,7 +230,7 @@ private:
     GCodeTableModel m_probeModel;
     GCodeTableModel m_programHeightmapModel;
 
-    HeightMapTableModel m_heightMapModel;
+    //HeightMapTableModel m_heightMapModel;
 
     bool m_programLoading;
     bool m_settingsLoading;
@@ -355,21 +355,21 @@ private:
     void updateLayouts();
     void updateRecentFilesMenu();
     void addRecentFile(QString fileName);
-    void addRecentHeightmap(QString fileName);
+    //void addRecentHeightmap(QString fileName);
     double toMetric(double value);
 
     QRectF borderRectFromTextboxes();
     QRectF borderRectFromExtremes();
-    void updateHeightMapBorderDrawer();
-    bool updateHeightMapGrid();
-    void loadHeightMap(QString fileName);
-    bool saveHeightMap(QString fileName);
+    //void updateHeightMapBorderDrawer();
+    //bool updateHeightMapGrid();
+    //void loadHeightMap(QString fileName);
+    //bool saveHeightMap(QString fileName);
 
     GCodeTableModel *m_currentModel;
     QList<LineSegment *> subdivideSegment(LineSegment *segment);
-    void resizeTableHeightMapSections();
-    void updateHeightMapGrid(double arg1);
-    void resetHeightmap();
+    //void resizeTableHeightMapSections();
+    //void updateHeightMapGrid(double arg1);
+    //void resetHeightmap();
     void storeParserState();
     void restoreParserState();
     void storeOffsets();
