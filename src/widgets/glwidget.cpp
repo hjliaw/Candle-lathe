@@ -87,18 +87,25 @@ void GLWidget::fitDrawable(ShaderDrawable *drawable)
     if (drawable != NULL) {
         updateExtremes(drawable);
 
-        double a = m_ySize / 2 / 0.25 * 1.3
-                + (m_zMax - m_zMin) / 2;
-        double b = m_xSize / 2 / 0.25 * 1.3
-                / ((double)this->width() / this->height())
-                + (m_zMax - m_zMin) / 2;
+        // double a = m_ySize / 2 / 0.25 * 1.3
+        //         + (m_zMax - m_zMin) / 2;
+        // double b = m_xSize / 2 / 0.25 * 1.3
+        //         / ((double)this->width() / this->height())
+        //         + (m_zMax - m_zMin) / 2;
+
+		double ar = (double) this->width() / this->height();
+		double dx = 0.384; // 2*0.25/1.3;
+		
+        double a = m_xSize / dx;
+        double b = m_zSize / dx /ar;
+		
         m_distance = qMax(a, b);
+        if (m_distance == 0) m_distance = 200;  // reasonable guess, tool bit stil visible
 
-        if (m_distance == 0) m_distance = 200;
-
-        m_xLookAt = (m_xMax - m_xMin) / 2 + m_xMin;
-        m_zLookAt = -((m_yMax - m_yMin) / 2 + m_yMin);
-        m_yLookAt = (m_zMax - m_zMin) / 2 + m_zMin;
+		m_xLookAt =   (m_zMax + m_zMin)/2;
+        m_yLookAt =  -(m_xMax + m_xMin)/2;    // lathe hack, original code has minus as well ?
+        m_zLookAt =  0;
+		
     } else {
         m_distance = 200;
         m_xLookAt = 0;
@@ -116,9 +123,9 @@ void GLWidget::fitDrawable(ShaderDrawable *drawable)
         m_ySize = 0;
         m_zSize = 0;
     }
-
-    m_xPan = 0;
-    m_yPan = 0;
+	// was 0,0,1
+    m_xPan = 0;  // -0.5;  NOT always a good starting position
+    m_yPan = 0;  // -0.3;
     m_zoom = 1;
 
     updateProjection();
@@ -411,7 +418,11 @@ void GLWidget::updateView()
     m_viewMatrix.scale(m_zoom, m_zoom, m_zoom);
     m_viewMatrix.translate(-m_xLookAt, -m_yLookAt, -m_zLookAt);
 
-    m_viewMatrix.rotate(-90, 1.0, 0.0, 0.0);
+    m_viewMatrix.rotate( -90, 1.0, 0.0, 0.0);
+
+	// lathe mode needs front view plus 90-deg rot
+	// rotate correctly, but messed up pan/zoom
+	m_viewMatrix.rotate( 90, 0.0, 1.0, 0.0);
 }
 
 #ifdef GLES
@@ -481,29 +492,34 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
     painter.setPen(pen);
 
     double x = 10;
-    double y = this->height() - 60;
+    double y = this->height() - 30;  // lathe only show x/z
+	
+	// cross at center
+	//painter.drawLine(0, this->height()/2, this->width(), this->height()/2 );
+	//painter.drawLine(this->width()/2, 0, this->width()/2, this->height() );
 
-    painter.drawText(QPoint(x, y), QString("X: %1 ... %2").arg(m_xMin, 0, 'f', 3).arg(m_xMax, 0, 'f', 3));
-    painter.drawText(QPoint(x, y + 15), QString("Y: %1 ... %2").arg(m_yMin, 0, 'f', 3).arg(m_yMax, 0, 'f', 3));
-    painter.drawText(QPoint(x, y + 30), QString("Z: %1 ... %2").arg(m_zMin, 0, 'f', 3).arg(m_zMax, 0, 'f', 3));
-    painter.drawText(QPoint(x, y + 45), QString("%1 / %2 / %3").arg(m_xSize, 0, 'f', 3).arg(m_ySize, 0, 'f', 3).arg(m_zSize, 0, 'f', 3));
+    painter.drawText(QPoint(x, y ), QString("X: %1 ... %2").arg(m_xMin, 0, 'f', 3).arg(m_xMax, 0, 'f', 3));
+    //painter.drawText(QPoint(x, y + 15), QString("Y: %1 ... %2").arg(m_yMin, 0, 'f', 3).arg(m_yMax, 0, 'f', 3));
+    painter.drawText(QPoint(x, y + 20), QString("Z: %1 ... %2").arg(m_zMin, 0, 'f', 3).arg(m_zMax, 0, 'f', 3));
+    //painter.drawText(QPoint(x, y + 45), QString("%1 / %2 / %3").arg(m_xSize, 0, 'f', 3).arg(m_ySize, 0, 'f', 3).arg(m_zSize, 0, 'f', 3));
 
     QFontMetrics fm(painter.font());
 
-    painter.drawText(QPoint(x, fm.height() + 10), m_parserStatus);
-    painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
-    painter.drawText(QPoint(x, fm.height() * 3 + 10), m_pinState);
+	// to be replaced with x/z WPos
+    //painter.drawText(QPoint(x, fm.height() + 10), m_parserStatus);
+    //painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
+    //painter.drawText(QPoint(x, fm.height() * 3 + 10), m_pinState);
 
-    QString str = QString(tr("Vertices: %1")).arg(vertices);
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 30), str);
-    str = QString("FPS: %1").arg(m_fps);
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 45), str);
+    //QString str = QString(tr("Vertices: %1")).arg(vertices);
+    //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 30), str);
+    //str = QString("FPS: %1").arg(m_fps);
+    //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 45), str);
 
-    str = m_spendTime.toString("hh:mm:ss") + " / " + m_estimatedTime.toString("hh:mm:ss");
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y), str);
+    QString str = m_spendTime.toString("hh:mm:ss") + " / " + m_estimatedTime.toString("hh:mm:ss");
+    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 20), str);
 
-    str = m_bufferState;
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 15), str);
+    //str = m_bufferState;
+    //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 15), str);
 
     m_frames++;
 
@@ -543,7 +559,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         m_xPan = m_xLastPan - (event->pos().x() - m_lastPos.x()) * 1 / (double)width();
         m_yPan = m_yLastPan + (event->pos().y() - m_lastPos.y()) * 1 / (double)height();
 
-		qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan;
+		qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan  << " zoom=" << m_zoom;
 		
         updateProjection();
     }
@@ -555,14 +571,14 @@ void GLWidget::wheelEvent(QWheelEvent *we)
 	// this zoom has a nice property that point of the mouse is stationary
 	
     if (m_zoom > 0.1 && we->delta() < 0) {
-        m_xPan -= ((double)we->pos().x() / width() - 0.5 + m_xPan) * (1 - 1 / ZOOMSTEP);
+        m_xPan -= ((double)we->pos().x() / width()  - 0.5 + m_xPan) * (1 - 1 / ZOOMSTEP);
         m_yPan += ((double)we->pos().y() / height() - 0.5 - m_yPan) * (1 - 1 / ZOOMSTEP);
 
         m_zoom /= ZOOMSTEP;
     }
     else if (m_zoom < 10 && we->delta() > 0)
     {
-        m_xPan -= ((double)we->pos().x() / width() - 0.5 + m_xPan) * (1 - ZOOMSTEP);
+        m_xPan -= ((double)we->pos().x() / width()  - 0.5 + m_xPan) * (1 - ZOOMSTEP);
         m_yPan += ((double)we->pos().y() / height() - 0.5 - m_yPan) * (1 - ZOOMSTEP);
 
         m_zoom *= ZOOMSTEP;
