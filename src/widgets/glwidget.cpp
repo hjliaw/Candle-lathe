@@ -529,7 +529,7 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
 	//painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 54), str);
 
     str = m_spendTime.toString("hh:mm:ss") + " / " + m_estimatedTime.toString("hh:mm:ss");
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, this->height() ), str);
+    painter.drawText(QPoint(this->width() - fm.width(str) - 10, this->height() - 2 ), str);
 
     //str = m_bufferState;
     //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 18), str);
@@ -584,6 +584,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 void GLWidget::wheelEvent(QWheelEvent *we)
 {
 	// ZOOMSTEP=1.1   m_zoom = 0.1..10
+	// this zoom has a nice property that point of the mouse is stationary
 	
     if (m_zoom > 0.1 && we->delta() < 0) {
         m_xPan -= ((double)we->pos().x() / width()  - 0.5 + m_xPan) * (1 - 1 / ZOOMSTEP);
