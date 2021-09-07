@@ -8,14 +8,14 @@ OriginDrawer::OriginDrawer()
 bool OriginDrawer::updateData()
 {
     m_lines = {
-        // X-axis
+        // X-axis, rotate arrow head to x/z plane
         {QVector3D(0, 0, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
         {QVector3D(9, 0, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
         {QVector3D(10, 0, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
-        {QVector3D(8, 0.3, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
-        {QVector3D(8, 0.3, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
-        {QVector3D(8, -0.3, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
-        {QVector3D(8, -0.3, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
+        {QVector3D(8,  0, 0.3), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
+        {QVector3D(8,  0, 0.3), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
+        {QVector3D(8,  0, -0.3), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
+        {QVector3D(8,  0, -0.3), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
         {QVector3D(10, 0, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
 
         // Y-axis

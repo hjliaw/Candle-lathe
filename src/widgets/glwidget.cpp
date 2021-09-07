@@ -26,10 +26,10 @@ GLWidget::GLWidget(QWidget *parent) : QGLWidget(parent), m_shaderProgram(0)
     m_animateView = false;
     m_updatesEnabled = false;
 
-    m_xRot = -90;
+    m_xRot = 90;
     m_yRot = 0;
 
-    m_xRotTarget = -90;
+    m_xRotTarget = 90;
     m_yRotTarget = 0;
 
     m_zoom = 1;
@@ -84,25 +84,21 @@ void GLWidget::fitDrawable(ShaderDrawable *drawable)
 {
     stopViewAnimation();
 
-	// HJ: even mill mode has the quirks that fit doesn;t really work
-	// likely because of x_pan = y_pan = 0 
     if (drawable != NULL) {
         updateExtremes(drawable);
 
-		qDebug() << "x:" << m_xSize << " y:" << m_ySize << " z:" << m_zSize;  
-		
-        double a = m_ySize / 2 / 0.25 * 1.3                + (m_zMax - m_zMin) / 2;
-        double b = m_xSize / 2 / 0.25 * 1.3 / ((double)this->width() / this->height())
+        double a = m_ySize / 2 / 0.25 * 1.3
                 + (m_zMax - m_zMin) / 2;
-		
+        double b = m_xSize / 2 / 0.25 * 1.3
+                / ((double)this->width() / this->height())
+                + (m_zMax - m_zMin) / 2;
         m_distance = qMax(a, b);
+
         if (m_distance == 0) m_distance = 200;
 
-		// why y-z flipped and middle one has minus sign ?
-        m_xLookAt =   (m_xMax - m_xMin) / 2 + m_xMin;
-        m_yLookAt =   (m_yMax - m_yMin) / 2 + m_yMin;
-        m_zLookAt =   (m_zMax - m_zMin) / 2 + m_zMin;
-		
+        m_xLookAt = (m_xMax - m_xMin) / 2 + m_xMin;
+        m_zLookAt = -((m_yMax - m_yMin) / 2 + m_yMin);
+        m_yLookAt = (m_zMax - m_zMin) / 2 + m_zMin;
     } else {
         m_distance = 200;
         m_xLookAt = 0;
@@ -125,10 +121,6 @@ void GLWidget::fitDrawable(ShaderDrawable *drawable)
     m_yPan = 0;
     m_zoom = 1;
 
-	m_xPan = -0.5;  // HJ hack 
-    m_yPan = +0.5;
-	m_zoom = 0.5;
-		
     updateProjection();
     updateView();
 }
@@ -273,15 +265,13 @@ void GLWidget::setLineWidth(double lineWidth)
 
 void GLWidget::setTopView()
 {
-    m_xRotTarget = -90;
+    m_xRotTarget = 90;
     m_yRotTarget = m_yRot > 180 ? 360 : 0;
     beginViewAnimation();
 }
 
 void GLWidget::setFrontView()
 {
-	// lathe mode, want front view  and rotate 90-degree
-	
     m_xRotTarget = 0;
     m_yRotTarget = m_yRot > 180 ? 360 : 0;
     beginViewAnimation();
@@ -301,12 +291,8 @@ int GLWidget::fps()
 
 void GLWidget::setIsometricView()
 {
-
     m_xRotTarget = 45;
     m_yRotTarget = m_yRot > 180 ? 405 : 45;
-
-	// m_zRotTarget = 45;  NOT defined ?
-	
     beginViewAnimation();
 }
 
@@ -373,8 +359,6 @@ void GLWidget::initializeGL()
 {
 #ifndef GLES
     // Initialize functions
-
-	qDebug() << "init GLES";
     initializeOpenGLFunctions();
 #endif
 
@@ -417,27 +401,17 @@ void GLWidget::updateView()
     double angY = M_PI / 180 * m_yRot;
     double angX = M_PI / 180 * m_xRot;
 
-    QVector3D eye(r * cos(angX) * sin(angY) + m_xLookAt,
-				  r * sin(angX)             + m_yLookAt,
-				  r * cos(angX) * cos(angY) + m_zLookAt);
-	
+    QVector3D eye(r * cos(angX) * sin(angY) + m_xLookAt, r * sin(angX) + m_yLookAt, r * cos(angX) * cos(angY) + m_zLookAt);
     QVector3D center(m_xLookAt, m_yLookAt, m_zLookAt);
-	
-    QVector3D up(fabs(m_xRot) == 90 ? -sin(angY + (m_xRot < 0 ? M_PI : 0)) : 0,
-				 cos(angX),
-				 fabs(m_xRot) == 90 ? -cos(angY + (m_xRot < 0 ? M_PI : 0)) : 0);
+    QVector3D up(fabs(m_xRot) == 90 ? -sin(angY + (m_xRot < 0 ? M_PI : 0)) : 0, cos(angX), fabs(m_xRot) == 90 ? -cos(angY + (m_xRot < 0 ? M_PI : 0)) : 0);
 
-	// HJL: -up doesn't do it
     m_viewMatrix.lookAt(eye, center, up.normalized());
 
-    m_viewMatrix.translate(+m_xLookAt, +m_yLookAt, +m_zLookAt);
+    m_viewMatrix.translate(m_xLookAt, m_yLookAt, m_zLookAt);
     m_viewMatrix.scale(m_zoom, m_zoom, m_zoom);
     m_viewMatrix.translate(-m_xLookAt, -m_yLookAt, -m_zLookAt);
 
-    //m_viewMatrix.rotate(-90, 1.0, 0.0, 0.0);
-
-	// HJL, lathe mode hack. plus setting x_Rot to -90 (a few places)
-	m_viewMatrix.rotate(90, 0, 1.0, 0.0);      
+    m_viewMatrix.rotate(-90, 1.0, 0.0, 0.0);
 }
 
 #ifdef GLES
@@ -509,34 +483,28 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
     double x = 10;
     double y = this->height() - 60;
 
-	// y-space was 15, 3 digits (HJL: too busy on a small screen)
-    // painter.drawText(QPoint(x, y),      QString("X  %1 : %2").arg(m_xMin, 0, 'f', 2).arg(m_xMax, 0, 'f', 2));
-    // painter.drawText(QPoint(x, y + 20), QString("Y  %1 : %2").arg(m_yMin, 0, 'f', 2).arg(m_yMax, 0, 'f', 2));
-    // painter.drawText(QPoint(x, y + 40), QString("Z  %1 : %2").arg(m_zMin, 0, 'f', 2).arg(m_zMax, 0, 'f', 2));
-    // painter.drawText(QPoint(x, y + 60), QString("%1 / %2 / %3").arg(m_xSize, 0, 'f', 2).arg(m_ySize, 0, 'f', 2).arg(m_zSize, 0
-	//																													, 'f', 2));
+    painter.drawText(QPoint(x, y), QString("X: %1 ... %2").arg(m_xMin, 0, 'f', 3).arg(m_xMax, 0, 'f', 3));
+    painter.drawText(QPoint(x, y + 15), QString("Y: %1 ... %2").arg(m_yMin, 0, 'f', 3).arg(m_yMax, 0, 'f', 3));
+    painter.drawText(QPoint(x, y + 30), QString("Z: %1 ... %2").arg(m_zMin, 0, 'f', 3).arg(m_zMax, 0, 'f', 3));
+    painter.drawText(QPoint(x, y + 45), QString("%1 / %2 / %3").arg(m_xSize, 0, 'f', 3).arg(m_ySize, 0, 'f', 3).arg(m_zSize, 0, 'f', 3));
 
     QFontMetrics fm(painter.font());
 
-    //painter.drawText(QPoint(x, fm.height() + 10), m_parserStatus);
-    //painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
-    //painter.drawText(QPoint(x, fm.height() * 3 + 10), m_pinState);
+    painter.drawText(QPoint(x, fm.height() + 10), m_parserStatus);
+    painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
+    painter.drawText(QPoint(x, fm.height() * 3 + 10), m_pinState);
 
-	QString str;
-    //QString str = QString(tr("Vertices: %1")).arg(vertices);
-    //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 36), str);
-    //str = QString("FPS: %1").arg(m_fps);
-	//painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 54), str);
+    QString str = QString(tr("Vertices: %1")).arg(vertices);
+    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 30), str);
+    str = QString("FPS: %1").arg(m_fps);
+    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 45), str);
 
     str = m_spendTime.toString("hh:mm:ss") + " / " + m_estimatedTime.toString("hh:mm:ss");
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, this->height() - 2 ), str);
+    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y), str);
 
-    //str = m_bufferState;
-    //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 18), str);
+    str = m_bufferState;
+    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 15), str);
 
-	//qDebug() << this << " w=" << this->width() << " h=" << this->height(); 
-	// why 100x30 ??
-	
     m_frames++;
 
 #ifdef GLES
@@ -587,21 +555,21 @@ void GLWidget::wheelEvent(QWheelEvent *we)
 	// this zoom has a nice property that point of the mouse is stationary
 	
     if (m_zoom > 0.1 && we->delta() < 0) {
-        m_xPan -= ((double)we->pos().x() / width()  - 0.5 + m_xPan) * (1 - 1 / ZOOMSTEP);
+        m_xPan -= ((double)we->pos().x() / width() - 0.5 + m_xPan) * (1 - 1 / ZOOMSTEP);
         m_yPan += ((double)we->pos().y() / height() - 0.5 - m_yPan) * (1 - 1 / ZOOMSTEP);
 
         m_zoom /= ZOOMSTEP;
     }
     else if (m_zoom < 10 && we->delta() > 0)
     {
-        m_xPan -= ((double)we->pos().x() / width()  - 0.5 + m_xPan) * (1 - ZOOMSTEP);
+        m_xPan -= ((double)we->pos().x() / width() - 0.5 + m_xPan) * (1 - ZOOMSTEP);
         m_yPan += ((double)we->pos().y() / height() - 0.5 - m_yPan) * (1 - ZOOMSTEP);
 
         m_zoom *= ZOOMSTEP;
     }
 
 	qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan << ", zoom=" << m_zoom;
-	
+
     updateProjection();
     updateView();
 }

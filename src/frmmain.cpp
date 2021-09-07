@@ -293,6 +293,8 @@ frmMain::frmMain(QWidget *parent) :
     //ui->glwVisualizer->resize(500,300);
 	//ui->btnRUNSTOP->setIcon( QIcon("images/run_big_green.svg") );
 
+	ui->glwVisualizer->setFrontView();   // lathe mode, 2nd try
+	
 	// TODO: want to reduce the top margin of txtConsole
 }
 
