@@ -7,7 +7,15 @@ OriginDrawer::OriginDrawer()
 // remove rectangular, dim axis color from 1.0 to 
 bool OriginDrawer::updateData()
 {
-    m_lines = {
+    m_lines =
+		{
+		 {QVector3D(0, 0, -100), QVector3D(0.3, 0.3, 0.3), QVector3D(sNan, sNan, sNan)},
+		 {QVector3D(0, 0, +100), QVector3D(0.3, 0.3, 0.3), QVector3D(sNan, sNan, sNan)},
+
+		 {QVector3D(-50, 0, 0), QVector3D(0.3, 0.3, 0.3), QVector3D(sNan, sNan, sNan)},
+		 {QVector3D(+50, 0, 0), QVector3D(0.3, 0.3, 0.3), QVector3D(sNan, sNan, sNan)},
+
+			   
         // X-axis, rotate arrow head to x/z plane
         {QVector3D(0, 0, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},
         {QVector3D(9, 0, 0), QVector3D(0.3, 0.0, 0.0), QVector3D(sNan, sNan, sNan)},

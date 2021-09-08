@@ -2,6 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -10,40 +11,46 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="145.31969"
-   height="145.3197"
-   viewBox="0 0 38.449167 38.435716"
+   width="145.8801"
+   height="143.58261"
+   viewBox="0 0 38.597442 37.976271"
    version="1.1"
    id="svg5114"
    inkscape:version="0.92.5 (2060ec1f9f, 2020-04-08)"
-   sodipodi:docname="run.svg"
+   sodipodi:docname="run_big_green.svg"
    inkscape:export-filename="C:\Users\Brenda Ellen Make\Dropbox\Brenda\Linux CNC\Presentation\Menu Help.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs
      id="defs5108">
     <linearGradient
-       inkscape:collect="always"
-       id="Caution">
+       id="linearGradient2484">
       <stop
-         style="stop-color:#00ff00;stop-opacity:1"
+         style="stop-color:#007800;stop-opacity:1;"
          offset="0"
-         id="stop1755" />
+         id="stop2480" />
       <stop
-         style="stop-color:#009c00;stop-opacity:1"
+         style="stop-color:#001e00;stop-opacity:0.88135594;"
          offset="1"
-         id="stop1757" />
+         id="stop2482" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient2428"
+       osb:paint="solid">
+      <stop
+         style="stop-color:#007800;stop-opacity:1;"
+         offset="0"
+         id="stop2426" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#Caution"
-       id="linearGradient2087"
-       x1="284.49985"
-       y1="-153.66824"
-       x2="296.89288"
-       y2="-153.66824"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(3.0580285,0,0,3.0580756,-710.11886,313.54795)" />
+       xlink:href="#linearGradient2484"
+       id="linearGradient874"
+       x1="137.89552"
+       y1="179.09154"
+       x2="176.49297"
+       y2="179.09154"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -52,9 +59,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.9243852"
-     inkscape:cx="56.789378"
-     inkscape:cy="65.175041"
+     inkscape:zoom="4.9243851"
+     inkscape:cx="13.987246"
+     inkscape:cy="66.02499"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -74,7 +81,8 @@
      inkscape:snap-tangential="true"
      units="px"
      viewbox-height="285.65"
-     inkscape:showpageshadow="false">
+     inkscape:showpageshadow="false"
+     inkscape:snap-page="false">
     <inkscape:grid
        type="xygrid"
        id="grid9591"
@@ -83,70 +91,70 @@
        units="px"
        spacingx="1.0583333"
        spacingy="1.057963"
-       originy="-98.57523"
-       originx="-137.1566" />
+       originy="-98.872328"
+       originx="-137.89553" />
     <sodipodi:guide
-       position="19.47672,37.847761"
+       position="18.737786,37.550661"
        orientation="1,0"
        id="guide5994"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="214.21006,-102.40921"
+       position="213.47113,-102.70631"
        orientation="1,0"
        id="guide5996"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="15.24339,147.93013"
+       position="14.504456,147.63303"
        orientation="1,0"
        id="guide6002"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="-133.54864,79.162551"
+       position="-134.28757,78.86545"
        orientation="1,0"
        id="guide6004"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="-112.81493,-94.343378"
+       position="-113.55386,-94.640476"
        orientation="0,1"
        id="guide6006"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="218.44339,104.55365"
+       position="217.70446,104.25655"
        orientation="1,0"
        id="guide6743"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="366.61006,51.708101"
+       position="365.87113,51.411001"
        orientation="1,0"
        id="guide6168"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="329.5684,138.40848"
+       position="328.82947,138.11138"
        orientation="1,0"
        id="guide8169"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="166.94777,166.07561"
+       position="166.20884,165.77851"
        orientation="0,1"
        id="guide2730"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="263.17962,153.1623"
+       position="262.44069,152.8652"
        orientation="0,1"
        id="guide4907"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="74.510061,147.93015"
+       position="73.771127,147.63305"
        orientation="0,1"
        id="guide4133"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="204.68507,23.090491"
+       position="203.94614,22.793391"
        orientation="0,1"
        id="guide4189"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="208.2619,-16.559396"
+       position="207.52297,-16.856495"
        orientation="1,0"
        id="guide17450"
        inkscape:locked="false" />
@@ -167,8 +175,15 @@
      inkscape:label="Main"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-137.15659,-159.94108)"
+     transform="translate(-137.89552,-160.10348)"
      style="display:inline">
+    <ellipse
+       style="fill:url(#linearGradient874);fill-opacity:1.0;stroke:#000000;stroke-width:0.51490968;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path920"
+       cx="157.19424"
+       cy="179.09154"
+       rx="19.041265"
+       ry="18.737328" />
     <text
        id="text1800"
        y="286.98175"
@@ -237,18 +252,6 @@
          y="302.89554"
          style="stroke-width:0.26458332"
          id="tspan2291" /></text>
-    <rect
-       style="fill:url(#linearGradient2087);fill-opacity:1;stroke:#000000;stroke-width:0.52916664;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect7482"
-       width="37.920002"
-       height="37.919998"
-       x="160.1956"
-       y="-175.34117"
-       rx="2.6997843"
-       transform="rotate(90)"
-       inkscape:export-filename="C:\Users\Brenda Ellen Make\Desktop\Torch2.png"
-       inkscape:export-xdpi="304.79999"
-       inkscape:export-ydpi="304.79999" />
     <g
        id="g7429"
        style="stroke-width:0.04196323;stroke-miterlimit:4;stroke-dasharray:none"
@@ -353,21 +356,21 @@
            y="268.81912" /></flowRegion><flowPara
          id="flowPara2160" /></flowRoot>    <path
        sodipodi:type="star"
-       id="path60"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.38350555;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path2523"
        sodipodi:sides="3"
-       sodipodi:cx="156.44539"
-       sodipodi:cy="179.79321"
-       sodipodi:r1="9.9937773"
-       sodipodi:r2="4.9717669"
-       sodipodi:arg1="0.0053763123"
-       sodipodi:arg2="1.0525738"
+       sodipodi:cx="158.15141"
+       sodipodi:cy="182.0751"
+       sodipodi:r1="13.755622"
+       sodipodi:r2="6.8778114"
+       sodipodi:arg1="-0.011718214"
+       sodipodi:arg2="1.0354793"
        inkscape:flatsided="true"
        inkscape:rounded="0"
        inkscape:randomized="0"
-       d="m 166.43902,179.84694 -15.03698,8.57415 0.0931,-17.30948 z"
-       inkscape:transform-center-x="-0.030264212"
-       inkscape:transform-center-y="-0.70188125"
-       style="fill:#005c00;fill-opacity:1;stroke-width:0.26458332"
-       transform="matrix(0.83206249,0,0,0.76719747,26.930499,41.339635)" />
+       d="m 171.90609,181.91392 -20.49242,12.15368 -0.27919,-23.8238 z"
+       inkscape:transform-center-x="-1.8305241"
+       inkscape:transform-center-y="0.039492065"
+       transform="matrix(0.54336376,0,0,0.49005701,71.108921,90.019435)" />
   </g>
 </svg>

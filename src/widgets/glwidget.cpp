@@ -505,7 +505,13 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
 
     QFontMetrics fm(painter.font());
 
-	// to be replaced with x/z WPos
+	// to be replaced with x/z WPos, but ui not in this scope, tooldrawer has the info, also not declared here
+	// separate widgets looks more profesional anyway
+	//QString xwpos = ui->txtMPosX->text();
+	//QString zwpos = ui->txtMPosZ->text(); 
+	//painter.drawText(QPoint(x, fm.height() + 10), xwpos);
+    //painter.drawText(QPoint(x, fm.height() * 2 + 10), zwpos);
+
     //painter.drawText(QPoint(x, fm.height() + 10), m_parserStatus);
     //painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
     //painter.drawText(QPoint(x, fm.height() * 3 + 10), m_pinState);

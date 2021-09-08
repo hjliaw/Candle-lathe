@@ -1640,7 +1640,8 @@ void frmMain::on_actFileExit_triggered()
 
 void frmMain::on_cmdFileOpen_clicked()
 {
-    if (!m_heightMapMode) {
+    //if (!m_heightMapMode)
+	{
         if (!saveChanges(false)) return;
 
         QString fileName  = QFileDialog::getOpenFileName(this, tr("Open"), m_lastFolder,
@@ -1654,17 +1655,18 @@ void frmMain::on_cmdFileOpen_clicked()
 
             loadFile(fileName);
         }
-    } else {
-        if (!saveChanges(true)) return;
-
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Open"), m_lastFolder, tr("Heightmap files (*.map)"));
-
-        if (fileName != "") {
-            //addRecentHeightmap(fileName);
-            updateRecentFilesMenu();
-            //loadHeightMap(fileName);
-        }
     }
+	// else {
+    //     if (!saveChanges(true)) return;
+
+    //     QString fileName = QFileDialog::getOpenFileName(this, tr("Open"), m_lastFolder, tr("Heightmap files (*.map)"));
+
+    //     if (fileName != "") {
+    //         //addRecentHeightmap(fileName);
+    //         updateRecentFilesMenu();
+    //         //loadHeightMap(fileName);
+    //     }
+    // }
 }
 
 // void frmMain::resetHeightmap()
