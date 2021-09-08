@@ -26,17 +26,13 @@
        inkscape:collect="always"
        id="Button_Grey3">
       <stop
-         style="stop-color:#c1c1c1;stop-opacity:1"
+         style="stop-color:#010937;stop-opacity:1;"
          offset="0"
-         id="stop2444" />
+         id="stop859" />
       <stop
-         id="stop2446"
-         offset="0.52059144"
-         style="stop-color:#868686;stop-opacity:1" />
-      <stop
-         style="stop-color:#5c5c5c;stop-opacity:1"
+         style="stop-color:#929394;stop-opacity:0.99435025;"
          offset="1"
-         id="stop2448" />
+         id="stop861" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
@@ -44,10 +40,10 @@
        id="linearGradient22185"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(-6.069522,0,0,5.8685828,828.16286,-1212.7551)"
-       x1="130"
-       y1="242"
-       x2="130"
-       y2="248" />
+       x1="126.53223"
+       y1="244.8485"
+       x2="132.85434"
+       y2="244.9055" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -56,9 +52,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.61554814"
-     inkscape:cx="132.87682"
-     inkscape:cy="112.68774"
+     inkscape:zoom="3.4820661"
+     inkscape:cx="0.37265321"
+     inkscape:cy="42.375067"
      inkscape:document-units="px"
      inkscape:current-layer="layer14"
      showgrid="false"
@@ -181,14 +177,14 @@
        style="fill:url(#linearGradient22185);fill-opacity:1;stroke:#000000;stroke-width:0.52916658;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <text
        id="text5813-9"
-       y="232.84746"
-       x="34.048065"
-       style="font-style:normal;font-weight:normal;font-size:95.92710876px;line-height:140;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.17999996;stroke-miterlimit:4;stroke-dasharray:none"
+       y="244.54791"
+       x="32.576473"
+       style="font-style:normal;font-weight:normal;font-size:86.02409363px;line-height:140;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#fcfbfb;fill-opacity:1;stroke:none;stroke-width:0.16141771;stroke-miterlimit:4;stroke-dasharray:none"
        xml:space="preserve"
-       transform="scale(1.0005878,0.99941257)"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:21.49411964px;line-height:40;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#000000;fill-opacity:1;stroke-width:0.17999996;stroke-miterlimit:4;stroke-dasharray:none"
-         y="232.84746"
-         x="34.048065"
+       transform="scale(1.053964,0.94879898)"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:19.27517891px;line-height:40;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#fcfbfb;fill-opacity:1;stroke-width:0.16141771;stroke-miterlimit:4;stroke-dasharray:none"
+         y="244.54791"
+         x="32.576473"
          id="tspan5811-8"
          sodipodi:role="line">Z-</tspan></text>
   </g>

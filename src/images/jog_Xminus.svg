@@ -26,17 +26,13 @@
        inkscape:collect="always"
        id="Button_Grey3">
       <stop
-         style="stop-color:#c1c1c1;stop-opacity:1"
+         style="stop-color:#929394;stop-opacity:0.99435025;"
          offset="0"
-         id="stop2444" />
+         id="stop861" />
       <stop
-         id="stop2446"
-         offset="0.52059144"
-         style="stop-color:#868686;stop-opacity:1" />
-      <stop
-         style="stop-color:#5c5c5c;stop-opacity:1"
+         style="stop-color:#010937;stop-opacity:1;"
          offset="1"
-         id="stop2448" />
+         id="stop859" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
@@ -56,9 +52,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.7410331"
-     inkscape:cx="265.41604"
-     inkscape:cy="195.48356"
+     inkscape:zoom="3.4820662"
+     inkscape:cx="152.8392"
+     inkscape:cy="52.962075"
      inkscape:document-units="px"
      inkscape:current-layer="layer14"
      showgrid="false"
@@ -163,7 +159,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -180,16 +176,16 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccsccsccccc" />
     <text
-       transform="scale(1.0005878,0.99941255)"
+       transform="scale(1.067583,0.93669533)"
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:95.92710876px;line-height:140;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.17999996;stroke-miterlimit:4;stroke-dasharray:none"
-       x="68.048637"
-       y="198.67924"
+       style="font-style:normal;font-weight:normal;font-size:83.85108185px;line-height:140;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#fbfcfc;fill-opacity:1;stroke:none;stroke-width:0.15734021;stroke-miterlimit:4;stroke-dasharray:none"
+       x="63.709896"
+       y="212.0631"
        id="text5826-2"><tspan
          sodipodi:role="line"
          id="tspan5824-2"
-         x="68.048637"
-         y="198.67924"
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:22.39177895px;line-height:40;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#000000;fill-opacity:1;stroke-width:0.17999996;stroke-miterlimit:4;stroke-dasharray:none">X-</tspan></text>
+         x="63.709896"
+         y="212.0631"
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:19.5729332px;line-height:40;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#fbfcfc;fill-opacity:1;stroke-width:0.15734021;stroke-miterlimit:4;stroke-dasharray:none">X-</tspan></text>
   </g>
 </svg>

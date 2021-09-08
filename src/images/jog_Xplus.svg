@@ -26,17 +26,13 @@
        inkscape:collect="always"
        id="Button_Grey3">
       <stop
-         style="stop-color:#c1c1c1;stop-opacity:1"
+         style="stop-color:#010937;stop-opacity:1;"
          offset="0"
-         id="stop2444" />
+         id="stop859" />
       <stop
-         id="stop2446"
-         offset="0.52059144"
-         style="stop-color:#868686;stop-opacity:1" />
-      <stop
-         style="stop-color:#5c5c5c;stop-opacity:1"
+         style="stop-color:#929394;stop-opacity:0.99435025;"
          offset="1"
-         id="stop2448" />
+         id="stop861" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
@@ -56,9 +52,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.7410331"
-     inkscape:cx="-144.36422"
-     inkscape:cy="55.051109"
+     inkscape:zoom="3.4820662"
+     inkscape:cx="19.34923"
+     inkscape:cy="53.040808"
      inkscape:document-units="px"
      inkscape:current-layer="layer14"
      showgrid="false"
@@ -181,14 +177,14 @@
        style="fill:url(#linearGradient22187);fill-opacity:1;stroke:#000000;stroke-width:0.52916658;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <text
        id="text5820-9"
-       y="268.40796"
-       x="65.941017"
-       style="font-style:normal;font-weight:normal;font-size:95.92710876px;line-height:140;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.17999996;stroke-miterlimit:4;stroke-dasharray:none"
+       y="266.21097"
+       x="65.925262"
+       style="font-style:normal;font-weight:normal;font-size:84.65104675px;line-height:140;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#fafefa;fill-opacity:1;stroke:none;stroke-width:0.15884127;stroke-miterlimit:4;stroke-dasharray:none"
        xml:space="preserve"
-       transform="scale(1.0005878,0.99941256)"><tspan
-         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:21.49411964px;line-height:40;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#000000;fill-opacity:1;stroke-width:0.17999996;stroke-miterlimit:4;stroke-dasharray:none"
-         y="268.40796"
-         x="65.941017"
+       transform="scale(1.0078132,0.99224736)"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;font-size:18.96752167px;line-height:40;font-family:'Open Sans';-inkscape-font-specification:'Open Sans Semi-Bold';fill:#fafefa;fill-opacity:1;stroke-width:0.15884127;stroke-miterlimit:4;stroke-dasharray:none"
+         y="266.21097"
+         x="65.925262"
          id="tspan5818-1"
          sodipodi:role="line">X+</tspan></text>
   </g>
