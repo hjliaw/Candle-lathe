@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>799</width>
+    <width>840</width>
     <height>419</height>
    </rect>
   </property>
@@ -44,14 +44,20 @@ QGroupBox {
   <layout class="QVBoxLayout" name="verticalLayout_17">
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
+     <item alignment="Qt::AlignLeft">
       <widget class="QListWidget" name="listCategories">
        <property name="enabled">
         <bool>true</bool>
        </property>
-       <property name="maximumSize">
+       <property name="minimumSize">
         <size>
          <width>160</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>240</width>
          <height>16777215</height>
         </size>
        </property>
@@ -152,6 +158,12 @@ QGroupBox {
               </item>
               <item>
                <widget class="QComboBox" name="cboBaud">
+                <property name="maximumSize">
+                 <size>
+                  <width>160</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="editable">
                  <bool>true</bool>
                 </property>
