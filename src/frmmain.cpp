@@ -667,9 +667,9 @@ void frmMain::updateControlsState() {
 	// HJL: switch icon dynamically
 	ui->btnRUNSTOP->setEnabled(m_processingFile || (portOpened && !m_processingFile && m_programModel.rowCount() > 1));
 	if(m_processingFile )
-		ui->btnRUNSTOP->setIcon( QIcon("images/stop_big_red.svg") );
+		ui->btnRUNSTOP->setIcon( QIcon("://images/stop_big_red.svg") );
 	else
-		ui->btnRUNSTOP->setIcon( QIcon("images/run_big_green.svg") );
+		ui->btnRUNSTOP->setIcon( QIcon("://images/run_big_green.svg") );
 	
     ui->cmdFilePause->setEnabled(m_processingFile && !ui->chkTestMode->isChecked());
     ui->cmdFileAbort->setEnabled(m_processingFile);
@@ -823,11 +823,7 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 
     m_serialPort.write( (command + "\r").toLatin1() );
 
-	qDebug() << "SEND " << command;
-
-	//QThread::msleep(2);  // HJL: add 2ms delay, still failure on laptop
-	m_serialPort.flush();
-
+	//qDebug() << "SEND " << command;
 }
 
 void frmMain::grblReset()
@@ -1130,7 +1126,7 @@ void frmMain::onSerialPortReadyRead()
 
 		} else if (data.length() > 0) {
 
-			qDebug() << "RCVD " << data;  // non status report (1st char is not '<'
+			//qDebug() << "RCVD " << data;  // non status report (1st char is not '<'
 
             // Processed commands
             if (m_commands.length() > 0 && !dataIsFloating(data)
