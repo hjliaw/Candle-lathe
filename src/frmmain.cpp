@@ -32,6 +32,9 @@
 #include <QAction>
 #include <QLayout>
 #include <QMimeData>
+
+#include <QThread>
+
 #include "frmmain.h"
 #include "ui_frmmain.h"
 
@@ -289,11 +292,11 @@ frmMain::frmMain(QWidget *parent) :
     }
 
     // HJL: hack to set size, works but why do I need it ? size values do not affect outcome 
-	// not necessary if auto-expand
+	// NO need with new expanding UI
     //ui->glwVisualizer->resize(500,300);
 	//ui->btnRUNSTOP->setIcon( QIcon("images/run_big_green.svg") );
 
-	ui->glwVisualizer->setFrontView();   // lathe mode, 2nd try
+	ui->glwVisualizer->setFrontView();   // lathe mode, 2nd try, much better
 	
 	// TODO: want to reduce the top margin of txtConsole
 }
@@ -818,7 +821,13 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
         m_fileEndSent = true;
     }
 
-    m_serialPort.write((command + "\r").toLatin1());
+    m_serialPort.write( (command + "\r").toLatin1() );
+
+	qDebug() << "SEND " << command;
+
+	//QThread::msleep(2);  // HJL: add 2ms delay, still failure on laptop
+	m_serialPort.flush();
+
 }
 
 void frmMain::grblReset()
@@ -882,7 +891,7 @@ void frmMain::onSerialPortReadyRead()
         }
 
         // Status response
-        if (data[0] == '<') {
+		if (data[0] == '<') {
             int status = -1;
 
             m_statusReceived = true;
@@ -1000,7 +1009,7 @@ void frmMain::onSerialPortReadyRead()
                         break;
                     }
                 }
-            }
+			}
 
             // Store work offset
             static QVector3D workOffset;
@@ -1119,7 +1128,9 @@ void frmMain::onSerialPortReadyRead()
                 ui->glwVisualizer->setSpeedState((QString(tr("F/S: %1 / %2")).arg(fs.cap(1)).arg(fs.cap(2))));
             }
 
-        } else if (data.length() > 0) {
+		} else if (data.length() > 0) {
+
+			qDebug() << "RCVD " << data;  // non status report (1st char is not '<'
 
             // Processed commands
             if (m_commands.length() > 0 && !dataIsFloating(data)

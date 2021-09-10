@@ -2,13 +2,22 @@
 <ui version="4.0">
  <class>frmSettings</class>
  <widget class="QDialog" name="frmSettings">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>555</width>
-    <height>715</height>
+    <width>799</width>
+    <height>419</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>640</width>
+    <height>320</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Settings</string>
@@ -37,6 +46,15 @@ QGroupBox {
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QListWidget" name="listCategories">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>160</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="styleSheet">
         <string notr="true">QListWidget::item {
 	height: 1.75em;
@@ -55,6 +73,12 @@ QGroupBox {
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="maximumSize">
+        <size>
+         <width>600</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
@@ -72,8 +96,8 @@ QGroupBox {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>436</width>
-          <height>1749</height>
+          <width>597</width>
+          <height>2018</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
