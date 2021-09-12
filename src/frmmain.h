@@ -104,7 +104,7 @@ private slots:
     void onCboCommandReturnPressed();
     void onTableCurrentChanged(QModelIndex idx1, QModelIndex idx2);
     void onConsoleResized(QSize size);
-    void onPanelsSizeChanged(QSize size);
+    // void onPanelsSizeChanged(QSize size);
     void onCmdUserClicked(bool checked);
     void onOverridingToggled(bool checked);
     void onActSendFromLineTriggered();

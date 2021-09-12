@@ -155,8 +155,9 @@ frmMain::frmMain(QWidget *parent) :
     ui->slbFeedOverride->setMinimum(10);
     ui->slbFeedOverride->setMaximum(200);
     ui->slbFeedOverride->setCurrentValue(100);
-    ui->slbFeedOverride->setTitle(tr("Feed rate:"));
+    ui->slbFeedOverride->setTitle(tr(" Feed rate:"));
     ui->slbFeedOverride->setSuffix("%");
+
     connect(ui->slbFeedOverride, SIGNAL(toggled(bool)), this, SLOT(onOverridingToggled(bool)));
     connect(ui->slbFeedOverride, &SliderBox::toggled, [=] {
         updateProgramEstimatedTime(m_currentDrawer->viewParser()->getLineSegmentList());
@@ -169,7 +170,7 @@ frmMain::frmMain(QWidget *parent) :
     ui->slbRapidOverride->setMinimum(25);
     ui->slbRapidOverride->setMaximum(100);
     ui->slbRapidOverride->setCurrentValue(100);
-    ui->slbRapidOverride->setTitle(tr("Rapid speed:"));
+    ui->slbRapidOverride->setTitle(tr(" Rapid speed:"));
     ui->slbRapidOverride->setSuffix("%");
     connect(ui->slbRapidOverride, SIGNAL(toggled(bool)), this, SLOT(onOverridingToggled(bool)));
     connect(ui->slbRapidOverride, &SliderBox::toggled, [=] {
@@ -183,7 +184,7 @@ frmMain::frmMain(QWidget *parent) :
     ui->slbSpindleOverride->setMinimum(50);
     ui->slbSpindleOverride->setMaximum(200);
     ui->slbSpindleOverride->setCurrentValue(100);
-    ui->slbSpindleOverride->setTitle(tr("Spindle speed:"));
+    ui->slbSpindleOverride->setTitle(tr(" Spindle speed:"));
     ui->slbSpindleOverride->setSuffix("%");
     connect(ui->slbSpindleOverride, SIGNAL(toggled(bool)), this, SLOT(onOverridingToggled(bool)));
 
@@ -348,7 +349,7 @@ void frmMain::loadSettings()
 
     m_settingsLoading = true;
 
-    m_settings->setFontSize(set.value("fontSize", 8).toInt());
+    m_settings->setFontSize(set.value("fontSize", 12).toInt());
     m_settings->setPort(set.value("port").toString());
     m_settings->setBaud(set.value("baud").toInt());
     m_settings->setIgnoreErrors(set.value("ignoreErrors", false).toBool());
@@ -965,8 +966,8 @@ void frmMain::onSerialPortReadyRead()
                     m_timerStateQuery.stop();
                     m_timerConnection.stop();
 
-                    QMessageBox::information(this, qApp->applicationDisplayName(), tr("Job done.\nTime elapsed: %1")
-                                             .arg(ui->glwVisualizer->spendTime().toString("hh:mm:ss")));
+                    //QMessageBox::information(this, qApp->applicationDisplayName(), tr("Job done.\nTime elapsed: %1")
+					// .arg(ui->glwVisualizer->spendTime().toString("hh:mm:ss")));
 
                     m_timerStateQuery.setInterval(m_settings->queryStateTime());
                     m_timerConnection.start();
@@ -1217,17 +1218,17 @@ void frmMain::onSerialPortReadyRead()
                         // Get probe Z coordinate
                         // "[PRB:0.000,0.000,0.000:0];ok"
                         QRegExp rx(".*PRB:([^,]*),([^,]*),([^]^:]*)");
-                        double z = qQNaN();
+                        //double z = qQNaN();
                         if (rx.indexIn(response) != -1) {
                             qDebug() << "probing coordinates:" << rx.cap(1) << rx.cap(2) << rx.cap(3);
-                            z = toMetric(rx.cap(3).toDouble());
+                            //z = toMetric(rx.cap(3).toDouble());
                         }
 
-                        static double firstZ;
-                        if (m_probeIndex == -1) {
-                            firstZ = z;
-                            z = 0;
-                        } else {
+                        //static double firstZ;
+                        //if (m_probeIndex == -1) {
+                            //firstZ = z;
+                            //z = 0;
+                        //} else {
                             // // Calculate delta Z
                             // z -= firstZ;
 
@@ -1240,7 +1241,7 @@ void frmMain::onSerialPortReadyRead()
                             // m_heightMapModel.setData(m_heightMapModel.index(row, column), z, Qt::UserRole);
                             // //ui->tblHeightMap->update(m_heightMapModel.index(m_heightMapModel.rowCount() - 1 - row, column));
                             // updateHeightMapInterpolationDrawer();
-                        }
+                        //}
 
                         m_probeIndex++;
                     }
@@ -2982,12 +2983,12 @@ void frmMain::onConsoleResized(QSize size)
     // }
 }
 
-void frmMain::onPanelsSizeChanged(QSize size)
-{
+//void frmMain::onPanelsSizeChanged(QSize size)
+//{
     // ui->splitPanels->setSizes(QList<int>() << size.height() + 4
     //                           << ui->splitPanels->height() - size.height()
     //                           - 4 - ui->splitPanels->handleWidth());
-}
+//}
 
 bool frmMain::keyIsMovement(int key)
 {

@@ -1,6 +1,6 @@
-* font too small (at least on screen size at 1920x1080)
-* jog button a bit small
-* ideally with a scalable screen layout and svg icons for tablet
+* [fixed] font too small (at least on screen size at 1920x1080)
+* [fixed] jog button a bit small
+* [done] ideally with a scalable screen layout and svg icons for tablet
 
 * 20210904 re-arrnage layout for small touch screen
 ** main page show 3D view and some basic control buttons

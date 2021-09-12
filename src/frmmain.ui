@@ -122,6 +122,11 @@ QSlider::handle:horizontal {
 QSlider::handle:horizontal:hover {
 	background-image: url(:/images/handle2sh.png);
 }
+
+/* somehow messed up check mark, Ans: need to set all style for QCheckBox
+QCheckBox::indicator {
+    border: 2px solid #5A5A5A;
+}*/
 </string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -232,6 +237,21 @@ QTabBar::tab:selected { color: #FFFFFF; }
            <item>
             <widget class="QWidget" name="widget" native="true">
              <layout class="QVBoxLayout" name="verticalLayout_15">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="GLWidget" name="glwVisualizer" native="true">
                 <property name="sizePolicy">
@@ -1406,7 +1426,7 @@ padding-right: 8;</string>
                  <item>
                   <widget class="StyledToolButton" name="cmdSpindle">
                    <property name="enabled">
-                    <bool>true</bool>
+                    <bool>false</bool>
                    </property>
                    <property name="sizePolicy">
                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">

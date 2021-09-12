@@ -1429,7 +1429,7 @@ QGroupBox {
                <bool>true</bool>
               </property>
               <property name="currentText">
-               <string>8</string>
+               <string>12</string>
               </property>
               <property name="maxCount">
                <number>10</number>
@@ -1444,22 +1444,22 @@ QGroupBox {
               </item>
               <item>
                <property name="text">
-                <string>9</string>
-               </property>
-              </item>
-              <item>
-               <property name="text">
                 <string>10</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>11</string>
+                <string>12</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>12</string>
+                <string>14</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>16</string>
                </property>
               </item>
              </widget>
