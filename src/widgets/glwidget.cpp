@@ -516,15 +516,9 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
 
     QFontMetrics fm(painter.font());
 
-	// to be replaced with x/z WPos, but ui not in this scope, tooldrawer has the info, also not declared here
-	// separate widgets looks more profesional anyway
-	//QString xwpos = ui->txtMPosX->text();
-	//QString zwpos = ui->txtMPosZ->text(); 
-	//painter.drawText(QPoint(x, fm.height() + 10), xwpos);
-    //painter.drawText(QPoint(x, fm.height() * 2 + 10), zwpos);
 
     //painter.drawText(QPoint(x, fm.height() + 10), m_parserStatus);
-    //painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
+    painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
     //painter.drawText(QPoint(x, fm.height() * 3 + 10), m_pinState);
 
     //QString str = QString(tr("Vertices: %1")).arg(vertices);
@@ -566,7 +560,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         if (m_xRot < -90) m_xRot = -90;
         if (m_xRot > 90) m_xRot = 90;
 
-		qDebug() << "xRot=" << m_xRot << ", yRot=" << m_yRot;
+		//qDebug() << "xRot=" << m_xRot << ", yRot=" << m_yRot;
 		
         updateView();
         emit rotationChanged();
@@ -576,7 +570,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         m_xPan = m_xLastPan - (event->pos().x() - m_lastPos.x()) * 1 / (double)width();
         m_yPan = m_yLastPan + (event->pos().y() - m_lastPos.y()) * 1 / (double)height();
 
-		qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan  << " zoom=" << m_zoom;
+		//qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan  << " zoom=" << m_zoom;
 		
         updateProjection();
     }

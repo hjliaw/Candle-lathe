@@ -232,7 +232,7 @@ frmMain::frmMain(QWidget *parent) :
 
     // Console window handling
     //connect(ui->grpConsole, SIGNAL(resized(QSize)), this, SLOT(onConsoleResized(QSize)));
-    connect(ui->scrollAreaWidgetContents, SIGNAL(sizeChanged(QSize)), this, SLOT(onPanelsSizeChanged(QSize)));
+    //connect(ui->scrollAreaWidgetContents, SIGNAL(sizeChanged(QSize)), this, SLOT(onPanelsSizeChanged(QSize)));
 
     m_senderErrorBox = new QMessageBox(QMessageBox::Warning, qApp->applicationDisplayName(), QString(),
                                        QMessageBox::Ignore | QMessageBox::Abort, this);
@@ -278,8 +278,8 @@ frmMain::frmMain(QWidget *parent) :
     ui->tblProgram->installEventFilter(this);
     ui->cboJogStep->installEventFilter(this);
     ui->cboJogFeed->installEventFilter(this);
-    ui->splitPanels->handle(1)->installEventFilter(this);
-    ui->splitPanels->installEventFilter(this);
+    //ui->splitPanels->handle(1)->installEventFilter(this);
+    //ui->splitPanels->installEventFilter(this);
 
     connect(&m_timerConnection, SIGNAL(timeout()), this, SLOT(onTimerConnection()));
     connect(&m_timerStateQuery, SIGNAL(timeout()), this, SLOT(onTimerStateQuery()));
@@ -478,7 +478,7 @@ void frmMain::loadSettings()
     // Update right panel width
     applySettings();
     show();
-    ui->scrollArea->updateMinimumWidth();
+    //ui->scrollArea->updateMinimumWidth();
 
     // Restore panels state
     ui->grpUserCommands->setChecked(set.value("userCommandsPanel", true).toBool());
@@ -638,7 +638,9 @@ bool frmMain::saveChanges(bool heightMapMode)
 void frmMain::updateControlsState() {
     bool portOpened = m_serialPort.isOpen();
 
-    ui->grpState->setEnabled(portOpened);
+    ui->hidden_grpState->setVisible(false);
+	ui->chkKeyboardControl->setVisible(false);   // hide this for now
+	
     ui->grpControl->setEnabled(portOpened);
     ui->widgetUserCommands->setEnabled(portOpened && !m_processingFile);
     ui->widgetSpindle->setEnabled(portOpened);
@@ -2267,8 +2269,8 @@ void frmMain::applySettings() {
     ui->slbSpindle->setMinimum(m_settings->spindleSpeedMin());
     ui->slbSpindle->setMaximum(m_settings->spindleSpeedMax());
 
-    ui->scrollArea->setVisible( m_settings->panelOverriding()
-                               || m_settings->panelJog() || m_settings->panelSpindle());
+    //ui->scrollArea->setVisible( m_settings->panelOverriding()
+    //                           || m_settings->panelJog() || m_settings->panelSpindle());
 
     ui->grpUserCommands->setVisible(m_settings->panelUserCommands());
     //ui->grpHeightMap->setVisible(m_settings->panelHeightmap());
@@ -2912,50 +2914,51 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
         }
 
     // Splitter events
-    } else if (obj == ui->splitPanels && event->type() == QEvent::Resize) {
+    //} else if (obj == ui->splitPanels && event->type() == QEvent::Resize) {
         // Resize splited widgets
-        onPanelsSizeChanged(ui->scrollAreaWidgetContents->sizeHint());
+        //onPanelsSizeChanged(ui->scrollAreaWidgetContents->sizeHint());
 
     // Splitter handle events
-    } else if (obj == ui->splitPanels->handle(1)) {
-        int minHeight = getConsoleMinHeight();
-        switch (event->type()) {
-        case QEvent::MouseButtonPress:
-
-			// HJL:  simplified with fixed height
-            // Store current console group box minimum & real heights
-            //m_storedConsoleMinimumHeight = ui->grpConsole->minimumHeight();
-            //m_storedConsoleHeight = ui->grpConsole->height();
-
-            // Update splited sizes
-            //ui->splitPanels->setSizes(QList<int>() << ui->scrollArea->height() << ui->grpConsole->height());
-
-            // Set new console mimimum height
-            //ui->grpConsole->setMinimumHeight(qMax(minHeight, ui->splitPanels->height()
-            //    - ui->scrollAreaWidgetContents->sizeHint().height() - ui->splitPanels->handleWidth() - 4));
-            break;
-        case QEvent::MouseButtonRelease:
-            // Store new console minimum height if height was changed with split handle
-            //if (ui->grpConsole->height() != m_storedConsoleHeight) {
-            //    ui->grpConsole->setMinimumHeight(ui->grpConsole->height());
-            //} else {
-            //    ui->grpConsole->setMinimumHeight(m_storedConsoleMinimumHeight);
-            //}
-            break;
-        case QEvent::MouseButtonDblClick:
-            // Switch to min/max console size
-            //if (ui->grpConsole->height() == minHeight || !ui->scrollArea->verticalScrollBar()->isVisible()) {
-            //    ui->splitPanels->setSizes(QList<int>() << ui->scrollArea->minimumHeight()
-            //    << ui->splitPanels->height() - ui->splitPanels->handleWidth() - ui->scrollArea->minimumHeight());
-            //} else {
-            //    ui->grpConsole->setMinimumHeight(minHeight);
-            //    onPanelsSizeChanged(ui->scrollAreaWidgetContents->sizeHint());
-            //}
-            break;
-        default:
-            break;
-        }
     }
+	// else if (obj == ui->splitPanels->handle(1)) {
+    //     int minHeight = getConsoleMinHeight();
+    //     switch (event->type()) {
+    //     case QEvent::MouseButtonPress:
+
+	// 		// HJL:  simplified with fixed height
+    //         // Store current console group box minimum & real heights
+    //         //m_storedConsoleMinimumHeight = ui->grpConsole->minimumHeight();
+    //         //m_storedConsoleHeight = ui->grpConsole->height();
+
+    //         // Update splited sizes
+    //         //ui->splitPanels->setSizes(QList<int>() << ui->scrollArea->height() << ui->grpConsole->height());
+
+    //         // Set new console mimimum height
+    //         //ui->grpConsole->setMinimumHeight(qMax(minHeight, ui->splitPanels->height()
+    //         //    - ui->scrollAreaWidgetContents->sizeHint().height() - ui->splitPanels->handleWidth() - 4));
+    //         break;
+    //     case QEvent::MouseButtonRelease:
+    //         // Store new console minimum height if height was changed with split handle
+    //         //if (ui->grpConsole->height() != m_storedConsoleHeight) {
+    //         //    ui->grpConsole->setMinimumHeight(ui->grpConsole->height());
+    //         //} else {
+    //         //    ui->grpConsole->setMinimumHeight(m_storedConsoleMinimumHeight);
+    //         //}
+    //         break;
+    //     case QEvent::MouseButtonDblClick:
+    //         // Switch to min/max console size
+    //         //if (ui->grpConsole->height() == minHeight || !ui->scrollArea->verticalScrollBar()->isVisible()) {
+    //         //    ui->splitPanels->setSizes(QList<int>() << ui->scrollArea->minimumHeight()
+    //         //    << ui->splitPanels->height() - ui->splitPanels->handleWidth() - ui->scrollArea->minimumHeight());
+    //         //} else {
+    //         //    ui->grpConsole->setMinimumHeight(minHeight);
+    //         //    onPanelsSizeChanged(ui->scrollAreaWidgetContents->sizeHint());
+    //         //}
+    //         break;
+    //     default:
+    //         break;
+    //     }
+    // }
 
     return QMainWindow::eventFilter(obj, event);
 }
@@ -2981,9 +2984,9 @@ void frmMain::onConsoleResized(QSize size)
 
 void frmMain::onPanelsSizeChanged(QSize size)
 {
-    ui->splitPanels->setSizes(QList<int>() << size.height() + 4
-                              << ui->splitPanels->height() - size.height()
-                              - 4 - ui->splitPanels->handleWidth());
+    // ui->splitPanels->setSizes(QList<int>() << size.height() + 4
+    //                           << ui->splitPanels->height() - size.height()
+    //                           - 4 - ui->splitPanels->handleWidth());
 }
 
 bool frmMain::keyIsMovement(int key)
