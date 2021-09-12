@@ -1029,6 +1029,10 @@ void frmMain::onSerialPortReadyRead()
                                          toMetric(ui->txtWPosY->text().toDouble()),
                                          toMetric(ui->txtWPosZ->text().toDouble()));
                 m_toolDrawer.setToolPosition(m_codeDrawer->getIgnoreZ() ? QVector3D(toolPosition.x(), toolPosition.y(), 0) : toolPosition);
+
+				ui->glwVisualizer->setWPos( toMetric(ui->txtWPosX->text().toDouble()),
+									  toMetric(ui->txtWPosY->text().toDouble()),
+									  toMetric(ui->txtWPosZ->text().toDouble()) );
             }
 
 

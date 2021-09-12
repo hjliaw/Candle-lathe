@@ -126,8 +126,7 @@ QSlider::handle:horizontal:hover {
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(64, 80, 104);
-
+    <string notr="true">background-color: rgb(50, 50, 50);
 color: rgb(255, 255, 255);</string>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0">
@@ -2368,11 +2367,6 @@ padding-right: 8;</string>
          </item>
         </layout>
        </widget>
-      </widget>
-      <widget class="QWidget" name="tab_config">
-       <attribute name="title">
-        <string>Config</string>
-       </attribute>
       </widget>
      </widget>
     </item>

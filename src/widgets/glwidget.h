@@ -39,6 +39,8 @@ public:
     double lineWidth() const;
     void setLineWidth(double lineWidth);
 
+	void setWPos( double x, double y, double z);
+
     void setIsometricView();
     void setTopView();
     void setFrontView();
@@ -98,6 +100,7 @@ private:
     double m_zoom;
     double m_distance;
     double m_xMin, m_xMax, m_yMin, m_yMax, m_zMin, m_zMax, m_xSize, m_ySize, m_zSize;
+	double m_xWpos, m_yWpos, m_zWpos;
     double m_lineWidth;
     double m_pointSize;
     bool m_antialiasing;

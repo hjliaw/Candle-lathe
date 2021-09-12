@@ -270,6 +270,13 @@ void GLWidget::setLineWidth(double lineWidth)
     m_lineWidth = lineWidth;
 }
 
+void GLWidget::setWPos(double x, double y, double z)   // to display pos in 3d plot
+{
+	m_xWpos = x;
+	m_yWpos = y;
+	m_zWpos = z;
+}
+
 void GLWidget::setTopView()
 {
     m_xRotTarget = 90;
@@ -492,16 +499,20 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
     painter.setPen(pen);
 
     double x = 10;
-    double y = this->height() - 30;  // lathe only show x/z
-	
-	// cross at center
+	double y = 20;
+	double linespace = 20;    // make it a function of font height
+
+    painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.2f mm", m_xWpos) );
+    painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z=%+8.2f mm", m_zWpos) );
+
+   	// cross at center (for debug)
 	//painter.drawLine(0, this->height()/2, this->width(), this->height()/2 );
 	//painter.drawLine(this->width()/2, 0, this->width()/2, this->height() );
 
-    painter.drawText(QPoint(x, y ), QString("X: %1 ... %2").arg(m_xMin, 0, 'f', 3).arg(m_xMax, 0, 'f', 3));
-    //painter.drawText(QPoint(x, y + 15), QString("Y: %1 ... %2").arg(m_yMin, 0, 'f', 3).arg(m_yMax, 0, 'f', 3));
-    painter.drawText(QPoint(x, y + 20), QString("Z: %1 ... %2").arg(m_zMin, 0, 'f', 3).arg(m_zMax, 0, 'f', 3));
-    //painter.drawText(QPoint(x, y + 45), QString("%1 / %2 / %3").arg(m_xSize, 0, 'f', 3).arg(m_ySize, 0, 'f', 3).arg(m_zSize, 0, 'f', 3));
+	// x/z only, and short string for concise range info 
+    y = this->height() - 35;
+    painter.drawText(QPoint(x, y ),  	     QString().sprintf("X %+.1f..%+.1f", m_xMin, m_xMax) );
+    painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z %+.1f..%+.1f", m_zMin, m_zMax) );
 
     QFontMetrics fm(painter.font());
 

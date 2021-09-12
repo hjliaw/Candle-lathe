@@ -40,3 +40,7 @@ cat cndl_ruf.log | ./proc.pl | grep ERROR
 
 ** no problem with uno, esp32 seemed ok, only happens with ezNC 
    move serial port task from core #0 to #1 seems fixed the problem
+* TODO
+** new control tab: set x/z as (0, user entered number), feed and rapid override
+** auto close messgae box
+** left hand tool

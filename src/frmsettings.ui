@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>840</width>
-    <height>419</height>
+    <width>800</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -51,13 +51,13 @@ QGroupBox {
        </property>
        <property name="minimumSize">
         <size>
-         <width>160</width>
+         <width>120</width>
          <height>0</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>240</width>
+         <width>260</width>
          <height>16777215</height>
         </size>
        </property>
@@ -81,7 +81,7 @@ QGroupBox {
        </property>
        <property name="maximumSize">
         <size>
-         <width>600</width>
+         <width>720</width>
          <height>16777215</height>
         </size>
        </property>
