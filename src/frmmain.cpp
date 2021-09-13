@@ -152,7 +152,7 @@ frmMain::frmMain(QWidget *parent) :
 
     // Setting up slider boxes
     ui->slbFeedOverride->setRatio(1);
-    ui->slbFeedOverride->setMinimum(10);
+    ui->slbFeedOverride->setMinimum(20);
     ui->slbFeedOverride->setMaximum(200);
     ui->slbFeedOverride->setCurrentValue(100);
     ui->slbFeedOverride->setTitle(tr(" Feed rate:"));
@@ -166,9 +166,9 @@ frmMain::frmMain(QWidget *parent) :
         updateProgramEstimatedTime(m_currentDrawer->viewParser()->getLineSegmentList());
     });
 
-    ui->slbRapidOverride->setRatio(50);
-    ui->slbRapidOverride->setMinimum(25);
-    ui->slbRapidOverride->setMaximum(100);
+    ui->slbRapidOverride->setRatio(1);
+    ui->slbRapidOverride->setMinimum(50);
+    ui->slbRapidOverride->setMaximum(150);
     ui->slbRapidOverride->setCurrentValue(100);
     ui->slbRapidOverride->setTitle(tr(" Rapid speed:"));
     ui->slbRapidOverride->setSuffix("%");
@@ -649,7 +649,7 @@ void frmMain::updateControlsState() {
 //    ui->grpConsole->setEnabled(portOpened);
     ui->cboCommand->setEnabled(portOpened && (!ui->chkKeyboardControl->isChecked()));
     ui->cmdCommandSend->setEnabled(portOpened);
-//    ui->widgetFeed->setEnabled(!m_transferringFile);
+//    ui->widgetFRSsliders->setEnabled(!m_transferringFile);
 
     ui->chkTestMode->setEnabled(portOpened && !m_processingFile);
     ui->cmdHome->setEnabled(!m_processingFile);
@@ -2823,7 +2823,7 @@ void frmMain::on_grpOverriding_toggled(bool checked)
     }
     updateLayouts();
 
-    ui->widgetFeed->setVisible(checked);
+    ui->widgetFRSsliders->setVisible(checked);
 }
 
 void frmMain::on_grpSpindle_toggled(bool checked)

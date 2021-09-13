@@ -107,20 +107,20 @@ QSlider::horizontal {
 
 QSlider::groove:horizontal {
     border: 1px solid #999999;
-    height: 2px; 
+    height: 5px; 
     background: #8f8f91;
-    margin: 2px 0;
+    margin: 2px 2px;
 }
 
 QSlider::handle:horizontal {	
-	background-image: url(:/images/handle2s.png);
+	background-image: url(:/images/handle2grnA.png);
     border: 0px;
-    width: 16px;
-    margin: -7px 0; 
+    width: 18px;
+    margin: -7px -3px;
 }
 
 QSlider::handle:horizontal:hover {
-	background-image: url(:/images/handle2sh.png);
+	background-image: url(:/images/handle2grn.png);
 }
 
 /* somehow messed up check mark, Ans: need to set all style for QCheckBox
@@ -956,6 +956,21 @@ padding-right: 8;</string>
         <string>Control</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QFrame" name="frame">
           <property name="minimumSize">
@@ -970,15 +985,27 @@ padding-right: 8;</string>
             <height>16777215</height>
            </size>
           </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_10">
+          <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <widget class="QFrame" name="grpControl">
+            <widget class="QGroupBox" name="grpControl">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>120</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>Control/SetPosition</string>
+             </property>
              <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0">
               <property name="leftMargin">
                <number>8</number>
@@ -1710,7 +1737,10 @@ padding-right: 8;</string>
             <number>8</number>
            </property>
            <item>
-            <widget class="QWidget" name="widgetFeed" native="true">
+            <widget class="QWidget" name="widgetFRSsliders" native="true">
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <layout class="QVBoxLayout" name="verticalLayout_22">
               <property name="leftMargin">
                <number>0</number>
