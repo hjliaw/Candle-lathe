@@ -75,3 +75,5 @@ Candle
 Makefile
 TAGS
 *.log
+crashed/
+TBS/

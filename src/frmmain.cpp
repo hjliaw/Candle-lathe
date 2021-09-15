@@ -1,3 +1,4 @@
+
 // This file is a part of "Candle" application.
 // Copyright 2015-2016 Hayrullin Denis Ravilevich
 
@@ -2449,6 +2450,10 @@ void frmMain::on_cmdXSet_clicked()
     // m_settingZeroXY = true;
     // sendCommand("G92X0Y0", -1, m_settings->showUICommands());
     // sendCommand("$#", -2, m_settings->showUICommands());
+
+	// need to pass X/Z to
+
+	m_setPos.exec();
 }
 
 void frmMain::on_cmdZSet_clicked()

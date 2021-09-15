@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       = core gui opengl serialport
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 win32: {
@@ -41,6 +42,8 @@ SOURCES += main.cpp\
         frmmain.cpp \
     frmsettings.cpp \
     frmabout.cpp \
+    setpos.cpp \
+    keyemitter.cpp \
     drawers/gcodedrawer.cpp \
     drawers/heightmapborderdrawer.cpp \
     drawers/heightmapgriddrawer.cpp \
@@ -71,6 +74,8 @@ SOURCES += main.cpp\
 HEADERS  += frmmain.h \
     frmsettings.h \
     frmabout.h \
+    setpos.h \
+    keyemitter.h \
     drawers/gcodedrawer.h \
     drawers/heightmapborderdrawer.h \
     drawers/heightmapgriddrawer.h \
@@ -103,6 +108,7 @@ HEADERS  += frmmain.h \
 FORMS    += frmmain.ui \
     frmsettings.ui \
     frmabout.ui \
+    setpos.ui \
     widgets/sliderbox.ui
 
 DEFINES += _USE_MATH_DEFINES

@@ -41,6 +41,7 @@
 
 #include "frmsettings.h"
 #include "frmabout.h"
+#include "setpos.h"
 
 #ifdef WINDOWS
     #include <QtWinExtras/QtWinExtras>
@@ -170,31 +171,18 @@ private slots:
     //void on_cmdHeightMapBorderAuto_clicked();
     void on_cmdFileAbort_clicked();
     void on_cmdSpindle_clicked(bool checked);   
-
     void on_cmdYPlus_pressed();
-
     void on_cmdYPlus_released();
-
     void on_cmdYMinus_pressed();
-
     void on_cmdYMinus_released();
-
     void on_cmdXPlus_pressed();
-
     void on_cmdXPlus_released();
-
     void on_cmdXMinus_pressed();
-
     void on_cmdXMinus_released();
-
     void on_cmdZPlus_pressed();
-
     void on_cmdZPlus_released();
-
     void on_cmdZMinus_pressed();
-
     void on_cmdZMinus_released();
-
     void on_cmdStop_clicked();
 
 protected:
@@ -239,6 +227,7 @@ private:
 
     frmSettings *m_settings;
     frmAbout m_frmAbout;
+	setPos   m_setPos;
 
     QString m_settingsFileName;
     QString m_programFileName;
