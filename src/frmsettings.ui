@@ -101,7 +101,7 @@ QGroupBox {
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>0</y>
+          <y>-1601</y>
           <width>597</width>
           <height>2018</height>
          </rect>
@@ -673,6 +673,9 @@ QGroupBox {
          </item>
          <item>
           <widget class="GroupBox" name="groupBox_4">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="title">
             <string>Heightmap</string>
            </property>
@@ -724,6 +727,9 @@ QGroupBox {
          </item>
          <item>
           <widget class="GroupBox" name="grpParser">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="title">
             <string>Parser</string>
            </property>
@@ -783,7 +789,7 @@ QGroupBox {
               <item row="0" column="1">
                <widget class="QDoubleSpinBox" name="txtArcLength">
                 <property name="enabled">
-                 <bool>true</bool>
+                 <bool>false</bool>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -1226,6 +1232,9 @@ QGroupBox {
          </item>
          <item>
           <widget class="GroupBox" name="grpPanels">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="title">
             <string>Panels</string>
            </property>
@@ -1429,7 +1438,7 @@ QGroupBox {
                <bool>true</bool>
               </property>
               <property name="currentText">
-               <string>12</string>
+               <string>8</string>
               </property>
               <property name="maxCount">
                <number>10</number>

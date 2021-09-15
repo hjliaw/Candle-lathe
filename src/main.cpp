@@ -80,6 +80,8 @@ int main(int argc, char *argv[])
     palette.setColor(QPalette::HighlightedText, QColor(0, 0, 0));
     a.setPalette(palette);
 
+	// HJ: why set menu bar color here ?
+	
     a.setStyleSheet("QWidget {font-family: \"Ubuntu\";}\
                     QMenuBar {background-color: #303030; padding-top: 2px; padding-bottom: 2px;}\
                     QMenuBar::item {spacing: 3px; padding: 2px 8px; background: transparent; color: white;}\
@@ -89,9 +91,6 @@ int main(int argc, char *argv[])
 #endif
 
     a.setStyleSheet(a.styleSheet() + "QWidget {font-size: 14pt}");
-
-	// empty title hack, ok, but messed up setting frame
-	//a.setStyleSheet("QGroupBox{padding-top:15px; margin-top:-15px}");
 
     frmMain w;
     w.show();

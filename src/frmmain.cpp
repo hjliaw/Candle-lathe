@@ -33,7 +33,7 @@
 #include <QLayout>
 #include <QMimeData>
 
-#include <QThread>
+//#include <QThread>
 
 #include "frmmain.h"
 #include "ui_frmmain.h"
@@ -652,12 +652,12 @@ void frmMain::updateControlsState() {
 //    ui->widgetFRSsliders->setEnabled(!m_transferringFile);
 
     ui->chkTestMode->setEnabled(portOpened && !m_processingFile);
-    ui->cmdHome->setEnabled(!m_processingFile);
-    ui->cmdTouch->setEnabled(!m_processingFile);
-    ui->cmdZeroXY->setEnabled(!m_processingFile);
-    ui->cmdZeroZ->setEnabled(!m_processingFile);
-    ui->cmdRestoreOrigin->setEnabled(!m_processingFile);
-    ui->cmdSafePosition->setEnabled(!m_processingFile);
+    ui->cmdHome->setEnabled( false ); // !m_processingFile);
+    ui->cmdTouch->setEnabled( false ); // !m_processingFile);
+    ui->cmdXSet->setEnabled(!m_processingFile);
+    ui->cmdZSet->setEnabled(!m_processingFile);
+    ui->cmdRestoreOrigin->setEnabled( false ); //!m_processingFile);
+    ui->cmdSafePosition->setEnabled( false ); //!m_processingFile);
     ui->cmdUnlock->setEnabled(!m_processingFile);
     ui->cmdSpindle->setEnabled(!m_processingFile);
 
@@ -919,10 +919,10 @@ void frmMain::onSerialPortReadyRead()
                 }
 
                 // Update controls
-                ui->cmdRestoreOrigin->setEnabled(status == IDLE);
-                ui->cmdSafePosition->setEnabled(status == IDLE);
-                ui->cmdZeroXY->setEnabled(status == IDLE);
-                ui->cmdZeroZ->setEnabled(status == IDLE);
+                ui->cmdRestoreOrigin->setEnabled( false ); //status == IDLE);
+                ui->cmdSafePosition->setEnabled( false );  // status == IDLE);
+                ui->cmdXSet->setEnabled(status == IDLE);
+                ui->cmdZSet->setEnabled(status == IDLE);
                 ui->chkTestMode->setEnabled(status != RUN && !m_processingFile);
                 ui->chkTestMode->setChecked(status == CHECK);
                 ui->cmdFilePause->setChecked(status == HOLD0 || status == HOLD1 || status == QUEUE);
@@ -2441,18 +2441,22 @@ void frmMain::on_cmdTouch_clicked()
     }
 }
 
-void frmMain::on_cmdZeroXY_clicked()
+// TODO: add X0, Z0 buttons ? or an option on Set-X/Z popup windown ?
+//       Z has radius and diameter mode
+
+void frmMain::on_cmdXSet_clicked()
 {
-    m_settingZeroXY = true;
-    sendCommand("G92X0Y0", -1, m_settings->showUICommands());
-    sendCommand("$#", -2, m_settings->showUICommands());
+    // m_settingZeroXY = true;
+    // sendCommand("G92X0Y0", -1, m_settings->showUICommands());
+    // sendCommand("$#", -2, m_settings->showUICommands());
 }
 
-void frmMain::on_cmdZeroZ_clicked()
+void frmMain::on_cmdZSet_clicked()
 {
-    m_settingZeroZ = true;
-    sendCommand("G92Z0", -1, m_settings->showUICommands());
-    sendCommand("$#", -2, m_settings->showUICommands());
+    // m_settingZeroZ = true;
+    // sendCommand("G92Z0", -1, m_settings->showUICommands());
+    // sendCommand("$#", -2, m_settings->showUICommands());
+	
 }
 
 void frmMain::on_cmdRestoreOrigin_clicked()
@@ -2867,7 +2871,7 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
             case Qt::Key_2:
                 if (event->type() == QEvent::KeyPress) emit ui->cmdYMinus->pressed(); else emit ui->cmdYMinus->released();
                 break;
-				/* simplify for lathe mode
+				/* simplify for lathe mode (re-map mill mode x/y buttons)
             case Qt::Key_9:
                 if (event->type() == QEvent::KeyPress) emit ui->cmdZPlus->pressed(); else emit ui->cmdZPlus->released();
                 break;
@@ -2966,7 +2970,7 @@ bool frmMain::eventFilter(QObject *obj, QEvent *event)
 
 int frmMain::getConsoleMinHeight()
 {
-	return 300;  // hack
+	return 300;  // simplified layout no need to dynamically adjust console height
 	//    return ui->grpConsole->height() - ui->grpConsole->contentsRect().height()
     //        + ui->spacerConsole->geometry().height() + ui->grpConsole->layout()->margin() * 2
     //        + ui->cboCommand->height();
@@ -3025,7 +3029,7 @@ void frmMain::on_chkKeyboardControl_toggled(bool checked)
 
 void frmMain::updateJogTitle()
 {
-	// simplified view has no title
+	// simplified view has no title, not to mention dynamically changed
 	
     // if (ui->grpJog->isChecked() || !ui->chkKeyboardControl->isChecked()) {
     //     ui->grpJog->setTitle(tr("Jog"));
@@ -3976,11 +3980,11 @@ void frmMain::jogStep()
     }
 }
 
-// HJL: re-map for lathe mode  x->z, y->x (inversed)
+// HJL: re-map for lathe mode  x->z, y->-x (inverted)
 
 void frmMain::on_cmdYPlus_pressed()
 {
-    m_jogVector += QVector3D(-1, 0, 0);
+    m_jogVector += QVector3D(-1, 0, 0);   // y -> -x
     jogStep();
 }
 
