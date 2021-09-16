@@ -15,6 +15,9 @@ class setPos : public QDialog
     Q_OBJECT
 
 public:
+	double pos;
+	QString axis;
+	void updateAxisPos();
     explicit setPos(QWidget *parent = 0);
     ~setPos();
 
@@ -34,9 +37,12 @@ private slots:
     void on_pushButtonKeyBack_clicked();
 	void on_pushButtonKeySign_clicked();
 
+	void on_pushButtonCancel_clicked();
+	void on_pushButtonUnit_clicked();
+	void on_pushButtonMode_clicked();
+
 private:
     Ui::setPos *ui;
-	void sync_rad_dia();
 };
 
 #endif // SETPOS_H

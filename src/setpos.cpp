@@ -7,7 +7,6 @@
 
 //#include <QDebug>
 
-//extern
 KeyEmitter keyEmitter;
 
 setPos::setPos(QWidget *parent) :
@@ -27,7 +26,8 @@ setPos::setPos(QWidget *parent) :
 	font.setPointSize(18);
 	ui->pushButtonKeyEnter->setFont(font);
 	ui->pushButtonKeyBack->setFont(font);
-	ui->pushButtonKeySign->setFont(font);	
+	ui->pushButtonKeySign->setFont(font);
+
 }
 
 setPos::~setPos(){
@@ -49,34 +49,55 @@ void setPos::on_pushButtonKeyDot_clicked(){  keyEmitter.emitKey(Qt::Key_Period);
 void setPos::on_pushButtonKeyBack_clicked(){ keyEmitter.emitKey(Qt::Key_Backspace); }
 
 void setPos::on_pushButtonKeySign_clicked(){
-	sync_rad_dia();
-	QString sr = ui->lineEditRadius->text();
+	QString sr = ui->lineEditPosition->text();
 	if( sr.at( 0 ) == '-' ){
-		ui->lineEditRadius->setText( sr.remove(0,1) );
+		ui->lineEditPosition->setText( sr.remove(0,1) );
 	}
 	else{
-		ui->lineEditRadius->setText( "-" + sr );
-	}
-	sync_rad_dia();
-}
-
-void setPos:: sync_rad_dia(){
-	if( ui->lineEditRadius->hasFocus() ){
-		double r = ui->lineEditRadius->text().toDouble();
-		ui->lineEditDiameter->setText( QString::number(2*r) );
-		//qInfo() << "rad =" << r;
-	}
-
-	if( ui->lineEditDiameter->hasFocus() ){
-		double d = ui->lineEditDiameter->text().toDouble();
-		ui->lineEditRadius->setText( QString::number(d/2) );
-		// qInfo() << "dia =" << d;
+		ui->lineEditPosition->setText( "-" + sr );
 	}
 }
 
 void setPos::on_pushButtonKeyEnter_clicked(){
-	sync_rad_dia();       // sync before emitKey, as Tab key changes focus
-	keyEmitter.emitKey(Qt::Key_Tab);
+	this->pos = ui->lineEditPosition->text().toDouble();
+	this->accept();  	// return from QDialog
+}
 
-	// return 
+void setPos::on_pushButtonCancel_clicked(){
+	this->reject();
+}
+
+void setPos::updateAxisPos(){    // called before window pops up
+	ui->lineEditPosition->setText( QString::number(this->pos) );
+	ui->lineEditPosition->selectAll();
+	ui->lineEditPosition->setFocus();
+}
+
+
+void setPos::on_pushButtonUnit_clicked(){
+
+	QString unit = ui->pushButtonUnit->text();
+
+	if( unit.at( 0 ) == 'm' ){
+		ui->pushButtonUnit->setText( "inch" );
+	}
+	else{
+		ui->pushButtonUnit->setText( "mm" );
+	}
+	
+	ui->lineEditPosition->setFocus();
+}
+
+void setPos::on_pushButtonMode_clicked(){
+	QString mode = ui->pushButtonMode->text();
+
+	if( mode.at( 0 ) == 'D' ){
+		ui->pushButtonMode->setText( "Radius, X" );
+	}
+	else{
+		ui->pushButtonMode->setText( "Diameter" );
+	}
+
+	ui->lineEditPosition->setFocus();
+
 }

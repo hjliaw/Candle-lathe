@@ -2451,9 +2451,11 @@ void frmMain::on_cmdXSet_clicked()
     // sendCommand("G92X0Y0", -1, m_settings->showUICommands());
     // sendCommand("$#", -2, m_settings->showUICommands());
 
-	// need to pass X/Z to
-
+	m_setPos.pos = ui->txtWPosX->text().toDouble(); 
+	m_setPos.axis = "X";
+	m_setPos.updateAxisPos();
 	m_setPos.exec();
+	qDebug() << "new X= " << m_setPos.pos;
 }
 
 void frmMain::on_cmdZSet_clicked()
@@ -2461,7 +2463,12 @@ void frmMain::on_cmdZSet_clicked()
     // m_settingZeroZ = true;
     // sendCommand("G92Z0", -1, m_settings->showUICommands());
     // sendCommand("$#", -2, m_settings->showUICommands());
-	
+
+	m_setPos.pos = ui->txtWPosZ->text().toDouble(); 
+	m_setPos.axis = "Z";
+	m_setPos.updateAxisPos();
+	m_setPos.exec();
+	qDebug() << "new Z= " << m_setPos.pos;
 }
 
 void frmMain::on_cmdRestoreOrigin_clicked()
