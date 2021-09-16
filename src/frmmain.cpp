@@ -187,6 +187,12 @@ frmMain::frmMain(QWidget *parent) :
     ui->slbSpindleOverride->setCurrentValue(100);
     ui->slbSpindleOverride->setTitle(tr(" Spindle speed:"));
     ui->slbSpindleOverride->setSuffix("%");
+
+	ui->slbSpindleOverride->setEnabled( false );  // HJL, disbale spindle for now
+	ui->slbSpindleOverride->setStyleSheet( "QWidget:disabled{color: #606060;}" );
+	ui->grpSpindle->setEnabled( false );
+	ui->grpSpindle->setStyleSheet( "QWidget:disabled{color: #606060;}" );
+					
     connect(ui->slbSpindleOverride, SIGNAL(toggled(bool)), this, SLOT(onOverridingToggled(bool)));
 
     m_originDrawer = new OriginDrawer();
@@ -927,7 +933,9 @@ void frmMain::onSerialPortReadyRead()
                 ui->chkTestMode->setEnabled(status != RUN && !m_processingFile);
                 ui->chkTestMode->setChecked(status == CHECK);
                 ui->cmdFilePause->setChecked(status == HOLD0 || status == HOLD1 || status == QUEUE);
-                ui->cmdSpindle->setEnabled(!m_processingFile || status == HOLD0);
+
+                //ui->cmdSpindle->setEnabled(!m_processingFile || status == HOLD0);
+				ui->cmdSpindle->setEnabled( false );
 #ifdef WINDOWS
                 if (QSysInfo::windowsVersion() >= QSysInfo::WV_WINDOWS7) {
                     if (m_taskBarProgress) m_taskBarProgress->setPaused(status == HOLD0 || status == HOLD1 || status == QUEUE);

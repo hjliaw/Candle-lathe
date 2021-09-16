@@ -5,7 +5,7 @@
 #include "ui_setpos.h"
 #include "keyemitter.h"
 
-//#include <QDebug>
+#include <QDebug>
 
 KeyEmitter keyEmitter;
 
@@ -18,6 +18,11 @@ setPos::setPos(QWidget *parent) :
 	QFont font = ui->pushButtonKey0->font();
 	font.setPointSize(32);
 
+	qDebug() << font;
+
+	// why did font size change works in example, but not here ?
+	// not only that, change style on all buttons leads to messed, non-uniformly compressed layout !
+	
 	foreach( QAbstractButton *button, ui->centralWidget->findChildren<QPushButton*>(QRegExp("pushButtonKey*"))){
 		button->setFont(font);
 	}
@@ -27,6 +32,17 @@ setPos::setPos(QWidget *parent) :
 	ui->pushButtonKeyEnter->setFont(font);
 	ui->pushButtonKeyBack->setFont(font);
 	ui->pushButtonKeySign->setFont(font);
+
+	//ui->pushButtonKey0->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
+	//ui->pushButtonKey1->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
+	//ui->pushButtonKey2->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
+	//ui->pushButtonKey3->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
+	//ui->pushButtonKey4->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
+	//ui->pushButtonKey5->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
+	//ui->pushButtonKey6->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
+	//ui->pushButtonKey7->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
+	//ui->pushButtonKey8->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
+	//ui->pushButtonKey9->setStyleSheet("border:1px solid lightgrey; border-radius: 10px" );
 
 }
 
@@ -68,11 +84,19 @@ void setPos::on_pushButtonCancel_clicked(){
 }
 
 void setPos::updateAxisPos(){    // called before window pops up
+
+	if( this->axis == "Z" ){
+		ui->pushButtonMode->setText( "Z=" );
+		// may be set inactive ?
+	}
+	else{
+		ui->pushButtonMode->setText( "Radius/X=" );
+	}
+	
 	ui->lineEditPosition->setText( QString::number(this->pos) );
 	ui->lineEditPosition->selectAll();
 	ui->lineEditPosition->setFocus();
 }
-
 
 void setPos::on_pushButtonUnit_clicked(){
 
@@ -91,13 +115,17 @@ void setPos::on_pushButtonUnit_clicked(){
 void setPos::on_pushButtonMode_clicked(){
 	QString mode = ui->pushButtonMode->text();
 
+	if( this->axis == "Z" ){
+		ui->lineEditPosition->setFocus();
+		return;
+	}
+	
 	if( mode.at( 0 ) == 'D' ){
-		ui->pushButtonMode->setText( "Radius, X" );
+		ui->pushButtonMode->setText( "Radius, X=" );
 	}
 	else{
-		ui->pushButtonMode->setText( "Diameter" );
+		ui->pushButtonMode->setText( "Diameter=" );
 	}
 
 	ui->lineEditPosition->setFocus();
-
 }
