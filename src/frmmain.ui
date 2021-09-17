@@ -703,6 +703,179 @@ QTabBar::tab:selected { color: #FFFFFF; }
            <enum>QFrame::Raised</enum>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QGroupBox" name="grpSetPosition">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>120</height>
+              </size>
+             </property>
+             <property name="title">
+              <string>SetPosition</string>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QFrame" name="frame">
+                <layout class="QGridLayout" name="gridLayout_4">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="verticalSpacing">
+                  <number>0</number>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="StyledToolButton" name="cmdXSet">
+                   <property name="minimumSize">
+                    <size>
+                     <width>44</width>
+                     <height>44</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Set X to</string>
+                   </property>
+                   <property name="text">
+                    <string>...</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="images.qrc">
+                     <normaloff>:/images/icon_X.png</normaloff>:/images/icon_X.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="StyledToolButton" name="cmdX0">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>44</width>
+                     <height>44</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>set X to zero</string>
+                   </property>
+                   <property name="text">
+                    <string>X=0</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="images.qrc">
+                     <normaloff>:/images/icon_X0.png</normaloff>:/images/icon_X0.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="StyledToolButton" name="cmdZ0">
+                   <property name="enabled">
+                    <bool>true</bool>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>44</width>
+                     <height>44</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>set Z to zero</string>
+                   </property>
+                   <property name="text">
+                    <string>Z=0</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="images.qrc">
+                     <normaloff>:/images/icon_Z0.png</normaloff>:/images/icon_Z0.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="3">
+                  <widget class="StyledToolButton" name="cmdZSet">
+                   <property name="minimumSize">
+                    <size>
+                     <width>44</width>
+                     <height>44</height>
+                    </size>
+                   </property>
+                   <property name="toolTip">
+                    <string>Set Z to</string>
+                   </property>
+                   <property name="text">
+                    <string>...</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="images.qrc">
+                     <normaloff>:/images/icon_Z.png</normaloff>:/images/icon_Z.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
            <item>
             <widget class="QGroupBox" name="grpControl">
              <property name="minimumSize">
@@ -712,111 +885,36 @@ QTabBar::tab:selected { color: #FFFFFF; }
               </size>
              </property>
              <property name="title">
-              <string>SetPosition/Control</string>
+              <string>Control</string>
              </property>
-             <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0">
+             <layout class="QVBoxLayout" name="verticalLayout_2x" stretch="0">
+              <property name="spacing">
+               <number>0</number>
+              </property>
               <property name="leftMargin">
-               <number>8</number>
+               <number>0</number>
               </property>
               <property name="topMargin">
-               <number>8</number>
+               <number>0</number>
               </property>
               <property name="rightMargin">
-               <number>8</number>
+               <number>0</number>
               </property>
               <property name="bottomMargin">
-               <number>9</number>
+               <number>0</number>
               </property>
               <item>
-               <layout class="QGridLayout" name="gridLayout_6">
+               <layout class="QGridLayout" name="gridLayout_6x">
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
                 <property name="horizontalSpacing">
                  <number>8</number>
                 </property>
-                <item row="0" column="2">
-                 <widget class="StyledToolButton" name="cmdX0">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>44</width>
-                    <height>44</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>set X to zero</string>
-                  </property>
-                  <property name="text">
-                   <string>X=0</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="images.qrc">
-                    <normaloff>:/images/icon_X0.png</normaloff>:/images/icon_X0.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>30</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="StyledToolButton" name="cmdZ0">
-                  <property name="enabled">
-                   <bool>true</bool>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>44</width>
-                    <height>44</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>set Z to zero</string>
-                  </property>
-                  <property name="text">
-                   <string>Z=0</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="images.qrc">
-                    <normaloff>:/images/icon_Z0.png</normaloff>:/images/icon_Z0.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>30</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="4">
-                 <widget class="StyledToolButton" name="cmdZSet">
-                  <property name="minimumSize">
-                   <size>
-                    <width>44</width>
-                    <height>44</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Set Z to</string>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="images.qrc">
-                    <normaloff>:/images/icon_Z.png</normaloff>:/images/icon_Z.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>30</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="1" column="1">
+                <property name="verticalSpacing">
+                 <number>0</number>
+                </property>
+                <item row="0" column="1">
                  <widget class="StyledToolButton" name="cmdRestoreOrigin">
                   <property name="enabled">
                    <bool>false</bool>
@@ -845,7 +943,7 @@ QTabBar::tab:selected { color: #FFFFFF; }
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="3">
+                <item row="0" column="3">
                  <widget class="StyledToolButton" name="cmdReset">
                   <property name="minimumSize">
                    <size>
@@ -871,7 +969,7 @@ QTabBar::tab:selected { color: #FFFFFF; }
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="4">
+                <item row="0" column="4">
                  <widget class="StyledToolButton" name="cmdUnlock">
                   <property name="enabled">
                    <bool>true</bool>
@@ -900,7 +998,7 @@ QTabBar::tab:selected { color: #FFFFFF; }
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="2">
+                <item row="0" column="2">
                  <widget class="StyledToolButton" name="cmdHome">
                   <property name="enabled">
                    <bool>false</bool>
@@ -920,32 +1018,6 @@ QTabBar::tab:selected { color: #FFFFFF; }
                   <property name="icon">
                    <iconset resource="images.qrc">
                     <normaloff>:/images/search_for_home2.png</normaloff>:/images/search_for_home2.png</iconset>
-                  </property>
-                  <property name="iconSize">
-                   <size>
-                    <width>30</width>
-                    <height>30</height>
-                   </size>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="StyledToolButton" name="cmdXSet">
-                  <property name="minimumSize">
-                   <size>
-                    <width>44</width>
-                    <height>44</height>
-                   </size>
-                  </property>
-                  <property name="toolTip">
-                   <string>Set X to</string>
-                  </property>
-                  <property name="text">
-                   <string>...</string>
-                  </property>
-                  <property name="icon">
-                   <iconset resource="images.qrc">
-                    <normaloff>:/images/icon_X.png</normaloff>:/images/icon_X.png</iconset>
                   </property>
                   <property name="iconSize">
                    <size>
@@ -1009,6 +1081,9 @@ QTabBar::tab:selected { color: #FFFFFF; }
                   <layout class="QGridLayout" name="gridLayout_7">
                    <property name="horizontalSpacing">
                     <number>8</number>
+                   </property>
+                   <property name="verticalSpacing">
+                    <number>0</number>
                    </property>
                    <item row="0" column="1">
                     <widget class="StyledToolButton" name="cmdUser1">
@@ -1130,13 +1205,13 @@ QTabBar::tab:selected { color: #FFFFFF; }
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>80</height>
+               <height>60</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
-               <height>120</height>
+               <height>100</height>
               </size>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
