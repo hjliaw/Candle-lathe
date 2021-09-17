@@ -131,7 +131,7 @@ QCheckBox::indicator {
   </property>
   <widget class="QWidget" name="centralWidget">
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(50, 50, 50);
+    <string notr="true">background-color: rgb(30, 30, 30);
 color: rgb(255, 255, 255);</string>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0">
@@ -720,7 +720,7 @@ QTabBar::tab:selected { color: #FFFFFF; }
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>120</height>
+               <height>80</height>
               </size>
              </property>
              <property name="title">
@@ -746,16 +746,19 @@ QTabBar::tab:selected { color: #FFFFFF; }
                <widget class="QFrame" name="frame">
                 <layout class="QGridLayout" name="gridLayout_4">
                  <property name="leftMargin">
-                  <number>0</number>
+                  <number>8</number>
                  </property>
                  <property name="topMargin">
                   <number>0</number>
                  </property>
                  <property name="rightMargin">
-                  <number>0</number>
+                  <number>8</number>
                  </property>
                  <property name="bottomMargin">
                   <number>0</number>
+                 </property>
+                 <property name="horizontalSpacing">
+                  <number>9</number>
                  </property>
                  <property name="verticalSpacing">
                   <number>0</number>
@@ -881,7 +884,7 @@ QTabBar::tab:selected { color: #FFFFFF; }
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>120</height>
+               <height>80</height>
               </size>
              </property>
              <property name="title">
@@ -905,11 +908,17 @@ QTabBar::tab:selected { color: #FFFFFF; }
               </property>
               <item>
                <layout class="QGridLayout" name="gridLayout_6x">
+                <property name="leftMargin">
+                 <number>8</number>
+                </property>
                 <property name="topMargin">
                  <number>0</number>
                 </property>
-                <property name="horizontalSpacing">
+                <property name="rightMargin">
                  <number>8</number>
+                </property>
+                <property name="horizontalSpacing">
+                 <number>9</number>
                 </property>
                 <property name="verticalSpacing">
                  <number>0</number>
@@ -1054,13 +1063,13 @@ QTabBar::tab:selected { color: #FFFFFF; }
                <number>8</number>
               </property>
               <property name="topMargin">
-               <number>8</number>
+               <number>0</number>
               </property>
               <property name="rightMargin">
                <number>8</number>
               </property>
               <property name="bottomMargin">
-               <number>8</number>
+               <number>0</number>
               </property>
               <item>
                <widget class="QWidget" name="widgetUserCommands" native="true">
