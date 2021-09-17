@@ -2465,12 +2465,11 @@ void frmMain::on_cmdXSet_clicked()
 	m_setPos.exec();
 
 	if( m_setPos.result() == QDialog::Accepted ){
-		qDebug() << "new X= " << m_setPos.pos;
+		//qDebug() << "new X= " << m_setPos.pos;
+		//sendCommand(QString("G10L20P1X%1").arg(toMetric(m_setPos.pos )), -1, m_settings->showUICommands());
 
-		// set WPos   "G10L20P1X%fY0Z%f", npos[0], npos[1] );
-		sendCommand(QString("G10L20P1X%1Y0Z%2")
-                    .arg(toMetric(m_setPos.pos ))
-                    .arg(toMetric(ui->txtWPosX->text().toDouble() )), -1, m_settings->showUICommands());
+		// G10L20P1 is same as G92 (perhaps G92 doesn't change eeprom ?)
+		sendCommand(QString("G92X%1").arg(toMetric(m_setPos.pos )), -1, m_settings->showUICommands());
 	}
 }
 
@@ -2486,7 +2485,10 @@ void frmMain::on_cmdZSet_clicked()
 	m_setPos.exec();
 
 	if( m_setPos.result() == QDialog::Accepted ){
-		qDebug() << "new Z= " << m_setPos.pos;
+		//qDebug() << "new Z= " << m_setPos.pos;
+		//sendCommand(QString("G10L20P1Z%1").arg(toMetric(m_setPos.pos )), -1, m_settings->showUICommands());
+
+		sendCommand(QString("G92Z%1").arg(toMetric(m_setPos.pos )), -1, m_settings->showUICommands());
 	}
 }
 
