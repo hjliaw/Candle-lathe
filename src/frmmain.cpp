@@ -2463,7 +2463,15 @@ void frmMain::on_cmdXSet_clicked()
 	m_setPos.axis = "X";
 	m_setPos.updateAxisPos();
 	m_setPos.exec();
-	qDebug() << "new X= " << m_setPos.pos;
+
+	if( m_setPos.result() == QDialog::Accepted ){
+		qDebug() << "new X= " << m_setPos.pos;
+
+		// set WPos   "G10L20P1X%fY0Z%f", npos[0], npos[1] );
+		sendCommand(QString("G10L20P1X%1Y0Z%2")
+                    .arg(toMetric(m_setPos.pos ))
+                    .arg(toMetric(ui->txtWPosX->text().toDouble() )), -1, m_settings->showUICommands());
+	}
 }
 
 void frmMain::on_cmdZSet_clicked()
@@ -2476,7 +2484,10 @@ void frmMain::on_cmdZSet_clicked()
 	m_setPos.axis = "Z";
 	m_setPos.updateAxisPos();
 	m_setPos.exec();
-	qDebug() << "new Z= " << m_setPos.pos;
+
+	if( m_setPos.result() == QDialog::Accepted ){
+		qDebug() << "new Z= " << m_setPos.pos;
+	}
 }
 
 void frmMain::on_cmdRestoreOrigin_clicked()
@@ -3160,7 +3171,7 @@ void frmMain::on_actRecentClear_triggered()
     updateRecentFilesMenu();
 }
 
-double frmMain::toMetric(double value)
+double frmMain::toMetric(double value)    // hard-coded unit==0 ->  mm
 {
     return m_settings->units() == 0 ? value : value * 25.4;
 }

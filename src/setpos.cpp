@@ -9,12 +9,17 @@
 
 KeyEmitter keyEmitter;
 
+// todo: coordinate with grbl and m_settings on unit conversion
+
 setPos::setPos(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::setPos)
 {
     ui->setupUi(this);
 
+	// compiles, not working as expected
+	//ui->centralWidget->setWindowFlags( Qt::CustomizeWindowHint );
+		
 	QFont font = ui->pushButtonKey0->font();
 	font.setPointSize(32);
 
