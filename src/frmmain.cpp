@@ -259,13 +259,13 @@ frmMain::frmMain(QWidget *parent) :
     }
 
     // Setting up spindle slider box
-    ui->slbSpindle->setTitle(tr("Speed:"));
+    ui->slbSpindle->setTitle(tr(" Spindle:"));
     ui->slbSpindle->setCheckable(false);
     ui->slbSpindle->setChecked(true);
     connect(ui->slbSpindle, &SliderBox::valueUserChanged, [=] {m_updateSpindleSpeed = true;});
     connect(ui->slbSpindle, &SliderBox::valueChanged, [=] {
-        if (!ui->grpSpindle->isChecked() && ui->cmdSpindle->isChecked())
-            ui->grpSpindle->setTitle(tr("Spindle") + QString(tr(" (%1)")).arg(ui->slbSpindle->value()));
+			//     if (!ui->grpSpindle->isChecked() && ui->cmdSpindle->isChecked())
+            //ui->grpSpindle->setTitle(tr("Spindle") + QString(tr(" (%1)")).arg(ui->slbSpindle->value()));
     });
 
     // Setup serial port
@@ -491,7 +491,7 @@ void frmMain::loadSettings()
     // Restore panels state
     ui->grpUserCommands->setChecked(set.value("userCommandsPanel", true).toBool());
     //ui->grpHeightMap->setChecked(set.value("heightmapPanel", true).toBool());
-    ui->grpSpindle->setChecked(set.value("spindlePanel", true).toBool());
+    //ui->grpSpindle->setChecked(set.value("spindlePanel", true).toBool());
     ui->grpOverriding->setChecked(set.value("feedPanel", true).toBool());
     //ui->grpJog->setChecked(set.value("jogPanel", true).toBool());
 
@@ -550,7 +550,7 @@ void frmMain::saveSettings()
     set.setValue("formSettingsSize", m_settings->size());    
     set.setValue("userCommandsPanel", ui->grpUserCommands->isChecked());
     //set.setValue("heightmapPanel", ui->grpHeightMap->isChecked());
-    set.setValue("spindlePanel", ui->grpSpindle->isChecked());
+    // set.setValue("spindlePanel", ui->grpSpindle->isChecked());
     set.setValue("feedPanel", ui->grpOverriding->isChecked());
     //set.setValue("jogPanel", ui->grpJog->isChecked());
     set.setValue("keyboardControl", ui->chkKeyboardControl->isChecked());
@@ -660,11 +660,11 @@ void frmMain::updateControlsState() {
 
     ui->chkTestMode->setEnabled(portOpened && !m_processingFile);
     ui->cmdHome->setEnabled( false ); // !m_processingFile);
-    ui->cmdTouch->setEnabled( false ); // !m_processingFile);
+    //ui->cmdTouch->setEnabled( false ); // !m_processingFile);
     ui->cmdXSet->setEnabled(!m_processingFile);
     ui->cmdZSet->setEnabled(!m_processingFile);
     ui->cmdRestoreOrigin->setEnabled( false ); //!m_processingFile);
-    ui->cmdSafePosition->setEnabled( false ); //!m_processingFile);
+    //ui->cmdSafePosition->setEnabled( false ); //!m_processingFile);
     ui->cmdUnlock->setEnabled(!m_processingFile);
     ui->cmdSpindle->setEnabled(!m_processingFile);
 
@@ -927,7 +927,7 @@ void frmMain::onSerialPortReadyRead()
 
                 // Update controls
                 ui->cmdRestoreOrigin->setEnabled( false ); //status == IDLE);
-                ui->cmdSafePosition->setEnabled( false );  // status == IDLE);
+                //ui->cmdSafePosition->setEnabled( false );  // status == IDLE);
                 ui->cmdXSet->setEnabled(status == IDLE);
                 ui->cmdZSet->setEnabled(status == IDLE);
                 ui->chkTestMode->setEnabled(status != RUN && !m_processingFile);
@@ -2473,6 +2473,17 @@ void frmMain::on_cmdXSet_clicked()
 	}
 }
 
+void frmMain::on_cmdX0_clicked()
+{
+	sendCommand(QString("G92X0"), -1, m_settings->showUICommands());
+}
+
+void frmMain::on_cmdZ0_clicked()
+{
+	sendCommand(QString("G92Z0"), -1, m_settings->showUICommands());
+}
+
+
 void frmMain::on_cmdZSet_clicked()
 {
     // m_settingZeroZ = true;
@@ -2540,11 +2551,13 @@ void frmMain::on_cmdSpindle_toggled(bool checked)
     style()->unpolish(ui->grpSpindle);
     ui->grpSpindle->ensurePolished();
 
+	/* title removed
     if (checked) {
         if (!ui->grpSpindle->isChecked()) ui->grpSpindle->setTitle(tr("Spindle") + QString(tr(" (%1)")).arg(ui->slbSpindle->value()));
     } else {
-        ui->grpSpindle->setTitle(tr("Spindle"));
+		        ui->grpSpindle->setTitle(tr("Spindle"));
     }
+	*/
 }
 
 void frmMain::on_cmdSpindle_clicked(bool checked)
@@ -2865,12 +2878,13 @@ void frmMain::on_grpOverriding_toggled(bool checked)
 
 void frmMain::on_grpSpindle_toggled(bool checked)
 {
-    if (checked) {
-        ui->grpSpindle->setTitle(tr("Spindle"));
-    } else if (ui->cmdSpindle->isChecked()) {
-//        ui->grpSpindle->setTitle(tr("Spindle") + QString(tr(" (%1)")).arg(ui->txtSpindleSpeed->text()));
-        ui->grpSpindle->setTitle(tr("Spindle") + QString(tr(" (%1)")).arg(ui->slbSpindle->value()));
-    }
+	// changed to no title
+	//    if (checked) {
+	//        ui->grpSpindle->setTitle(tr("Spindle"));
+    //} else if (ui->cmdSpindle->isChecked()) {
+    //        ui->grpSpindle->setTitle(tr("Spindle") + QString(tr(" (%1)")).arg(ui->txtSpindleSpeed->text()));
+    //        ui->grpSpindle->setTitle(tr("Spindle") + QString(tr(" (%1)")).arg(ui->slbSpindle->value()));
+    //}
     updateLayouts();
 
     ui->widgetSpindle->setVisible(checked);

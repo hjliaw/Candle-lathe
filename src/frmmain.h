@@ -124,6 +124,8 @@ private slots:
     void on_cmdTouch_clicked();
     void on_cmdXSet_clicked();
     void on_cmdZSet_clicked();
+	void on_cmdX0_clicked();
+    void on_cmdZ0_clicked();
     void on_cmdRestoreOrigin_clicked();
     void on_cmdReset_clicked();
     void on_cmdUnlock_clicked();
