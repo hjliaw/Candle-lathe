@@ -663,6 +663,8 @@ void frmMain::updateControlsState() {
     //ui->cmdTouch->setEnabled( false ); // !m_processingFile);
     ui->cmdXSet->setEnabled(!m_processingFile);
     ui->cmdZSet->setEnabled(!m_processingFile);
+	ui->cmdX0->setEnabled(!m_processingFile);
+    ui->cmdZ0->setEnabled(!m_processingFile);
     ui->cmdRestoreOrigin->setEnabled( false ); //!m_processingFile);
     //ui->cmdSafePosition->setEnabled( false ); //!m_processingFile);
     ui->cmdUnlock->setEnabled(!m_processingFile);

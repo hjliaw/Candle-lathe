@@ -15,8 +15,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>640</width>
-    <height>320</height>
+    <width>800</width>
+    <height>480</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -101,7 +101,7 @@ QGroupBox {
         <property name="geometry">
          <rect>
           <x>0</x>
-          <y>-1601</y>
+          <y>0</y>
           <width>597</width>
           <height>2018</height>
          </rect>
@@ -223,7 +223,7 @@ QGroupBox {
             <item>
              <widget class="QCheckBox" name="chkAutoLine">
               <property name="text">
-               <string>Automatically set parser state before sending from selected line</string>
+               <string>Auto set parser state before sending</string>
               </property>
              </widget>
             </item>
