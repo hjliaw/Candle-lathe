@@ -1665,10 +1665,18 @@ void frmMain::on_actFileExit_triggered()
 
 void frmMain::on_actPowerOff_triggered()
 {
+	m_confirm.exec();
+
+	if( m_confirm.result() == QDialog::Accepted ){
+		system("sudo shutdown now");
+	}
+
+	/*
 	if (QMessageBox::warning(this, qApp->applicationDisplayName(), tr("Power Off?"),
                              QMessageBox::Yes | QMessageBox::Cancel) != QMessageBox::Yes) return;
-	// todo: only on Raspberry pi
+	// this also works on ubuntu ?
 	system("sudo shutdown now");
+	*/
 }
 
 void frmMain::on_cmdFileOpen_clicked()

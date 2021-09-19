@@ -42,6 +42,7 @@ SOURCES += main.cpp\
         frmmain.cpp \
     frmsettings.cpp \
     frmabout.cpp \
+    confirm.cpp \
     setpos.cpp \
     keyemitter.cpp \
     drawers/gcodedrawer.cpp \
@@ -74,6 +75,7 @@ SOURCES += main.cpp\
 HEADERS  += frmmain.h \
     frmsettings.h \
     frmabout.h \
+    confirm.h \
     setpos.h \
     keyemitter.h \
     drawers/gcodedrawer.h \
@@ -109,6 +111,7 @@ FORMS    += frmmain.ui \
     frmsettings.ui \
     frmabout.ui \
     setpos.ui \
+    confirm.ui \
     widgets/sliderbox.ui
 
 DEFINES += _USE_MATH_DEFINES

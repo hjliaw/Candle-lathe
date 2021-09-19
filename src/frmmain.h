@@ -42,6 +42,7 @@
 #include "frmsettings.h"
 #include "frmabout.h"
 #include "setpos.h"
+#include "confirm.h"
 
 #ifdef WINDOWS
     #include <QtWinExtras/QtWinExtras>
@@ -231,6 +232,7 @@ private:
     frmSettings *m_settings;
     frmAbout m_frmAbout;
 	setPos   m_setPos;
+	confirm  m_confirm;
 
     QString m_settingsFileName;
     QString m_programFileName;
