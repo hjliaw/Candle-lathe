@@ -188,6 +188,7 @@ private slots:
     void on_cmdZMinus_pressed();
     void on_cmdZMinus_released();
     void on_cmdStop_clicked();
+	void getGrblState();
 
 protected:
     void showEvent(QShowEvent *se);
@@ -263,6 +264,9 @@ private:
 
     QMessageBox* m_senderErrorBox;
 
+	double m_grblScale = 1.0;
+	double m_cndlScale = 1.0;
+	
     // Stored origin
     double m_storedX = 0;
     double m_storedY = 0;

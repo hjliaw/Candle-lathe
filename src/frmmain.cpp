@@ -556,6 +556,9 @@ void frmMain::saveSettings()
     set.setValue("keyboardControl", ui->chkKeyboardControl->isChecked());
     set.setValue("autoCompletion", m_settings->autoCompletion());
     set.setValue("units", m_settings->units());
+
+	m_cndlScale = (m_settings->units() == 0 ) ? 1.0 : 25.4;
+	
     set.setValue("storedX", m_storedX);
     set.setValue("storedY", m_storedY);
     set.setValue("storedZ", m_storedZ);
@@ -784,13 +787,16 @@ void frmMain::openPort()
 
 void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 {
+
+	//qDebug() << "sendCmd:" << command;
+			
     if (!m_serialPort.isOpen() || !m_resetCompleted) return;
 
     command = command.toUpper();
 
     // Commands queue
     if ((bufferLength() + command.length() + 1) > BUFFERLENGTH) {
-//        qDebug() << "queue:" << command;
+        //qDebug() << "queue:" << command;
 
         CommandQueue cq;
 
@@ -870,6 +876,13 @@ void frmMain::grblReset()
     m_commands.append(ca);
 
     updateControlsState();
+
+	QTimer::singleShot( 500, this, SLOT( getGrblState()));
+}
+
+void frmMain::getGrblState()
+{
+  		sendCommand( "$$", -1 );
 }
 
 int frmMain::bufferLength()
@@ -907,9 +920,16 @@ void frmMain::onSerialPortReadyRead()
             // Update machine coordinates
             static QRegExp mpx("MPos:([^,]*),([^,]*),([^,^>^|]*)");
             if (mpx.indexIn(data) != -1) {
-                ui->txtMPosX->setText(mpx.cap(1));
-                ui->txtMPosY->setText(mpx.cap(2));
-                ui->txtMPosZ->setText(mpx.cap(3));
+
+				double xm, ym, zm;
+				xm = mpx.cap(1).toDouble() * m_grblScale;
+				ym = mpx.cap(2).toDouble() * m_grblScale;
+				zm = mpx.cap(3).toDouble() * m_grblScale;
+
+				int prec = m_settings->units() == 0 ? 2 : 3;  // todo: let user specify this
+				ui->txtMPosX->setText( QString::number( xm/m_cndlScale, 'f', prec ) );
+				ui->txtMPosY->setText( QString::number( ym/m_cndlScale, 'f', prec ) );
+				ui->txtMPosZ->setText( QString::number( zm/m_cndlScale, 'f', prec ) );
             }
 
             // Status
@@ -1012,9 +1032,9 @@ void frmMain::onSerialPortReadyRead()
                             z = sNan;
                             grblReset();
                         } else {
-                            x = ui->txtMPosX->text().toDouble();
-                            y = ui->txtMPosY->text().toDouble();
-                            z = ui->txtMPosZ->text().toDouble();
+							x = ui->txtMPosX->text().toDouble() * m_cndlScale;
+							y = ui->txtMPosY->text().toDouble() * m_cndlScale;
+							z = ui->txtMPosZ->text().toDouble() * m_cndlScale;
                         }
                         break;
                     }
@@ -1022,31 +1042,36 @@ void frmMain::onSerialPortReadyRead()
 			}
 
             // Store work offset
-            static QVector3D workOffset;
+            static QVector3D workOffset, mPos;
             static QRegExp wpx("WCO:([^,]*),([^,]*),([^,^>^|]*)");
 
-            if (wpx.indexIn(data) != -1)
-            {
-                workOffset = QVector3D(wpx.cap(1).toDouble(), wpx.cap(2).toDouble(), wpx.cap(3).toDouble());
+            if (wpx.indexIn(data) != -1){
+                workOffset = m_grblScale * QVector3D(wpx.cap(1).toDouble(), wpx.cap(2).toDouble(), wpx.cap(3).toDouble());
             }
+
+			mPos = m_cndlScale * QVector3D( ui->txtMPosX->text().toDouble(),
+											ui->txtMPosY->text().toDouble(),
+											ui->txtMPosZ->text().toDouble() );
 
             // Update work coordinates
             int prec = m_settings->units() == 0 ? 2 : 3;
-            ui->txtWPosX->setText(QString::number(ui->txtMPosX->text().toDouble() - workOffset.x(), 'f', prec));
-            ui->txtWPosY->setText(QString::number(ui->txtMPosY->text().toDouble() - workOffset.y(), 'f', prec));
-            ui->txtWPosZ->setText(QString::number(ui->txtMPosZ->text().toDouble() - workOffset.z(), 'f', prec));
+            ui->txtWPosX->setText(QString::number( (mPos.x() - workOffset.x()) / m_cndlScale, 'f', prec));
+            ui->txtWPosY->setText(QString::number( (mPos.y() - workOffset.y()) / m_cndlScale, 'f', prec));
+            ui->txtWPosZ->setText(QString::number( (mPos.z() - workOffset.z()) / m_cndlScale, 'f', prec));
 
             // Update tool position
             QVector3D toolPosition;
             if (!(status == CHECK && m_fileProcessedCommandIndex < m_currentModel->rowCount() - 1)) {
-                toolPosition = QVector3D(toMetric(ui->txtWPosX->text().toDouble()),
-                                         toMetric(ui->txtWPosY->text().toDouble()),
-                                         toMetric(ui->txtWPosZ->text().toDouble()));
+                toolPosition = mPos - workOffset;
+				//QVector3D(toMetric(ui->txtWPosX->text().toDouble()),
+                //                         toMetric(ui->txtWPosY->text().toDouble()),
+                //                         toMetric(ui->txtWPosZ->text().toDouble()));
                 m_toolDrawer.setToolPosition(m_codeDrawer->getIgnoreZ() ? QVector3D(toolPosition.x(), toolPosition.y(), 0) : toolPosition);
 
-				ui->glwVisualizer->setWPos( toMetric(ui->txtWPosX->text().toDouble()),
-									  toMetric(ui->txtWPosY->text().toDouble()),
-									  toMetric(ui->txtWPosZ->text().toDouble()) );
+				ui->glwVisualizer->setWPos( toolPosition.x(), toolPosition.y(), toolPosition.z() );
+				//toMetric(ui->txtWPosX->text().toDouble()),
+				//					  toMetric(ui->txtWPosY->text().toDouble()),
+				//					  toMetric(ui->txtWPosZ->text().toDouble()) );
             }
 
 
@@ -1142,9 +1167,22 @@ void frmMain::onSerialPortReadyRead()
                 ui->glwVisualizer->setSpeedState((QString(tr("F/S: %1 / %2")).arg(fs.cap(1)).arg(fs.cap(2))));
             }
 
-		} else if (data.length() > 0) {
+		} else if (data.length() > 0) {  // non status report (1st char is not '<'
 
-			//qDebug() << "RCVD " << data;  // non status report (1st char is not '<'
+			//qDebug() << "RCVD " << data;
+
+			// HJL: process grbl status report
+			QRegExp grblsts("\\$(\\d+)=([\\d\\.]+)");
+            if (grblsts.indexIn(data) != -1){
+				//qDebug() << "GRBL " << grblsts.cap(1) <<  " " << grblsts.cap(2);
+				if( grblsts.cap(1) == "13" ){
+					m_grblScale = 1.0;
+					if( grblsts.cap(2) == "1" ){ 
+						m_grblScale = 25.4;
+					}
+					qDebug() << "GRBL report unit= " << grblsts.cap(2) << " sx= " << m_grblScale;
+				}
+            }
 
             // Processed commands
             if (m_commands.length() > 0 && !dataIsFloating(data)
@@ -1669,7 +1707,7 @@ void frmMain::on_actPowerOff_triggered()
 	m_confirm.exec();
 
 	if( m_confirm.result() == QDialog::Accepted ){
-		system("sudo shutdown now");
+		int ignore = system("sudo shutdown now");
 	}
  	//ui->setEnabled( true );
 }
@@ -2492,6 +2530,8 @@ void frmMain::on_cmdXSet_clicked()
 void frmMain::on_cmdX0_clicked()
 {
 	sendCommand(QString("G92X0"), -1, m_settings->showUICommands());
+
+	// sendCommand( "$$", -1 );   // works here
 }
 
 void frmMain::on_cmdZ0_clicked()
@@ -2547,6 +2587,11 @@ void frmMain::on_cmdRestoreOrigin_clicked()
 void frmMain::on_cmdReset_clicked()
 {
     grblReset();
+
+	// doesn't work here, as grbl will be in the middle of reset
+	//sendCommand( "$$", -1 );
+
+	//QTimer::singleShot( 500, this, SLOT( getGrblState()));  MOVE to grblReset
 }
 
 void frmMain::on_cmdUnlock_clicked()
