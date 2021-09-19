@@ -14,7 +14,7 @@
    <string>Confirm</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(30, 30, 30);
+   <string notr="true">
 
 </string>
   </property>
@@ -22,7 +22,7 @@
    <item>
     <widget class="QWidget" name="centralWidget" native="true">
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);</string>
+      <string notr="true"/>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -104,12 +104,7 @@
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">color: rgb(255, 255, 255);
-
-QPushButton{
-border-color: rgb(60,60,60);
-border: 3px;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>

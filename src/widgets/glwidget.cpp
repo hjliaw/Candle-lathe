@@ -498,27 +498,26 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
     QPen pen(m_colorText);
     painter.setPen(pen);
 
+	QFontMetrics fm(painter.font());
+
     double x = 10;
 	double y = 20;
-	double linespace = 20;    // make it a function of font height
+	double linespace = fm.height();    // make it a function of font height
 
     painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.2f mm", m_xWpos) );
     painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z=%+8.2f mm", m_zWpos) );
+    painter.drawText(QPoint(x, y+linespace*2 ), m_speedState);
 
-   	// cross at center (for debug)
+   	// draw cross at center (for debug)
 	//painter.drawLine(0, this->height()/2, this->width(), this->height()/2 );
 	//painter.drawLine(this->width()/2, 0, this->width()/2, this->height() );
 
 	// x/z only, and short string for concise range info 
-    y = this->height() - 35;
-    painter.drawText(QPoint(x, y ),  	     QString().sprintf("X %+.1f..%+.1f", m_xMin, m_xMax) );
-    painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z %+.1f..%+.1f", m_zMin, m_zMax) );
-
-    QFontMetrics fm(painter.font());
-
+    //y = this->height() - 35;
+    //painter.drawText(QPoint(x, y ),  	     QString().sprintf("X %+.1f..%+.1f", m_xMin, m_xMax) );
+    //painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z %+.1f..%+.1f", m_zMin, m_zMax) );
 
     //painter.drawText(QPoint(x, fm.height() + 10), m_parserStatus);
-    painter.drawText(QPoint(x, fm.height() * 2 + 10), m_speedState);
     //painter.drawText(QPoint(x, fm.height() * 3 + 10), m_pinState);
 
     //QString str = QString(tr("Vertices: %1")).arg(vertices);
@@ -527,7 +526,7 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
     //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 45), str);
 
     QString str = m_spendTime.toString("hh:mm:ss") + " / " + m_estimatedTime.toString("hh:mm:ss");
-    painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 20), str);
+    painter.drawText(QPoint(this->width() - fm.width(str) - 10,  this->height() - 15), str);
 
     //str = m_bufferState;
     //painter.drawText(QPoint(this->width() - fm.width(str) - 10, y + 15), str);

@@ -16,6 +16,7 @@ class setPos : public QDialog
 
 public:
 	double pos;
+	int    unit;  // 0=mm hardcoded in frmmain.cpp
 	QString axis;
 	void updateAxisPos();
     explicit setPos(QWidget *parent = 0);

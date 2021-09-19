@@ -97,6 +97,13 @@ void setPos::updateAxisPos(){    // called before window pops up
 	else{
 		ui->pushButtonMode->setText( "Radius/X=" );
 	}
+
+	if( this->unit == 0 ){   // mm
+		ui->pushButtonUnit->setText( "mm" );
+	}
+	else{
+		ui->pushButtonUnit->setText( "inch" );
+	}
 	
 	ui->lineEditPosition->setText( QString::number(this->pos) );
 	ui->lineEditPosition->selectAll();
@@ -105,12 +112,15 @@ void setPos::updateAxisPos(){    // called before window pops up
 
 void setPos::on_pushButtonUnit_clicked(){
 
+	
 	QString unit = ui->pushButtonUnit->text();
 
-	if( unit.at( 0 ) == 'm' ){
+	if( this->unit == 0 ){   // mm
+		this->unit = 1;
 		ui->pushButtonUnit->setText( "inch" );
 	}
 	else{
+		this->unit = 0;
 		ui->pushButtonUnit->setText( "mm" );
 	}
 	

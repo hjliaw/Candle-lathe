@@ -700,8 +700,8 @@ void frmMain::updateControlsState() {
         ui->txtStatus->setStyleSheet(QString("background-color: palette(button); color: palette(text);"));
     }
 
-    this->setWindowTitle(m_programFileName.isEmpty() ? qApp->applicationDisplayName()
-                                                     : m_programFileName.mid(m_programFileName.lastIndexOf("/") + 1) + " - " + qApp->applicationDisplayName());
+    //this->setWindowTitle(m_programFileName.isEmpty() ? qApp->applicationDisplayName()
+    //                                                 : m_programFileName.mid(m_programFileName.lastIndexOf("/") + 1) + " - " + qApp->applicationDisplayName());
 
     if (!m_processingFile) ui->chkKeyboardControl->setChecked(m_storedKeyboardControl);
 
@@ -1665,18 +1665,13 @@ void frmMain::on_actFileExit_triggered()
 
 void frmMain::on_actPowerOff_triggered()
 {
+	//ui->setEnabled( false );  NOT working
 	m_confirm.exec();
 
 	if( m_confirm.result() == QDialog::Accepted ){
 		system("sudo shutdown now");
 	}
-
-	/*
-	if (QMessageBox::warning(this, qApp->applicationDisplayName(), tr("Power Off?"),
-                             QMessageBox::Yes | QMessageBox::Cancel) != QMessageBox::Yes) return;
-	// this also works on ubuntu ?
-	system("sudo shutdown now");
-	*/
+ 	//ui->setEnabled( true );
 }
 
 void frmMain::on_cmdFileOpen_clicked()
@@ -2477,6 +2472,8 @@ void frmMain::on_cmdXSet_clicked()
     // sendCommand("G92X0Y0", -1, m_settings->showUICommands());
     // sendCommand("$#", -2, m_settings->showUICommands());
 
+	m_setPos.unit = m_settings->units();   // 0=mm
+	
 	m_setPos.pos = ui->txtWPosX->text().toDouble(); 
 	m_setPos.axis = "X";
 	m_setPos.updateAxisPos();
@@ -2487,7 +2484,8 @@ void frmMain::on_cmdXSet_clicked()
 		//sendCommand(QString("G10L20P1X%1").arg(toMetric(m_setPos.pos )), -1, m_settings->showUICommands());
 
 		// G10L20P1 is same as G92 (perhaps G92 doesn't change eeprom ?)
-		sendCommand(QString("G92X%1").arg(toMetric(m_setPos.pos )), -1, m_settings->showUICommands());
+		double posmm = (m_setPos.unit == 0) ? m_setPos.pos : m_setPos.pos * 25.4;
+		sendCommand(QString("G92X%1").arg(posmm), -1, m_settings->showUICommands());
 	}
 }
 
@@ -2508,6 +2506,8 @@ void frmMain::on_cmdZSet_clicked()
     // sendCommand("G92Z0", -1, m_settings->showUICommands());
     // sendCommand("$#", -2, m_settings->showUICommands());
 
+	m_setPos.unit = m_settings->units();   // 0=mm
+	
 	m_setPos.pos = ui->txtWPosZ->text().toDouble(); 
 	m_setPos.axis = "Z";
 	m_setPos.updateAxisPos();
@@ -2517,7 +2517,8 @@ void frmMain::on_cmdZSet_clicked()
 		//qDebug() << "new Z= " << m_setPos.pos;
 		//sendCommand(QString("G10L20P1Z%1").arg(toMetric(m_setPos.pos )), -1, m_settings->showUICommands());
 
-		sendCommand(QString("G92Z%1").arg(toMetric(m_setPos.pos )), -1, m_settings->showUICommands());
+		double posmm = (m_setPos.unit == 0) ? m_setPos.pos : m_setPos.pos * 25.4;
+		sendCommand( QString("G92Z%1").arg(posmm), -1, m_settings->showUICommands());
 	}
 }
 
