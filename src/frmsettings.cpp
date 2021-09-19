@@ -623,8 +623,8 @@ void frmSettings::on_cboToolType_currentIndexChanged(int index)
 
 void frmSettings::on_cmdDefaults_clicked()
 {
-    if (QMessageBox::warning(this, qApp->applicationDisplayName(), tr("Reset settings to default values?"),
-                             QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel) != QMessageBox::Yes) return;
+    if (QMessageBox::warning(this, qApp->applicationDisplayName(), tr("Reset settings to default values ?"),
+                             QMessageBox::Yes | QMessageBox::Cancel) != QMessageBox::Yes) return;
 
     setPort("");
     setBaud(115200);
@@ -685,7 +685,7 @@ void frmSettings::on_cmdDefaults_clicked()
     ui->clpToolpathStart->setColor(QColor(255, 0, 0));
     ui->clpToolpathEnd->setColor(QColor(0, 255, 0));
 
-    setFontSize(9);
+    setFontSize(14);
 }
 
 void frmSettings::on_cboFontSize_currentTextChanged(const QString &arg1)

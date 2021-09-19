@@ -1900,6 +1900,7 @@ padding-right: 8;</string>
     <addaction name="actFileSaveTransformedAs"/>
     <addaction name="separator"/>
     <addaction name="actFileExit"/>
+    <addaction name="actPowerOff"/>
    </widget>
    <widget class="QMenu" name="mnuService">
     <property name="title">
@@ -1960,6 +1961,11 @@ padding-right: 8;</string>
   <action name="actFileSaveTransformedAs">
    <property name="text">
     <string>Save &amp;transformed as...</string>
+   </property>
+  </action>
+  <action name="actPowerOff">
+   <property name="text">
+    <string>Power off</string>
    </property>
   </action>
  </widget>

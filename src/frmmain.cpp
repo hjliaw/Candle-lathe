@@ -1663,6 +1663,14 @@ void frmMain::on_actFileExit_triggered()
     close();
 }
 
+void frmMain::on_actPowerOff_triggered()
+{
+	if (QMessageBox::warning(this, qApp->applicationDisplayName(), tr("Power Off?"),
+                             QMessageBox::Yes | QMessageBox::Cancel) != QMessageBox::Yes) return;
+	// todo: only on Raspberry pi
+	system("sudo shutdown now");
+}
+
 void frmMain::on_cmdFileOpen_clicked()
 {
     //if (!m_heightMapMode)

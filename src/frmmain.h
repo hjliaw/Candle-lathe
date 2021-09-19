@@ -110,6 +110,7 @@ private slots:
     void onOverridingToggled(bool checked);
     void onActSendFromLineTriggered();
 
+	void on_actPowerOff_triggered();
     void on_actFileExit_triggered();
     void on_cmdFileOpen_clicked();
     //void on_cmdFit_clicked();

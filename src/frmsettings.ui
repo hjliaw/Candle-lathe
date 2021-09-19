@@ -36,7 +36,17 @@ QGroupBox {
 	border: none;
 	padding-top: 16;
 	font-weight: bold;
-}</string>
+}
+
+QMessageBox {
+    background-color: #202020;
+}
+
+QMessageBox QLabel {
+    color: #aaa;
+}
+
+background-color: rgb(85, 87, 83);</string>
   </property>
   <property name="modal">
    <bool>true</bool>
@@ -102,7 +112,7 @@ QGroupBox {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>597</width>
+          <width>501</width>
           <height>2018</height>
          </rect>
         </property>
