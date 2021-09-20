@@ -41,6 +41,13 @@ cat cndl_ruf.log | ./proc.pl | grep ERROR
 ** no problem with uno, esp32 seemed ok, only happens with ezNC 
    move serial port task from core #0 to #1 seems fixed the problem
 * TODO
-** new control tab: set x/z as (0, user entered number), feed and rapid override
-** auto close messgae box
+** DONE new control tab: set x/z as (0, user entered number), feed and rapid override
+** auto close messgae box ?
 ** left hand tool
+** DONE jog step works in both units
+** feedrate in dif units ?
+** prhaps, switch unit with G20/G21 when candle changes unit
+
+* BUGS
+** happened once, switch back and forth between mm and inch lost some accuracy
+   should remember the position instead of convert from 2/3-digits text

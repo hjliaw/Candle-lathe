@@ -40,6 +40,7 @@ public:
     void setLineWidth(double lineWidth);
 
 	void setWPos( double x, double y, double z);
+	void setUnit( int uint );
 
     void setIsometricView();
     void setTopView();
@@ -103,6 +104,7 @@ private:
 	double m_xWpos, m_yWpos, m_zWpos;
     double m_lineWidth;
     double m_pointSize;
+	int    m_xyzUnit = 0;
     bool m_antialiasing;
     bool m_msaa;
     bool m_vsync;

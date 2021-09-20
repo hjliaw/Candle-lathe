@@ -417,6 +417,8 @@ void frmMain::loadSettings()
     ui->slbSpindleOverride->setValue(set.value("spindleOverrideValue", 100).toInt());
 
     m_settings->setUnits(set.value("units", 0).toInt());
+	m_cndlScale = (m_settings->units() == 0 ) ? 1.0 : 25.4;
+		
     m_storedX = set.value("storedX", 0).toDouble();
     m_storedY = set.value("storedY", 0).toDouble();
     m_storedZ = set.value("storedZ", 0).toDouble();
@@ -453,6 +455,7 @@ void frmMain::loadSettings()
         m_settings->setUserCommands(i, set.value(QString("userCommands%1").arg(i)).toString());
     }
 
+	// todo; adjust jogSteps as function of unit
     ui->cboJogStep->setItems(set.value("jogSteps").toStringList());
     ui->cboJogStep->setCurrentIndex(ui->cboJogStep->findText(set.value("jogStep").toString()));
     ui->cboJogFeed->setItems(set.value("jogFeeds").toStringList());
@@ -558,6 +561,7 @@ void frmMain::saveSettings()
     set.setValue("units", m_settings->units());
 
 	m_cndlScale = (m_settings->units() == 0 ) ? 1.0 : 25.4;
+	ui->glwVisualizer->setUnit( m_settings->units() );
 	
     set.setValue("storedX", m_storedX);
     set.setValue("storedY", m_storedY);
@@ -685,6 +689,8 @@ void frmMain::updateControlsState() {
 		ui->btnRUNSTOP->setIcon( QIcon("://images/stop_big_red.svg") );
 	else
 		ui->btnRUNSTOP->setIcon( QIcon("://images/run_big_green.svg") );
+
+	ui->glwVisualizer->setUnit( m_settings->units() );
 	
     ui->cmdFilePause->setEnabled(m_processingFile && !ui->chkTestMode->isChecked());
     ui->cmdFileAbort->setEnabled(m_processingFile);
@@ -1068,6 +1074,9 @@ void frmMain::onSerialPortReadyRead()
                 //                         toMetric(ui->txtWPosZ->text().toDouble()));
                 m_toolDrawer.setToolPosition(m_codeDrawer->getIgnoreZ() ? QVector3D(toolPosition.x(), toolPosition.y(), 0) : toolPosition);
 
+				// should only need to set once
+				//ui->glwVisualizer->setUnit( m_settings->units() );
+				
 				ui->glwVisualizer->setWPos( toolPosition.x(), toolPosition.y(), toolPosition.z() );
 				//toMetric(ui->txtWPosX->text().toDouble()),
 				//					  toMetric(ui->txtWPosY->text().toDouble()),
@@ -4062,7 +4071,7 @@ void frmMain::jogStep()
 {
     if (m_jogVector.length() == 0) return;
 
-    if (ui->cboJogStep->currentText().toDouble() == 0) {
+    if (ui->cboJogStep->currentText().toDouble() == 0) {    // cont
         const double acc = m_settings->acceleration();              // Acceleration mm/sec^2
         int speed = ui->cboJogFeed->currentText().toInt();          // Speed mm/min
         double v = (double)speed / 60;                              // Rapid speed mm/sec
@@ -4081,7 +4090,7 @@ void frmMain::jogStep()
                     .arg(speed), -2, m_settings->showUICommands());
     } else {
         int speed = ui->cboJogFeed->currentText().toInt();          // Speed mm/min
-        QVector3D vec = m_jogVector * ui->cboJogStep->currentText().toDouble();
+        QVector3D vec = m_jogVector * m_cndlScale * ui->cboJogStep->currentText().toDouble();
 
         sendCommand(QString("$J=G21G91X%1Y%2Z%3F%4")
                     .arg(vec.x(), 0, 'g', 4)

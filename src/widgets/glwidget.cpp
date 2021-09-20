@@ -272,10 +272,16 @@ void GLWidget::setLineWidth(double lineWidth)
 
 void GLWidget::setWPos(double x, double y, double z)   // to display pos in 3d plot
 {
-	m_xWpos = x;
+	m_xWpos = x;  // always in mm
 	m_yWpos = y;
 	m_zWpos = z;
 }
+
+void GLWidget::setUnit( int unit )  // 0=mm, 1=inch
+{
+	m_xyzUnit = unit;
+}
+
 
 void GLWidget::setTopView()
 {
@@ -504,8 +510,15 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
 	double y = 20;
 	double linespace = fm.height();    // make it a function of font height
 
-    painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.2f mm", m_xWpos) );
-    painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z=%+8.2f mm", m_zWpos) );
+	if( m_xyzUnit == 0 ){
+		painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.2f mm", m_xWpos) );
+		painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z=%+8.2f mm", m_zWpos) );
+	}
+	else{
+		painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.3f\"", m_xWpos/25.4) );
+		painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z=%+8.3f\"", m_zWpos/25.4) );
+	}
+	
     painter.drawText(QPoint(x, y+linespace*2 ), m_speedState);
 
    	// draw cross at center (for debug)
