@@ -123,10 +123,13 @@ QSlider::handle:horizontal:hover {
 	background-image: url(:/images/handle2grn.png);
 }
 
-/* somehow messed up check mark, Ans: need to set all style for QCheckBox
-QCheckBox::indicator {
-    border: 2px solid #5A5A5A;
-}*/
+/* change only checkbox color works, but turns off check mark, Ans: need to set all style for QCheckBox !?#$% */
+QCheckBox::indicator:checked {
+    image: url(:/images/handle2grn.png);
+}
+QCheckBox::indicator:unchecked {
+    image: url(:/images/handle2bg.png);
+}
 </string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -167,7 +170,7 @@ QTabBar::tab:selected { color: #FFFFFF; }
        <enum>QTabWidget::Triangular</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <property name="tabsClosable">
        <bool>false</bool>

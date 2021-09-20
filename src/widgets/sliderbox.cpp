@@ -18,6 +18,7 @@ SliderBox::SliderBox(QWidget *parent) :
 
     connect(&m_timerValueChanged, SIGNAL(timeout()), this, SLOT(onTimerValueChanged()));
     m_timerValueChanged.setInterval(250);
+
 }
 
 SliderBox::~SliderBox()
@@ -46,7 +47,7 @@ void SliderBox::setCurrentValue(int value)
     m_currentValue = value;
 
     ui->sliValue->setCurrentValue(value / m_ratio);
-    ui->txtValue->setStyleSheet(value == ui->txtValue->value() || !this->isChecked() ? "color: palette(text);" : "color: red;");
+    ui->txtValue->setStyleSheet(value == ui->txtValue->value() || !this->isChecked() ? "color: white;" : "color: red;");
 }
 
 int SliderBox::sliderPosition()

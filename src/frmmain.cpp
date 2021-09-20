@@ -156,7 +156,7 @@ frmMain::frmMain(QWidget *parent) :
     ui->slbFeedOverride->setMinimum(20);
     ui->slbFeedOverride->setMaximum(200);
     ui->slbFeedOverride->setCurrentValue(100);
-    ui->slbFeedOverride->setTitle(tr(" Feed rate:"));
+    ui->slbFeedOverride->setTitle(tr(" Feed rate"));
     ui->slbFeedOverride->setSuffix("%");
 
     connect(ui->slbFeedOverride, SIGNAL(toggled(bool)), this, SLOT(onOverridingToggled(bool)));
@@ -171,7 +171,7 @@ frmMain::frmMain(QWidget *parent) :
     ui->slbRapidOverride->setMinimum(50);
     ui->slbRapidOverride->setMaximum(150);
     ui->slbRapidOverride->setCurrentValue(100);
-    ui->slbRapidOverride->setTitle(tr(" Rapid speed:"));
+    ui->slbRapidOverride->setTitle(tr(" Rapid speed"));
     ui->slbRapidOverride->setSuffix("%");
     connect(ui->slbRapidOverride, SIGNAL(toggled(bool)), this, SLOT(onOverridingToggled(bool)));
     connect(ui->slbRapidOverride, &SliderBox::toggled, [=] {
@@ -181,11 +181,16 @@ frmMain::frmMain(QWidget *parent) :
         updateProgramEstimatedTime(m_currentDrawer->viewParser()->getLineSegmentList());
     });
 
+	// // HJL: change checkbox color  NOT working no member named chkTitle
+	// QPalette p = ui->slbRapidOverride->chkTitle->palette();
+	// p.setColor(QPalette::Active, QPalette::WindowText, green);
+	// ui->slbRapidOverride->chkTitle->setPalette(p);
+
     ui->slbSpindleOverride->setRatio(1);
     ui->slbSpindleOverride->setMinimum(50);
     ui->slbSpindleOverride->setMaximum(200);
     ui->slbSpindleOverride->setCurrentValue(100);
-    ui->slbSpindleOverride->setTitle(tr(" Spindle speed:"));
+    ui->slbSpindleOverride->setTitle(tr(" Spindle speed"));
     ui->slbSpindleOverride->setSuffix("%");
 
 	ui->slbSpindleOverride->setEnabled( false );  // HJL, disbale spindle for now
