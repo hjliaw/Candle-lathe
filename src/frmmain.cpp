@@ -690,11 +690,13 @@ void frmMain::updateControlsState() {
 
 	// HJL: switch icon dynamically
 	ui->btnRUNSTOP->setEnabled(m_processingFile || (portOpened && !m_processingFile && m_programModel.rowCount() > 1));
-	if(m_processingFile )
+	if(m_processingFile ){
 		ui->btnRUNSTOP->setIcon( QIcon("://images/stop_big_red.svg") );
-	else
+	}
+	else{
 		ui->btnRUNSTOP->setIcon( QIcon("://images/run_big_green.svg") );
-
+		//ui->btnRUNSTOP->setStyleSheet( ":pressed{ image: url(://images/run_big_green2.svg); }"); 
+	}
 	ui->glwVisualizer->setUnit( m_settings->units() );
 	
     ui->cmdFilePause->setEnabled(m_processingFile && !ui->chkTestMode->isChecked());

@@ -51,7 +51,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Radius, X</string>
+             <string>Set as X (Radius)=</string>
             </property>
            </widget>
           </item>

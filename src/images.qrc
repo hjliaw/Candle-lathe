@@ -57,6 +57,7 @@
 		<file>images/jog_Xplus.svg</file>
 		<file>images/stop_big_red.svg</file>
 		<file>images/run_big_green.svg</file>
+		<file>images/run_big_green2.svg</file>	
 		<file>images/stop_small.svg</file>		
     </qresource>
 </RCC>

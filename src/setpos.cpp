@@ -81,6 +81,10 @@ void setPos::on_pushButtonKeySign_clicked(){
 
 void setPos::on_pushButtonKeyEnter_clicked(){
 	this->pos = ui->lineEditPosition->text().toDouble();
+
+	if( ui->pushButtonMode->text().contains( "Diameter" ) ){
+		this->pos /= 2;
+	}
 	this->accept();  	// return from QDialog
 }
 
@@ -91,11 +95,11 @@ void setPos::on_pushButtonCancel_clicked(){
 void setPos::updateAxisPos(){    // called before window pops up
 
 	if( this->axis == "Z" ){
-		ui->pushButtonMode->setText( "Z=" );
+		ui->pushButtonMode->setText( "Set as Z=" );
 		// may be set inactive ?
 	}
 	else{
-		ui->pushButtonMode->setText( "Radius/X=" );
+		ui->pushButtonMode->setText( "Set as X (Radius)=" );
 	}
 
 	if( this->unit == 0 ){   // mm
@@ -135,11 +139,11 @@ void setPos::on_pushButtonMode_clicked(){
 		return;
 	}
 	
-	if( mode.at( 0 ) == 'D' ){
-		ui->pushButtonMode->setText( "Radius, X=" );
+	if( mode.contains( "Diameter" ) ){
+		ui->pushButtonMode->setText( "Set as X (Radius)=" );
 	}
 	else{
-		ui->pushButtonMode->setText( "Diameter=" );
+		ui->pushButtonMode->setText( "Set as Diameter=" );
 	}
 
 	ui->lineEditPosition->setFocus();
