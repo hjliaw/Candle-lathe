@@ -697,7 +697,7 @@ void frmMain::updateControlsState() {
 		ui->btnRUNSTOP->setIcon( QIcon("://images/run_big_green.svg") );
 		//ui->btnRUNSTOP->setStyleSheet( ":pressed{ image: url(://images/run_big_green2.svg); }"); 
 	}
-	ui->glwVisualizer->setUnit( m_settings->units() );
+	ui->glwVisualizer->setUnit( m_settings->units() ); // probably not necessary
 	
     ui->cmdFilePause->setEnabled(m_processingFile && !ui->chkTestMode->isChecked());
     ui->cmdFileAbort->setEnabled(m_processingFile);
@@ -1039,7 +1039,10 @@ void frmMain::onSerialPortReadyRead()
                     case HOLD0: // Hold
                     case HOLD1:
                     case QUEUE:
+						qDebug() << "     x = " << x << ", z= " << z;
+						qDebug() << "Mpos x = " << ui->txtMPosX->text() << ", z= " << ui->txtMPosZ->text();
                         if (!m_reseting && compareCoordinates(x, y, z)) {
+							qDebug() << "Nan & grblReset";
                             x = sNan;
                             y = sNan;
                             z = sNan;
@@ -2119,8 +2122,13 @@ void frmMain::onActSendFromLineTriggered()
 void frmMain::on_cmdFileAbort_clicked()
 {
     m_aborting = true;
+
+	// BUG caused by HJ, why go into chkTestMode (sim mode) ?
+	
     if (!ui->chkTestMode->isChecked()) {
-        m_serialPort.write("!");
+		qDebug() << "abort with serial write";
+		m_serialPort.write("!");
+		//grblReset();   // hack, but still needs manually unlock afterwards ?? 
     } else {
         grblReset();
     }
@@ -4038,7 +4046,11 @@ QRectF frmMain::borderRectFromExtremes()
 
 bool frmMain::compareCoordinates(double x, double y, double z)
 {
-    return ui->txtMPosX->text().toDouble() == x && ui->txtMPosY->text().toDouble() == y && ui->txtMPosZ->text().toDouble() == z;
+	// MPos in candlScale, x,y,z already convrted
+	
+    return m_cndlScale * ui->txtMPosX->text().toDouble() == x
+		&& m_cndlScale * ui->txtMPosY->text().toDouble() == y
+		&& m_cndlScale * ui->txtMPosZ->text().toDouble() == z;
 }
 
 void frmMain::onCmdUserClicked(bool checked)
