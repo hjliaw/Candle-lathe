@@ -503,12 +503,14 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
 
     QPen pen(m_colorText);
     painter.setPen(pen);
-
 	QFontMetrics fm(painter.font());
 
     double x = 10;
 	double y = 20;
 	double linespace = fm.height();    // make it a function of font height
+
+	painter.fillRect(x, 0, 200, 3*linespace, m_colorBackground );
+	
 
 	if( m_xyzUnit == 0 ){
 		painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.2f mm", m_xWpos) );
