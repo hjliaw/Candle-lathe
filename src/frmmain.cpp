@@ -692,11 +692,14 @@ void frmMain::updateControlsState() {
 	ui->btnRUNSTOP->setEnabled(m_processingFile || (portOpened && !m_processingFile && m_programModel.rowCount() > 1));
 	if(m_processingFile ){
 		ui->btnRUNSTOP->setIcon( QIcon("://images/stop_big_red.svg") );
+
 	}
 	else{
 		ui->btnRUNSTOP->setIcon( QIcon("://images/run_big_green.svg") );
-		//ui->btnRUNSTOP->setStyleSheet( ":pressed{ image: url(://images/run_big_green2.svg); }"); 
 	}
+	// seems to disable existing style sheet in ui, but stylesheet doesn;t work as expected ...
+	ui->btnRUNSTOP->setStyleSheet( ":pressed{ background-color: rgb(130, 130, 130); }"); 
+	
 	ui->glwVisualizer->setUnit( m_settings->units() ); // probably not necessary
 	
     ui->cmdFilePause->setEnabled(m_processingFile && !ui->chkTestMode->isChecked());
@@ -854,7 +857,7 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 
     m_serialPort.write( (command + "\r").toLatin1() );
 
-	//qDebug() << "SEND " << command;
+	qDebug() << "SEND " << command;
 }
 
 void frmMain::grblReset()
@@ -924,6 +927,10 @@ void frmMain::onSerialPortReadyRead()
             }
         }
 
+		if (data.length() > 0) {
+			qDebug() << "RCVD " << data;
+		}
+
         // Status response
 		if (data[0] == '<') {
             int status = -1;
@@ -965,6 +972,17 @@ void frmMain::onSerialPortReadyRead()
                 //ui->cmdSafePosition->setEnabled( false );  // status == IDLE);
                 ui->cmdXSet->setEnabled(status == IDLE);
                 ui->cmdZSet->setEnabled(status == IDLE);
+				ui->cmdX0->setEnabled(status == IDLE);
+				ui->cmdZ0->setEnabled(status == IDLE);
+
+				if( status == ALARM ){
+					ui->btnRUNSTOP->setEnabled( false );
+					ui->btnRUNSTOP->setStyleSheet( "background-color: rgb(250, 100, 0);" );
+				}
+				else{
+					ui->btnRUNSTOP->setStyleSheet( ":pressed{ background-color: rgb(130, 130, 130); }" );
+				}
+								
                 ui->chkTestMode->setEnabled(status != RUN && !m_processingFile);
                 ui->chkTestMode->setChecked(status == CHECK);
                 ui->cmdFilePause->setChecked(status == HOLD0 || status == HOLD1 || status == QUEUE);
@@ -1010,8 +1028,9 @@ void frmMain::onSerialPortReadyRead()
                     m_timerStateQuery.stop();
                     m_timerConnection.stop();
 
-                    //QMessageBox::information(this, qApp->applicationDisplayName(), tr("Job done.\nTime elapsed: %1")
-					// .arg(ui->glwVisualizer->spendTime().toString("hh:mm:ss")));
+					// todo: show with custom confirm box
+                    QMessageBox::information(this, qApp->applicationDisplayName(), tr("Job done.\nTime elapsed: %1")
+					 .arg(ui->glwVisualizer->spendTime().toString("hh:mm:ss")));
 
                     m_timerStateQuery.setInterval(m_settings->queryStateTime());
                     m_timerConnection.start();
@@ -1187,8 +1206,6 @@ void frmMain::onSerialPortReadyRead()
             }
 
 		} else if (data.length() > 0) {  // non status report (1st char is not '<'
-
-			//qDebug() << "RCVD " << data;
 
 			// HJL: process grbl status report
 			QRegExp grblsts("\\$(\\d+)=([\\d\\.]+)");
@@ -1379,7 +1396,8 @@ void frmMain::onSerialPortReadyRead()
                             errors.append(QString::number(ca.tableIndex + 1) + ": " + ca.command
                                           + " < " + response + "\n");
 
-                            m_senderErrorBox->setText(tr("Error message(s) received:\n") + errors);
+							QString first2lines = errors.section( '\n', 0, 1 );
+                            m_senderErrorBox->setText( tr("Error message(s) received:\n") + first2lines );
 
                             if (!holding) {
                                 holding = true;         // Hold transmit while messagebox is visible
@@ -2147,11 +2165,13 @@ void frmMain::restoreParserState()
 
 void frmMain::storeOffsets()
 {
-//    sendCommand("$#", -2, m_settings->showUICommands());
+	//    sendCommand("$#", -2, m_settings->showUICommands());
 }
 
 void frmMain::restoreOffsets()
 {
+	return;   // consistent with the above
+	
     // Still have pre-reset working position
     sendCommand(QString("G21G53G90X%1Y%2Z%3").arg(toMetric(ui->txtMPosX->text().toDouble()))
                                        .arg(toMetric(ui->txtMPosY->text().toDouble()))
@@ -2553,9 +2573,11 @@ void frmMain::on_cmdXSet_clicked()
 
 void frmMain::on_cmdX0_clicked()
 {
-	sendCommand(QString("G92X0"), -1, m_settings->showUICommands());
+	//sendCommand(QString("G92X0"), -1, m_settings->showUICommands());
 
-	// sendCommand( "$$", -1 );   // works here
+	// DEBUG debug HJL: to be cleaned up
+	qDebug() << QString("WPos x=%1 z=%2").arg( ui->txtWPosX->text() ).arg( ui->txtWPosZ->text() );
+	qDebug() << QString("MPos x=%1 z=%2").arg( ui->txtMPosX->text() ).arg( ui->txtMPosZ->text() );
 }
 
 void frmMain::on_cmdZ0_clicked()

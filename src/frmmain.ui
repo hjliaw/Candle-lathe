@@ -120,8 +120,19 @@ QSlider::handle:horizontal {
 }
 
 QSlider::handle:horizontal:hover {
-	background-image: url(:/images/handle2grn.png);
+background-image: url(:/images/handle2grn.png);
 }
+
+/*  not as expected
+QToolButton#btnRUNSTOP {
+	border: none;
+	background: transparent; 
+}
+
+QToolButton#btnRUNSTOP:pressed {
+	background-color: rgb(180, 180, 180);
+}
+*/
 
 /* change only checkbox color works, but turns off check mark, Ans: need to set all style for QCheckBox !?#$% */
 QCheckBox::indicator:checked {
@@ -280,6 +291,21 @@ QTabBar::tab:selected { color: #FFFFFF; }
         <item row="0" column="1">
          <widget class="QFrame" name="grpJog">
           <layout class="QVBoxLayout" name="verticalLayout_11">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QWidget" name="widgetJog" native="true">
              <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -631,8 +657,8 @@ QTabBar::tab:selected { color: #FFFFFF; }
              </property>
              <property name="minimumSize">
               <size>
-               <width>110</width>
-               <height>110</height>
+               <width>180</width>
+               <height>120</height>
               </size>
              </property>
              <property name="font">
@@ -641,10 +667,6 @@ QTabBar::tab:selected { color: #FFFFFF; }
                <weight>50</weight>
                <bold>false</bold>
               </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">border: none
-</string>
              </property>
              <property name="text">
               <string>STOP</string>

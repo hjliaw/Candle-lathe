@@ -1,3 +1,5 @@
+* commands
+  rsync -avz --exclude "*.o" --exclude "moc_*" --exclude "ui_*" /home/hjack/cnc/candle/src/* .
 * [fixed] font too small (at least on screen size at 1920x1080)
 * [fixed] jog button a bit small
 * [done] ideally with a scalable screen layout and svg icons for tablet
@@ -51,3 +53,8 @@ cat cndl_ruf.log | ./proc.pl | grep ERROR
 * BUGS
 ** happened once, switch back and forth between mm and inch lost some accuracy
    should remember the position instead of convert from 2/3-digits text
+** DONE abort made grbl in alarm mode (status was removed by me !)
+   add back status report ?
+   now checks for alarm state and disable btnRUNSTOP with orange background
+   WANT to restart Candle
+** occasionally, STOP button is received, but no action
