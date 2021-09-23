@@ -1028,9 +1028,15 @@ void frmMain::onSerialPortReadyRead()
                     m_timerStateQuery.stop();
                     m_timerConnection.stop();
 
-					// todo: show with custom confirm box
-                    QMessageBox::information(this, qApp->applicationDisplayName(), tr("Job done.\nTime elapsed: %1")
-					 .arg(ui->glwVisualizer->spendTime().toString("hh:mm:ss")));
+					// show with custom confirm box
+                    //QMessageBox::information(this, qApp->applicationDisplayName(), tr("Job done.\nTime elapsed: %1")
+					// .arg(ui->glwVisualizer->spendTime().toString("hh:mm:ss")));
+
+					m_confirm.setTitle( "Job Done" );
+					m_confirm.setMessage( "Time elapsed: " + ui->glwVisualizer->spendTime().toString("hh:mm:ss") );
+ 					m_confirm.exec();
+
+
 
                     m_timerStateQuery.setInterval(m_settings->queryStateTime());
                     m_timerConnection.start();
@@ -1741,6 +1747,9 @@ void frmMain::on_actFileExit_triggered()
 void frmMain::on_actPowerOff_triggered()
 {
 	//ui->setEnabled( false );  NOT working
+
+	m_confirm.setTitle( "Please Confirm" );
+	m_confirm.setMessage( "Power off the system ?" );
 	m_confirm.exec();
 
 	if( m_confirm.result() == QDialog::Accepted ){

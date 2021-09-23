@@ -21,6 +21,14 @@ confirm::~confirm(){
     delete ui;
 }
 
+void confirm::setMessage( QString msg ){
+	ui->txtMessage->setText( msg );
+}
+
+void confirm::setTitle( QString ttl ){
+	ui->txtTitle->setText( ttl );
+}
+
 void confirm::on_pushButtonOK_clicked(){
 	this->accept();
 }

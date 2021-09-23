@@ -16,6 +16,9 @@ public:
     explicit confirm(QWidget *parent = 0);
     ~confirm();
 
+	void setMessage( QString msg );
+	void setTitle( QString ttl );
+
 private slots:
 	void on_pushButtonOK_clicked();
 	void on_pushButtonCancel_clicked();
