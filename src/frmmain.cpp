@@ -1028,15 +1028,13 @@ void frmMain::onSerialPortReadyRead()
                     m_timerStateQuery.stop();
                     m_timerConnection.stop();
 
-					// show with custom confirm box
-                    //QMessageBox::information(this, qApp->applicationDisplayName(), tr("Job done.\nTime elapsed: %1")
+					// show with custom confirm box, much more visible
+                    //QMessageBox::information(this, qApp->applicationDisplayName(),
+					// tr("Job done.\nTime elapsed: %1")
 					// .arg(ui->glwVisualizer->spendTime().toString("hh:mm:ss")));
-
 					m_confirm.setTitle( "Job Done" );
 					m_confirm.setMessage( "Time elapsed: " + ui->glwVisualizer->spendTime().toString("hh:mm:ss") );
  					m_confirm.exec();
-
-
 
                     m_timerStateQuery.setInterval(m_settings->queryStateTime());
                     m_timerConnection.start();
@@ -1536,7 +1534,7 @@ void frmMain::onTimerConnection()
 
 void frmMain::onTimerStateQuery()
 {
-    if (m_serialPort.isOpen() && m_resetCompleted && m_statusReceived) {
+	if (m_serialPort.isOpen() && m_resetCompleted ){  // && m_statusReceived) {
         m_serialPort.write(QByteArray(1, '?'));
         m_statusReceived = false;
     }
