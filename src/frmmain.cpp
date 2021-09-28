@@ -39,6 +39,8 @@
 #include "frmmain.h"
 #include "ui_frmmain.h"
 
+static double accel = 1;
+
 frmMain::frmMain(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::frmMain)
@@ -857,10 +859,9 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 
     m_serialPort.write( (command + "\r").toLatin1() );
 
-	if( command.contains("$G") ) return;
-	
-	qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz")
-			 << " SEND " << command;
+	//if( command.contains("$G") ) return;           // debug jog mode
+	//qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz")
+	//		 << " SEND " << command << " ST= " << ui->txtStatus->text() << " z= " << ui->txtWPosZ->text();
 }
 
 void frmMain::grblReset()
@@ -917,7 +918,6 @@ int frmMain::bufferLength()
 
 void frmMain::onSerialPortReadyRead()
 {
-	static double accel = 1;
 	
     while (m_serialPort.canReadLine()) {
         QString data = m_serialPort.readLine().trimmed();
@@ -988,7 +988,9 @@ void frmMain::onSerialPortReadyRead()
 					ui->btnRUNSTOP->setStyleSheet( ":pressed{ background-color: rgb(130, 130, 130); }" );
 				}
 
-				if( status != JOG ) accel = 1;
+				// rpi is too slow and trip this often
+				//if( status != JOG ) accel = 1;
+
 				// HJL: tried to stop jog as soon as possible
 				if( status == JOG && ! m_jogging )
 					    m_serialPort.write(QByteArray(1, char(0x85)));
@@ -1263,7 +1265,8 @@ void frmMain::onSerialPortReadyRead()
 					// try: add a flag to sync
 					
                     if (ca.command.toUpper().contains("$J=") && ca.tableIndex == -2 && m_jogging ) {
-						accel *= 1.025;
+						// ubuntu 1.025 is fast enough
+						accel *= 1.15; 
 						if( accel > 100.0 ) accel = 100.0;
                         jogStep( accel );
                     }
@@ -3172,13 +3175,6 @@ void frmMain::onConsoleResized(QSize size)
     // }
 }
 
-//void frmMain::onPanelsSizeChanged(QSize size)
-//{
-    // ui->splitPanels->setSizes(QList<int>() << size.height() + 4
-    //                           << ui->splitPanels->height() - size.height()
-    //                           - 4 - ui->splitPanels->handleWidth());
-//}
-
 bool frmMain::keyIsMovement(int key)
 {
     return key == Qt::Key_4 || key == Qt::Key_6 || key == Qt::Key_8 || key == Qt::Key_2 || key == Qt::Key_9 || key == Qt::Key_3;
@@ -3215,14 +3211,6 @@ void frmMain::on_chkKeyboardControl_toggled(bool checked)
 void frmMain::updateJogTitle()
 {
 	// simplified view has no title, not to mention dynamically changed
-	
-    // if (ui->grpJog->isChecked() || !ui->chkKeyboardControl->isChecked()) {
-    //     ui->grpJog->setTitle(tr("Jog"));
-    // } else if (ui->chkKeyboardControl->isChecked()) {
-    //     ui->grpJog->setTitle(tr("Jog") + QString(tr(" (%1/%2)"))
-    //                          .arg(ui->cboJogStep->currentText().toDouble() > 0 ? ui->cboJogStep->currentText() : tr("C"))
-    //                          .arg(ui->cboJogFeed->currentText()));
-    // }
 }
 
 void frmMain::on_tblProgram_customContextMenuRequested(const QPoint &pos)
@@ -3330,22 +3318,6 @@ double frmMain::toMetric(double value)    // hard-coded unit==0 ->  mm
     return m_settings->units() == 0 ? value : value * 25.4;
 }
 
-// void frmMain::on_grpHeightMap_toggled(bool arg1)
-// {
-//     ui->widgetHeightMap->setVisible(arg1);
-// }
-
-// QRectF frmMain::borderRectFromTextboxes()
-// {
-//     QRectF rect;
-
-//     rect.setX(ui->txtHeightMapBorderX->value());
-//     rect.setY(ui->txtHeightMapBorderY->value());
-//     rect.setWidth(ui->txtHeightMapBorderWidth->value());
-//     rect.setHeight(ui->txtHeightMapBorderHeight->value());
-
-//     return rect;
-// }
 
 QRectF frmMain::borderRectFromExtremes()
 {
@@ -3359,740 +3331,6 @@ QRectF frmMain::borderRectFromExtremes()
     return rect;
 }
 
-// void frmMain::updateHeightMapBorderDrawer()
-// {
-//     if (m_settingsLoading) return;
-
-//     qDebug() << "updating border drawer";
-
-//     m_heightMapBorderDrawer.setBorderRect(borderRectFromTextboxes());
-// }
-
-// void frmMain::updateHeightMapGrid(double arg1)
-// {
-//     if (sender()->property("previousValue").toDouble() != arg1 && !updateHeightMapGrid())
-//         static_cast<QDoubleSpinBox*>(sender())->setValue(sender()->property("previousValue").toDouble());
-//     else sender()->setProperty("previousValue", arg1);
-// }
-
-// bool frmMain::updateHeightMapGrid()
-// {
-//     if (m_settingsLoading) return true;
-
-//     qDebug() << "updating heightmap grid drawer";
-
-//     // Grid map changing warning
-//     bool nan = true;
-//     for (int i = 0; i < m_heightMapModel.rowCount(); i++)
-//         for (int j = 0; j < m_heightMapModel.columnCount(); j++)
-//             if (!qIsNaN(m_heightMapModel.data(m_heightMapModel.index(i, j), Qt::UserRole).toDouble())) {
-//                 nan = false;
-//                 break;
-//             }
-//     if (!nan && QMessageBox::warning(this, this->windowTitle(), tr("Changing grid settings will reset probe data. Continue?"),
-//                                                            QMessageBox::Yes | QMessageBox::No) == QMessageBox::No) return false;
-
-//     // Update grid drawer
-//     QRectF borderRect = borderRectFromTextboxes();
-//     m_heightMapGridDrawer.setBorderRect(borderRect);
-//     m_heightMapGridDrawer.setGridSize(QPointF(ui->txtHeightMapGridX->value(), ui->txtHeightMapGridY->value()));
-//     m_heightMapGridDrawer.setZBottom(ui->txtHeightMapGridZBottom->value());
-//     m_heightMapGridDrawer.setZTop(ui->txtHeightMapGridZTop->value());
-
-//     // Reset model
-// //    int gridPointsX = trunc(borderRect.width() / ui->txtHeightMapGridX->value()) + 1;
-// //    int gridPointsY = trunc(borderRect.height() / ui->txtHeightMapGridY->value()) + 1;
-//     int gridPointsX = ui->txtHeightMapGridX->value();
-//     int gridPointsY = ui->txtHeightMapGridY->value();
-
-//     m_heightMapModel.resize(gridPointsX, gridPointsY);
-//     //ui->tblHeightMap->setModel(NULL);
-//     //ui->tblHeightMap->setModel(&m_heightMapModel);
-//     resizeTableHeightMapSections();
-
-//     // Update interpolation
-//     updateHeightMapInterpolationDrawer(true);
-
-//     // Generate probe program
-//     double gridStepX = gridPointsX > 1 ? borderRect.width() / (gridPointsX - 1) : 0;
-//     double gridStepY = gridPointsY > 1 ? borderRect.height() / (gridPointsY - 1) : 0;
-
-//     qDebug() << "generating probe program";
-
-//     m_programLoading = true;
-//     m_probeModel.clear();
-//     m_probeModel.insertRow(0);
-
-//     m_probeModel.setData(m_probeModel.index(m_probeModel.rowCount() - 1, 1), QString("G21G90F%1G0Z%2").
-//                          arg(m_settings->heightmapProbingFeed()).arg(ui->txtHeightMapGridZTop->value()));
-//     m_probeModel.setData(m_probeModel.index(m_probeModel.rowCount() - 1, 1), QString("G0X0Y0"));
-// //                         .arg(ui->txtHeightMapGridZTop->value()));
-//     m_probeModel.setData(m_probeModel.index(m_probeModel.rowCount() - 1, 1), QString("G38.2Z%1")
-//                          .arg(ui->txtHeightMapGridZBottom->value()));
-//     m_probeModel.setData(m_probeModel.index(m_probeModel.rowCount() - 1, 1), QString("G0Z%1")
-//                          .arg(ui->txtHeightMapGridZTop->value()));
-
-//     double x, y;
-
-//     for (int i = 0; i < gridPointsY; i++) {
-//         y = borderRect.top() + gridStepY * i;
-//         for (int j = 0; j < gridPointsX; j++) {
-//             x = borderRect.left() + gridStepX * (i % 2 ? gridPointsX - 1 - j : j);
-//             m_probeModel.setData(m_probeModel.index(m_probeModel.rowCount() - 1, 1), QString("G0X%1Y%2")
-//                                  .arg(x, 0, 'f', 3).arg(y, 0, 'f', 3));
-//             m_probeModel.setData(m_probeModel.index(m_probeModel.rowCount() - 1, 1), QString("G38.2Z%1")
-//                                  .arg(ui->txtHeightMapGridZBottom->value()));
-//             m_probeModel.setData(m_probeModel.index(m_probeModel.rowCount() - 1, 1), QString("G0Z%1")
-//                                  .arg(ui->txtHeightMapGridZTop->value()));
-//         }
-//     }
-
-//     m_programLoading = false;
-
-//     if (m_currentDrawer == m_probeDrawer) updateParser();
-
-//     m_heightMapChanged = true;
-//     return true;
-// }
-
-// void frmMain::updateHeightMapInterpolationDrawer(bool reset)
-// {
-//     if (m_settingsLoading) return;
-
-//     qDebug() << "Updating interpolation";
-
-//     QRectF borderRect = borderRectFromTextboxes();
-//     m_heightMapInterpolationDrawer.setBorderRect(borderRect);
-
-//     QVector<QVector<double>> *interpolationData = new QVector<QVector<double>>;
-
-//     int interpolationPointsX = ui->txtHeightMapInterpolationStepX->value();// * (ui->txtHeightMapGridX->value() - 1) + 1;
-//     int interpolationPointsY = ui->txtHeightMapInterpolationStepY->value();// * (ui->txtHeightMapGridY->value() - 1) + 1;
-
-//     double interpolationStepX = interpolationPointsX > 1 ? borderRect.width() / (interpolationPointsX - 1) : 0;
-//     double interpolationStepY = interpolationPointsY > 1 ? borderRect.height() / (interpolationPointsY - 1) : 0;
-
-//     for (int i = 0; i < interpolationPointsY; i++) {
-//         QVector<double> row;
-//         for (int j = 0; j < interpolationPointsX; j++) {
-
-//             double x = interpolationStepX * j + borderRect.x();
-//             double y = interpolationStepY * i + borderRect.y();
-
-//             row.append(reset ? qQNaN() : Interpolation::bicubicInterpolate(borderRect, &m_heightMapModel, x, y));
-//         }
-//         interpolationData->append(row);
-//     }
-
-//     if (m_heightMapInterpolationDrawer.data() != NULL) {
-//         delete m_heightMapInterpolationDrawer.data();
-//     }
-//     m_heightMapInterpolationDrawer.setData(interpolationData);
-
-//     // Update grid drawer
-//     m_heightMapGridDrawer.update();
-
-//     // Heightmap changed by table user input
-//     //if (sender() == &m_heightMapModel) m_heightMapChanged = true;
-
-//     // Reset heightmapped program model
-//     m_programHeightmapModel.clear();
-// }
-
-// void frmMain::on_chkHeightMapBorderShow_toggled(bool checked)
-// {
-//     Q_UNUSED(checked)
-
-//     updateControlsState();
-// }
-
-// void frmMain::on_txtHeightMapBorderX_valueChanged(double arg1)
-// {
-//     updateHeightMapBorderDrawer();
-//     updateHeightMapGrid(arg1);
-// }
-
-// void frmMain::on_txtHeightMapBorderWidth_valueChanged(double arg1)
-// {
-//     updateHeightMapBorderDrawer();
-//     updateHeightMapGrid(arg1);
-// }
-
-// void frmMain::on_txtHeightMapBorderY_valueChanged(double arg1)
-// {
-//     updateHeightMapBorderDrawer();
-//     updateHeightMapGrid(arg1);
-// }
-
-// void frmMain::on_txtHeightMapBorderHeight_valueChanged(double arg1)
-// {
-//     updateHeightMapBorderDrawer();
-//     updateHeightMapGrid(arg1);
-// }
-
-// void frmMain::on_chkHeightMapGridShow_toggled(bool checked)
-// {
-//     Q_UNUSED(checked)
-
-//     updateControlsState();
-// }
-
-// void frmMain::on_txtHeightMapGridX_valueChanged(double arg1)
-// {
-//     updateHeightMapGrid(arg1);
-// }
-
-// void frmMain::on_txtHeightMapGridY_valueChanged(double arg1)
-// {
-//     updateHeightMapGrid(arg1);
-// }
-
-// void frmMain::on_txtHeightMapGridZBottom_valueChanged(double arg1)
-// {
-//     updateHeightMapGrid(arg1);
-// }
-
-// void frmMain::on_txtHeightMapGridZTop_valueChanged(double arg1)
-// {
-//     updateHeightMapGrid(arg1);
-// }
-
-// void frmMain::on_cmdHeightMapMode_toggled(bool checked)
-// {
-//     // Update flag
-//     m_heightMapMode = checked;
-
-//     // Reset file progress
-//     m_fileCommandIndex = 0;
-//     m_fileProcessedCommandIndex = 0;
-//     m_lastDrawnLineIndex = 0;
-
-//     // Reset/restore g-code program modification on edit mode enter/exit
-//     if (ui->chkHeightMapUse->isChecked()) {
-//         on_chkHeightMapUse_clicked(!checked); // Update gcode program parser
-// //        m_codeDrawer->updateData(); // Force update data to properly shadowing
-//     }
-
-//     if (checked) {
-//         ui->tblProgram->setModel(&m_probeModel);
-//         resizeTableHeightMapSections();
-//         m_currentModel = &m_probeModel;
-//         m_currentDrawer = m_probeDrawer;
-//         updateParser();  // Update probe program parser
-//     } else {
-//         m_probeParser.reset();
-//         if (!ui->chkHeightMapUse->isChecked()) {
-//             ui->tblProgram->setModel(&m_programModel);
-//             connect(ui->tblProgram->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onTableCurrentChanged(QModelIndex,QModelIndex)));
-//             ui->tblProgram->selectRow(0);
-
-//             resizeTableHeightMapSections();
-//             m_currentModel = &m_programModel;
-//             m_currentDrawer = m_codeDrawer;
-
-//             if (!ui->chkHeightMapUse->isChecked()) {
-//                 ui->glwVisualizer->updateExtremes(m_codeDrawer);
-//                 updateProgramEstimatedTime(m_currentDrawer->viewParser()->getLineSegmentList());
-//             }
-//         }
-//     }
-
-//     // Shadow toolpath
-//     QList<LineSegment*> list = m_viewParser.getLineSegmentList();
-//     QList<int> indexes;
-//     for (int i = m_lastDrawnLineIndex; i < list.count(); i++) {
-//         list[i]->setDrawn(checked);
-//         list[i]->setIsHightlight(false);
-//         indexes.append(i);
-//     }
-//     // Update only vertex color.
-//     // If chkHeightMapUse was checked codeDrawer updated via updateParser
-//     if (!ui->chkHeightMapUse->isChecked()) m_codeDrawer->update(indexes);
-
-//     updateRecentFilesMenu();
-//     updateControlsState();
-// }
-
-// bool frmMain::saveHeightMap(QString fileName)
-// {
-//     QFile file(fileName);
-//     QDir dir;
-
-//     if (file.exists()) dir.remove(file.fileName());
-//     if (!file.open(QIODevice::WriteOnly)) return false;
-
-//     QTextStream textStream(&file);
-//     textStream << ui->txtHeightMapBorderX->text() << ";"
-//                << ui->txtHeightMapBorderY->text() << ";"
-//                << ui->txtHeightMapBorderWidth->text() << ";"
-//                << ui->txtHeightMapBorderHeight->text() << "\r\n";
-//     textStream << ui->txtHeightMapGridX->text() << ";"
-//                << ui->txtHeightMapGridY->text() << ";"
-//                << ui->txtHeightMapGridZBottom->text() << ";"
-//                << ui->txtHeightMapGridZTop->text() << "\r\n";
-//     textStream << ui->cboHeightMapInterpolationType->currentIndex() << ";"
-//                << ui->txtHeightMapInterpolationStepX->text() << ";"
-//                 << ui->txtHeightMapInterpolationStepY->text() << "\r\n";
-
-//     for (int i = 0; i < m_heightMapModel.rowCount(); i++) {
-//         for (int j = 0; j < m_heightMapModel.columnCount(); j++) {
-//             textStream << m_heightMapModel.data(m_heightMapModel.index(i, j), Qt::UserRole).toString() << ((j == m_heightMapModel.columnCount() - 1) ? "" : ";");
-//         }
-//         textStream << "\r\n";
-//     }
-
-//     file.close();
-
-//     m_heightMapChanged = false;
-
-//     return true;
-// }
-
-// void frmMain::loadHeightMap(QString fileName)
-// {
-//     QFile file(fileName);
-
-//     if (!file.open(QIODevice::ReadOnly)) {
-//         QMessageBox::critical(this, this->windowTitle(), tr("Can't open file:\n") + fileName);
-//         return;
-//     }
-//     QTextStream textStream(&file);
-
-//     m_settingsLoading = true;
-
-//     // Storing previous values
-//     ui->txtHeightMapBorderX->setValue(qQNaN());
-//     ui->txtHeightMapBorderY->setValue(qQNaN());
-//     ui->txtHeightMapBorderWidth->setValue(qQNaN());
-//     ui->txtHeightMapBorderHeight->setValue(qQNaN());
-
-//     ui->txtHeightMapGridX->setValue(qQNaN());
-//     ui->txtHeightMapGridY->setValue(qQNaN());
-//     ui->txtHeightMapGridZBottom->setValue(qQNaN());
-//     ui->txtHeightMapGridZTop->setValue(qQNaN());
-
-//     QList<QString> list = textStream.readLine().split(";");
-//     ui->txtHeightMapBorderX->setValue(list[0].toDouble());
-//     ui->txtHeightMapBorderY->setValue(list[1].toDouble());
-//     ui->txtHeightMapBorderWidth->setValue(list[2].toDouble());
-//     ui->txtHeightMapBorderHeight->setValue(list[3].toDouble());
-
-//     list = textStream.readLine().split(";");
-//     ui->txtHeightMapGridX->setValue(list[0].toDouble());
-//     ui->txtHeightMapGridY->setValue(list[1].toDouble());
-//     ui->txtHeightMapGridZBottom->setValue(list[2].toDouble());
-//     ui->txtHeightMapGridZTop->setValue(list[3].toDouble());
-
-//     m_settingsLoading = false;
-
-//     updateHeightMapBorderDrawer();
-
-//     m_heightMapModel.clear();   // To avoid probe data wipe message
-//     updateHeightMapGrid();
-
-//     list = textStream.readLine().split(";");
-
-// //    ui->chkHeightMapBorderAuto->setChecked(false);
-// //    ui->chkHeightMapBorderAuto->setEnabled(false);
-// //    ui->txtHeightMapBorderX->setEnabled(false);
-// //    ui->txtHeightMapBorderY->setEnabled(false);
-// //    ui->txtHeightMapBorderWidth->setEnabled(false);
-// //    ui->txtHeightMapBorderHeight->setEnabled(false);
-
-// //    ui->txtHeightMapGridX->setEnabled(false);
-// //    ui->txtHeightMapGridY->setEnabled(false);
-// //    ui->txtHeightMapGridZBottom->setEnabled(false);
-// //    ui->txtHeightMapGridZTop->setEnabled(false);
-
-//     for (int i = 0; i < m_heightMapModel.rowCount(); i++) {
-//         QList<QString> row = textStream.readLine().split(";");
-//         for (int j = 0; j < m_heightMapModel.columnCount(); j++) {
-//             m_heightMapModel.setData(m_heightMapModel.index(i, j), row[j].toDouble(), Qt::UserRole);
-//         }
-//     }
-
-//     file.close();
-
-//     ui->txtHeightMap->setText(fileName.mid(fileName.lastIndexOf("/") + 1));
-//     m_heightMapFileName = fileName;
-//     m_heightMapChanged = false;
-
-//     ui->cboHeightMapInterpolationType->setCurrentIndex(list[0].toInt());
-//     ui->txtHeightMapInterpolationStepX->setValue(list[1].toDouble());
-//     ui->txtHeightMapInterpolationStepY->setValue(list[2].toDouble());
-
-//     updateHeightMapInterpolationDrawer();
-// }
-
-// void frmMain::on_chkHeightMapInterpolationShow_toggled(bool checked)
-// {
-//     Q_UNUSED(checked)
-
-//     updateControlsState();
-// }
-
-// void frmMain::on_cmdHeightMapLoad_clicked()
-// {
-//     if (!saveChanges(true)) {
-//         return;
-//     }
-
-//     QString fileName = QFileDialog::getOpenFileName(this, tr("Open"), m_lastFolder, tr("Heightmap files (*.map)"));
-
-//     if (fileName != "") {
-//         addRecentHeightmap(fileName);
-//         loadHeightMap(fileName);
-
-//         // If using heightmap
-//         if (ui->chkHeightMapUse->isChecked() && !m_heightMapMode) {
-//             // Restore original file
-//             on_chkHeightMapUse_clicked(false);
-//             // Apply heightmap
-//             on_chkHeightMapUse_clicked(true);
-//         }
-
-//         updateRecentFilesMenu();
-//         updateControlsState(); // Enable 'cmdHeightMapMode' button
-//     }
-// }
-
-// void frmMain::on_txtHeightMapInterpolationStepX_valueChanged(double arg1)
-// {
-//     Q_UNUSED(arg1)
-
-//     updateHeightMapInterpolationDrawer();
-// }
-
-// void frmMain::on_txtHeightMapInterpolationStepY_valueChanged(double arg1)
-// {
-//     Q_UNUSED(arg1)
-
-//     updateHeightMapInterpolationDrawer();
-// }
-
-// void frmMain::on_chkHeightMapUse_clicked(bool checked)
-// {
-// //    static bool fileChanged;
-
-//     // Reset table view
-//     QByteArray headerState = ui->tblProgram->horizontalHeader()->saveState();
-//     ui->tblProgram->setModel(NULL);
-
-//     CancelException cancel;
-
-//     if (checked) try {
-
-//         // Prepare progress dialog
-//         QProgressDialog progress(tr("Applying heightmap..."), tr("Abort"), 0, 0, this);
-//         progress.setWindowModality(Qt::WindowModal);
-//         progress.setFixedHeight(progress.sizeHint().height());
-//         progress.show();
-//         progress.setStyleSheet("QProgressBar {text-align: center; qproperty-format: \"\"}");
-
-//         // Performance test
-//         QTime time;
-
-//         // Store fileChanged state
-// //        fileChanged = m_fileChanged;
-
-//         // Set current model to prevent reseting heightmap cache
-//         m_currentModel = &m_programHeightmapModel;
-
-//         // Update heightmap-modificated program if not cached
-//         if (m_programHeightmapModel.rowCount() == 0) {
-
-//             // Modifying linesegments
-//             QList<LineSegment*> *list = m_viewParser.getLines();
-//             QRectF borderRect = borderRectFromTextboxes();
-//             double x, y, z;
-//             QVector3D point;
-
-//             progress.setLabelText(tr("Subdividing segments..."));
-//             progress.setMaximum(list->count() - 1);
-//             time.start();
-
-//             for (int i = 0; i < list->count(); i++) {
-//                 if (!list->at(i)->isZMovement()) {
-//                     QList<LineSegment*> subSegments = subdivideSegment(list->at(i));
-
-//                     if (subSegments.count() > 0) {
-//                         delete list->at(i);
-//                         list->removeAt(i);
-//                         foreach (LineSegment* subSegment, subSegments) list->insert(i++, subSegment);
-//                         i--;
-//                     }
-//                 }
-
-//                 if (progress.isVisible() && (i % PROGRESSSTEP == 0)) {
-//                     progress.setMaximum(list->count() - 1);
-//                     progress.setValue(i);
-//                     qApp->processEvents();
-//                     if (progress.wasCanceled()) throw cancel;
-//                 }
-//             }
-
-//             qDebug() << "Subdivide time: " << time.elapsed();
-
-//             progress.setLabelText(tr("Updating Z-coordinates..."));
-//             progress.setMaximum(list->count() - 1);
-//             time.start();
-
-//             for (int i = 0; i < list->count(); i++) {
-//                 if (i == 0) {
-//                     x = list->at(i)->getStart().x();
-//                     y = list->at(i)->getStart().y();
-//                     z = list->at(i)->getStart().z() + Interpolation::bicubicInterpolate(borderRect, &m_heightMapModel, x, y);
-//                     list->at(i)->setStart(QVector3D(x, y, z));
-//                 } else list->at(i)->setStart(list->at(i - 1)->getEnd());
-
-//                 x = list->at(i)->getEnd().x();
-//                 y = list->at(i)->getEnd().y();
-//                 z = list->at(i)->getEnd().z() + Interpolation::bicubicInterpolate(borderRect, &m_heightMapModel, x, y);
-//                 list->at(i)->setEnd(QVector3D(x, y, z));
-
-//                 if (progress.isVisible() && (i % PROGRESSSTEP == 0)) {
-//                     progress.setValue(i);
-//                     qApp->processEvents();
-//                     if (progress.wasCanceled()) throw cancel;
-//                 }
-//             }
-
-//             qDebug() << "Z update time (interpolation): " << time.elapsed();
-
-//             progress.setLabelText(tr("Modifying G-code program..."));
-//             progress.setMaximum(m_programModel.rowCount() - 2);
-//             time.start();
-
-//             // Modifying g-code program
-//             QString command;
-//             QStringList args;
-//             int line;
-//             QString newCommand;
-//             GCodeItem item;
-//             int lastSegmentIndex = 0;
-//             int lastCommandIndex = -1;
-
-//             // Search strings
-//             QString coords("XxYyZzIiJjKkRr");
-//             QString g("Gg");
-//             QString m("Mm");
-
-//             char codeChar;          // Single code char G1 -> G
-//             float codeNum;          // Code number      G1 -> 1
-
-//             QString lastCode;
-//             bool isLinearMove;
-//             bool hasCommand;
-
-//             m_programLoading = true;
-//             for (int i = 0; i < m_programModel.rowCount() - 1; i++) {
-//                 command = m_programModel.data().at(i).command;
-//                 line = m_programModel.data().at(i).line;
-//                 isLinearMove = false;
-//                 hasCommand = false;
-
-//                 if (line < 0 || line == lastCommandIndex || lastSegmentIndex == list->count() - 1) {
-//                     item.command = command;
-//                     m_programHeightmapModel.data().append(item);
-//                 } else {
-//                     // Get commands args
-//                     args = m_programModel.data().at(i).args;
-//                     newCommand.clear();
-
-//                     // Parse command args
-//                     foreach (QString arg, args) {                   // arg examples: G1, G2, M3, X100...
-//                         codeChar = arg.at(0).toLatin1();            // codeChar: G, M, X...
-//                         if (!coords.contains(codeChar)) {           // Not parameter
-//                             codeNum = arg.mid(1).toDouble();
-//                             if (g.contains(codeChar)) {             // 'G'-command
-//                                 // Store 'G0' & 'G1'
-//                                 if (codeNum == 0.0f || codeNum == 1.0f) {
-//                                     lastCode = arg;
-//                                     isLinearMove = true;            // Store linear move
-//                                 }
-
-//                                 // Replace 'G2' & 'G3' with 'G1'
-//                                 if (codeNum == 2.0f || codeNum == 3.0f) {
-//                                     newCommand.append("G1");
-//                                     isLinearMove = true;
-//                                 // Drop plane command for arcs
-//                                 } else if (codeNum != 17.0f && codeNum != 18.0f && codeNum != 19.0f) {
-//                                     newCommand.append(arg);
-//                                 }
-
-//                                 hasCommand = true;                  // Command has 'G'
-//                             } else {
-//                                 if (m.contains(codeChar))
-//                                     hasCommand = true;              // Command has 'M'
-//                                 newCommand.append(arg);       // Other commands
-//                             }
-//                         }
-//                     }
-
-//                     // Find first linesegment by command index
-//                     for (int j = lastSegmentIndex; j < list->count(); j++) {
-//                         if (list->at(j)->getLineNumber() == line) {
-//                             if (!qIsNaN(list->at(j)->getEnd().length()) && (isLinearMove || (!hasCommand && !lastCode.isEmpty()))) {
-//                                 // Create new commands for each linesegment with given command index
-//                                 while ((j < list->count()) && (list->at(j)->getLineNumber() == line)) {
-
-//                                     point = list->at(j)->getEnd();
-//                                     if (!list->at(j)->isAbsolute()) point -= list->at(j)->getStart();
-//                                     if (!list->at(j)->isMetric()) point /= 25.4;
-
-//                                     item.command = newCommand + QString("X%1Y%2Z%3")
-//                                             .arg(point.x(), 0, 'f', 3).arg(point.y(), 0, 'f', 3).arg(point.z(), 0, 'f', 3);
-//                                     m_programHeightmapModel.data().append(item);
-
-//                                     if (!newCommand.isEmpty()) newCommand.clear();
-//                                     j++;
-//                                 }
-//                             // Copy original command if not G0 or G1
-//                             } else {
-//                                 item.command = command;
-//                                 m_programHeightmapModel.data().append(item);
-//                             }
-
-//                             lastSegmentIndex = j;
-//                             break;
-//                         }
-//                     }
-//                 }
-//                 lastCommandIndex = line;
-
-//                 if (progress.isVisible() && (i % PROGRESSSTEP == 0)) {
-//                     progress.setValue(i);
-//                     qApp->processEvents();
-//                     if (progress.wasCanceled()) throw cancel;
-//                 }
-//             }
-//             m_programHeightmapModel.insertRow(m_programHeightmapModel.rowCount());
-//         }
-//         progress.close();
-
-//         qDebug() << "Program modification time: " << time.elapsed();
-
-//         ui->tblProgram->setModel(&m_programHeightmapModel);
-//         ui->tblProgram->horizontalHeader()->restoreState(headerState);
-
-//         connect(ui->tblProgram->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onTableCurrentChanged(QModelIndex,QModelIndex)));
-
-//         m_programLoading = false;
-
-//         // Update parser
-//         m_currentDrawer = m_codeDrawer;
-//         updateParser();
-
-//         // Select first row
-//         ui->tblProgram->selectRow(0);
-//     }
-//     catch (CancelException) {                       // Cancel modification
-//         m_programHeightmapModel.clear();
-//         m_currentModel = &m_programModel;
-
-//         ui->tblProgram->setModel(&m_programModel);
-//         ui->tblProgram->horizontalHeader()->restoreState(headerState);
-
-//         connect(ui->tblProgram->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onTableCurrentChanged(QModelIndex,QModelIndex)));
-//         ui->tblProgram->selectRow(0);
-
-//         ui->chkHeightMapUse->setChecked(false);
-
-//         return;
-//     } else {                                        // Restore original program
-//         m_currentModel = &m_programModel;
-
-//         ui->tblProgram->setModel(&m_programModel);
-//         ui->tblProgram->horizontalHeader()->restoreState(headerState);
-
-//         connect(ui->tblProgram->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onTableCurrentChanged(QModelIndex,QModelIndex)));
-
-//         // Store changes flag
-//         bool fileChanged = m_fileChanged;
-
-//         // Update parser
-//         updateParser();
-
-//         // Select first row
-//         ui->tblProgram->selectRow(0);
-
-//         // Restore changes flag
-//         m_fileChanged = fileChanged;
-//     }
-
-//     // Update groupbox title
-//     ui->grpHeightMap->setProperty("overrided", checked);
-//     style()->unpolish(ui->grpHeightMap);
-//     ui->grpHeightMap->ensurePolished();
-
-//     // Update menu
-//     ui->actFileSaveTransformedAs->setVisible(checked);
-// }
-
-// QList<LineSegment*> frmMain::subdivideSegment(LineSegment* segment)
-// {
-//     QList<LineSegment*> list;
-
-//     QRectF borderRect = borderRectFromTextboxes();
-
-//     double interpolationStepX = borderRect.width() / (ui->txtHeightMapInterpolationStepX->value() - 1);
-//     double interpolationStepY = borderRect.height() / (ui->txtHeightMapInterpolationStepY->value() - 1);
-
-//     double length;
-
-//     QVector3D vec = segment->getEnd() - segment->getStart();
-
-//     if (qIsNaN(vec.length())) return QList<LineSegment*>();
-
-//     if (fabs(vec.x()) / fabs(vec.y()) < interpolationStepX / interpolationStepY) length = interpolationStepY / (vec.y() / vec.length());
-//     else length = interpolationStepX / (vec.x() / vec.length());
-
-//     length = fabs(length);
-
-//     if (qIsNaN(length)) {
-//         qDebug() << "ERROR length:" << segment->getStart() << segment->getEnd();
-//         return QList<LineSegment*>();
-//     }
-
-//     QVector3D seg = vec.normalized() * length;
-//     int count = trunc(vec.length() / length);
-
-//     if (count == 0) return QList<LineSegment*>();
-
-//     for (int i = 0; i < count; i++) {
-//         LineSegment* line = new LineSegment(segment);
-//         line->setStart(i == 0 ? segment->getStart() : list[i - 1]->getEnd());
-//         line->setEnd(line->getStart() + seg);
-//         list.append(line);
-//     }
-
-//     if (list.count() > 0 && list.last()->getEnd() != segment->getEnd()) {
-//         LineSegment* line = new LineSegment(segment);
-//         line->setStart(list.last()->getEnd());
-//         line->setEnd(segment->getEnd());
-//         list.append(line);
-//     }
-
-//     return list;
-// }
-
-// void frmMain::on_cmdHeightMapCreate_clicked()
-// {
-//     ui->cmdHeightMapMode->setChecked(true);
-//     on_actFileNew_triggered();
-// }
-
-// void frmMain::on_cmdHeightMapBorderAuto_clicked()
-// {
-//     QRectF rect = borderRectFromExtremes();
-
-//     if (!qIsNaN(rect.width()) && !qIsNaN(rect.height())) {
-//         ui->txtHeightMapBorderX->setValue(rect.x());
-//         ui->txtHeightMapBorderY->setValue(rect.y());
-//         ui->txtHeightMapBorderWidth->setValue(rect.width());
-//         ui->txtHeightMapBorderHeight->setValue(rect.height());
-//     }
-// }
 
 bool frmMain::compareCoordinates(double x, double y, double z)
 {
@@ -4136,26 +3374,30 @@ void frmMain::updateOverride(SliderBox *slider, int value, char command)
     }
 }
 
-void frmMain::jogStep(double accel)
+//----------------------------------------------------------------------------------------------------
+// enhanced touch scren jogging: short tough moves baby steps, long touch ramps up to full speed
+// much harder than I thought, but usable now, only complain is initial ramp not silk-smooth
+//----------------------------------------------------------------------------------------------------
+
+void frmMain::jogStep(double xacc)
 {
     if (m_jogVector.length() == 0) return;
 
 	// HJL: the following assumes same speed and accel in X/Z, needs improvement
 	
     if (ui->cboJogStep->currentText().toDouble() == 0) {    // cont
-        const double acc = m_settings->acceleration();              // Acceleration mm/sec^2
+        //const double acc = m_settings->acceleration();              // Acceleration mm/sec^2
         int speed = ui->cboJogFeed->currentText().toInt();          // Speed mm/min
-        double v = (double)speed / 60;                              // Rapid speed mm/sec
-        int N = 15;                                                 // Planner blocks
-        double dt = qMax(0.01, sqrt(v) / (2 * acc * (N - 1)));      // Single jog command time
-        double s = v * dt;                                          // Jog distance
-
-		// scale up step to 2,4,8  trying to make rpi smooth
-		// not working, and caused ubuntu to overshoot as well
-		// 
-        QVector3D vec = m_jogVector.normalized() * s * accel / 16 ; //   100/16 ~ 8  
-
+        //double v = (double)speed / 60;                              // Rapid speed mm/sec
+        //int N = 15;                                                 // Planner blocks
+        //double dt = qMax(0.01, sqrt(v) / (2 * acc * (N - 1)));      // Single jog command time
+        //double s = v * dt;                                          // Jog distance
 		// qDebug() << "jog" << speed << v << acc << dt <<s;
+
+		// min step = 0.005mm, otherwise small feed-rate takes too long to accel
+		// to-do: inch mode
+		
+        QVector3D vec = m_jogVector.normalized() * 0.005 * xacc; 
 
         sendCommand(QString("$J=G21G91X%1Y%2Z%3F%4")
                     .arg(vec.x(), 0, 'g', 4)
@@ -4175,12 +3417,40 @@ void frmMain::jogStep(double accel)
 }
 
 // HJL: re-map for lathe mode  x->z, y->-x (inverted)
+// todo: rename to Jleft  Jright, Jin, Jout (Jup, Jdown) 
+// += QVector  allows one to hold two keys at the same time, this hack makes 2-key op less smooth
 
-// +=  allows one to hold two keys at the same time
+void frmMain::m_initJog(){
+	m_jogging = true;
+	accel = 1.0;
+}
+
+void frmMain::m_stopJog(){  // internal stopJog function, merge with UI function Jog Stop ? 
+	m_jogging = false;
+	accel = 1.0;
+	m_queue.clear();
+	
+	//m_serialPort.write(QByteArray(1, char(0x85)));   // sometimes not working ??
+	// move to SLOT, w/o dealy -> always fail, 150-ms delay, seems fine 
+	// one shot 50ms or two shots 50ms+175ms, bith fail often.  why ? who is so slow ?
+
+	// try new stop jog (checks m_jogging flag) and shorter time at 50-ms, much better
+	QTimer::singleShot( 50, this, SLOT( m_clearJog() ) );
+}
+
+void frmMain::m_clearJog(){
+	m_serialPort.write(QByteArray(1, char(0x85)));	
+	//qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " clearJog";
+	//qDebug() << QString("WPos x=%1 z=%2").arg( ui->txtWPosX->text() ).arg( ui->txtWPosZ->text() );
+}
+
+//---------------------------------------------------------------------------------------------------
+// mill Y -> lathe X
 
 void frmMain::on_cmdYPlus_pressed()
 {
-    m_jogVector += QVector3D(-1, 0, 0);   // y -> -x
+	m_initJog();
+    m_jogVector += QVector3D(-1, 0, 0);
     jogStep();
 }
 
@@ -4188,10 +3458,12 @@ void frmMain::on_cmdYPlus_released()
 {
     m_jogVector -= QVector3D(-1, 0, 0);
     jogStep();
+	m_stopJog();
 }
 
 void frmMain::on_cmdYMinus_pressed()
 {
+	m_initJog();
     m_jogVector += QVector3D(+1, 0, 0);
     jogStep();
 }
@@ -4200,50 +3472,30 @@ void frmMain::on_cmdYMinus_released()
 {
     m_jogVector -= QVector3D(+1, 0, 0);
     jogStep();
+	m_stopJog();
 }
 
-void frmMain::on_cmdXPlus_pressed()    // mill XPlus ->  lathe Z+
+// mill X ->  lathe Z
+
+void frmMain::on_cmdXPlus_pressed()    
 {
-	qDebug() << "lathe-Z+ pressed";
-	m_jogging = true;
+	m_initJog();
     m_jogVector += QVector3D(0, 0, 1);
     jogStep();
 }
 
-void frmMain::clearJog(){     // todo: remove timer -> always fail ?
-	m_jogging = false;
-	
-	m_queue.clear();
-	m_serialPort.write(QByteArray(1, char(0x85)));
-
-	qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " clearJog";
-	qDebug() << QString("WPos x=%1 z=%2").arg( ui->txtWPosX->text() ).arg( ui->txtWPosZ->text() );
-}
-
 void frmMain::on_cmdXPlus_released()   // want to cancel jog in cont mode
 {
+	accel = 1.0;
 	m_jogVector -= QVector3D(0, 0, 1);
 	jogStep();
 
-	if( ui->cboJogStep->currentText().toDouble() == 0 ){  // cont mode
-
-		qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " Z+ RELEASED";
-			
-		m_queue.clear();
-		//m_serialPort.write(QByteArray(1, char(0x85)));   // sometimes not working ??
-
-		// move to SLOT, w/o dealy -> always fail, 150-ms delay, seems fine
-		// two shots 50ms+175ms fails often ??
-
-		// try new stop jog and shorter time
-		QTimer::singleShot( 50, this, SLOT( clearJog() ) );
-	}
+	m_stopJog();  // used to be cont mode only, now all modes. todo: test with keyboard
 }
 
 void frmMain::on_cmdXMinus_pressed()
 {
-	qDebug() << "lathe-Z- pressed";
-	m_jogging = true;
+	m_initJog();
     m_jogVector += QVector3D(0, 0, -1);
     jogStep();
 }
@@ -4252,44 +3504,33 @@ void frmMain::on_cmdXMinus_released()
 {
 	m_jogVector -= QVector3D(0, 0, -1);
 	jogStep();
-
-		
-	if( ui->cboJogStep->currentText().toDouble() == 0 ){  // cont mode
-
-		qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " lathe Z- RELEASED";
-
-		//m_queue.clear();
-		//m_serialPort.write(QByteArray(1, char(0x85)));
-		
-		QTimer::singleShot(  50, this, SLOT( clearJog()));   // 150-ms seems fine on ubuntu
-	}
-
+	m_stopJog();
 }
 
-// HJL: no change here (buttons not visible)
+// buttons removed in lathe mode
 
 void frmMain::on_cmdZPlus_pressed()
 {
-    m_jogVector += QVector3D(0, 0, 1);
-    jogStep();
+	// m_jogVector += QVector3D(0, 0, 1);
+    // jogStep();
 }
 
 void frmMain::on_cmdZPlus_released()
 {
-    m_jogVector -= QVector3D(0, 0, 1);
-    jogStep();
+    // m_jogVector -= QVector3D(0, 0, 1);
+    // jogStep();
 }
 
 void frmMain::on_cmdZMinus_pressed()
 {
-    m_jogVector += QVector3D(0, 0, -1);
-    jogStep();
+    // m_jogVector += QVector3D(0, 0, -1);
+    // jogStep();
 }
 
 void frmMain::on_cmdZMinus_released()
 {
-    m_jogVector -= QVector3D(0, 0, -1);
-    jogStep();
+    // m_jogVector -= QVector3D(0, 0, -1);
+    // jogStep();
 }
 
 void frmMain::on_cmdStop_clicked()

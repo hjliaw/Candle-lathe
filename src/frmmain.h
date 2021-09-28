@@ -189,7 +189,7 @@ private slots:
     void on_cmdZMinus_released();
     void on_cmdStop_clicked();
 	void getGrblState();
-	void clearJog();
+	void m_clearJog();   // time delayed call-back
 
 protected:
     void showEvent(QShowEvent *se);
@@ -384,6 +384,8 @@ private:
     void updateOverride(SliderBox *slider, int value, char command);
     void jogStep(double accel=1.0);
     void updateJogTitle();
+	void m_initJog();
+	void m_stopJog();
 };
 
 #endif // FRMMAIN_H
