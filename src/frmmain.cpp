@@ -801,6 +801,8 @@ void frmMain::openPort()
     }
 }
 
+// table index = -2 ??
+
 void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 {
 
@@ -812,7 +814,7 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 
     // Commands queue
     if ((bufferLength() + command.length() + 1) > BUFFERLENGTH) {
-        //qDebug() << "queue:" << command;
+        qDebug() << "queue:" << command;
 
         CommandQueue cq;
 
@@ -826,8 +828,6 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 
     CommandAttributes ca;
 
-//    if (!(command == "$G" && tableIndex < -1) && !(command == "$#" && tableIndex < -1)
-//            && (!m_transferringFile || (m_transferringFile && m_showAllCommands) || tableIndex < 0)) {
     if (showInConsole) {
         ui->txtConsole->appendPlainText(command);
         ca.consoleIndex = ui->txtConsole->blockCount() - 1;
@@ -857,7 +857,10 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 
     m_serialPort.write( (command + "\r").toLatin1() );
 
-	qDebug() << "SEND " << command;
+	if( command.contains("$G") ) return;
+	
+	qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz")
+			 << " SEND " << command;
 }
 
 void frmMain::grblReset()
@@ -928,7 +931,7 @@ void frmMain::onSerialPortReadyRead()
         }
 
 		if (data.length() > 0) {
-			qDebug() << "RCVD " << data;
+			// qDebug() << "RCVD " << data;
 		}
 
         // Status response
@@ -1246,10 +1249,18 @@ void frmMain::onSerialPortReadyRead()
                         else if (response.contains("G90")) sendCommand("G90", -1, m_settings->showUICommands());
                     }
 
-                    // Jog
-                    if (ca.command.toUpper().contains("$J=") && ca.tableIndex == -2) {
+					// HJL: this is how jog buttons auto-repeats
+					// however, the cycle time is not well controlled, this leads to slow rpi3/4 feels jerky
+					// work-around can be longer jog step, this needs reliable jog cancel to work well, but
+					// somehow it is not the case for Candle right now
+					// try: add a flag to sync
+					
+                    if (ca.command.toUpper().contains("$J=") && ca.tableIndex == -2 && m_jogging ) {
                         jogStep();
                     }
+					else{
+						m_serialPort.write(QByteArray(1, char(0x85)));   // over-kill ?
+					}
 
                     // Process parser status
                     if (ca.command.toUpper() == "$G" && ca.tableIndex == -3) {
@@ -4119,6 +4130,8 @@ void frmMain::jogStep()
 {
     if (m_jogVector.length() == 0) return;
 
+	// HJL: the following assumes same speed and accel in X/Z, needs improvement
+	
     if (ui->cboJogStep->currentText().toDouble() == 0) {    // cont
         const double acc = m_settings->acceleration();              // Acceleration mm/sec^2
         int speed = ui->cboJogFeed->currentText().toInt();          // Speed mm/min
@@ -4127,9 +4140,12 @@ void frmMain::jogStep()
         double dt = qMax(0.01, sqrt(v) / (2 * acc * (N - 1)));      // Single jog command time
         double s = v * dt;                                          // Jog distance
 
-        QVector3D vec = m_jogVector.normalized() * s;
+		// scale up step to 2,4,8  trying to make rpi smooth
+		// not working, and caused ubuntu to overshoot as well
+		// 
+        QVector3D vec = m_jogVector.normalized() * s * 18.12345;  
 
-    //    qDebug() << "jog" << speed << v << acc << dt <<s;
+		// qDebug() << "jog" << speed << v << acc << dt <<s;
 
         sendCommand(QString("$J=G21G91X%1Y%2Z%3F%4")
                     .arg(vec.x(), 0, 'g', 4)
@@ -4149,6 +4165,8 @@ void frmMain::jogStep()
 }
 
 // HJL: re-map for lathe mode  x->z, y->-x (inverted)
+
+// +=  allows one to hold two keys at the same time
 
 void frmMain::on_cmdYPlus_pressed()
 {
@@ -4174,28 +4192,65 @@ void frmMain::on_cmdYMinus_released()
     jogStep();
 }
 
-void frmMain::on_cmdXPlus_pressed()
+void frmMain::on_cmdXPlus_pressed()    // mill XPlus ->  lathe Z+
 {
+	qDebug() << "lathe-Z+ pressed";
+	m_jogging = true;
     m_jogVector += QVector3D(0, 0, 1);
     jogStep();
 }
 
-void frmMain::on_cmdXPlus_released()
+void frmMain::clearJog(){     // todo: remove timer and move back or enhance
+	m_jogging = false;
+	
+	m_queue.clear();
+	m_serialPort.write(QByteArray(1, char(0x85)));
+	m_serialPort.write("\r");
+	m_serialPort.flush();
+
+	qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " clearJog";
+	qDebug() << QString("WPos x=%1 z=%2").arg( ui->txtWPosX->text() ).arg( ui->txtWPosZ->text() );
+}
+
+void frmMain::on_cmdXPlus_released()   // want to cancel jog in cont mode
 {
-    m_jogVector -= QVector3D(0, 0, 1);
-    jogStep();
+	m_jogVector -= QVector3D(0, 0, 1);
+	jogStep();
+
+	if( ui->cboJogStep->currentText().toDouble() == 0 ){  // cont mode
+
+		qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " Z+ RELEASED";
+			
+		m_queue.clear();
+		//m_serialPort.write(QByteArray(1, char(0x85)));   // sometimes not working ??
+		clearJog();
+	}
 }
 
 void frmMain::on_cmdXMinus_pressed()
 {
+	qDebug() << "lathe-Z- pressed";
+	m_jogging = true;
     m_jogVector += QVector3D(0, 0, -1);
     jogStep();
 }
 
 void frmMain::on_cmdXMinus_released()
 {
-    m_jogVector -= QVector3D(0, 0, -1);
-    jogStep();
+	m_jogVector -= QVector3D(0, 0, -1);
+	jogStep();
+
+		
+	if( ui->cboJogStep->currentText().toDouble() == 0 ){  // cont mode
+
+		qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " lathe Z- RELEASED";
+
+		//m_queue.clear();
+		//m_serialPort.write(QByteArray(1, char(0x85)));
+		//QTimer::singleShot( 100, this, SLOT( clearJog()));   NOT always 
+		clearJog();
+	}
+
 }
 
 // HJL: no change here (buttons not visible)

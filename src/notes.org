@@ -17,7 +17,7 @@
 ** TODOS
 *** better icons for Jog/Run/Stop
 
-* 20200909 serial port problem (seems fixed]
+* 20210909 serial port (grbl error) problem [seems fixed]
   happens 1st with rpi3 and ezNC, eventually happened on labtop,
   enable echo and post process log (cat foo.log | ./proc.pl | grep ERROR)
   found a lot more discrepencies, but only few will show up as error
@@ -58,3 +58,13 @@ cat cndl_ruf.log | ./proc.pl | grep ERROR
    now checks for alarm state and disable btnRUNSTOP with orange background
    WANT to restart Candle
 ** occasionally, STOP button is received, but no action
+* 20210927 jog not smooth on rpi, but fine on ubuntu
+** same setting, labtop ~100  $J/s, but rpi4 only ~10 (or less)/s
+   set higher accel and jog speed did not fix rpi jerkiness, further change cpp code to 2x jog step helps
+   but only with high speed setting at 1000 (unit?), 300 is still jumpy
+** rpi did not stop jog as quickly as ubuntu ?
+   force jog stop did not work all the time, occasionally will stall, then cont for a while ?
+   want a smooth job even at slow speed !
+** observations
+   grbl jog cancel may not work, add 100ms delay seems better
+   over-kill with flooded jog-cancel ok, but still jerky ?

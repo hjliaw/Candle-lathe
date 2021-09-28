@@ -189,6 +189,7 @@ private slots:
     void on_cmdZMinus_released();
     void on_cmdStop_clicked();
 	void getGrblState();
+	void clearJog();
 
 protected:
     void showEvent(QShowEvent *se);
@@ -298,6 +299,8 @@ private:
     bool m_heightMapMode;
     bool m_cellChanged;
 
+	bool m_jogging = false;
+
     // Indices
     int m_fileCommandIndex;
     int m_fileProcessedCommandIndex;
@@ -334,8 +337,10 @@ private:
     void updateControlsState();
     void openPort();
     void sendCommand(QString command, int tableIndex = -1, bool showInConsole = true);
+
     void grblReset();
-    int bufferLength();
+	
+    int  bufferLength();
     void sendNextFileCommands();
     void applySettings();
     void updateParser();
