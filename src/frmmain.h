@@ -382,7 +382,7 @@ private:
     bool compareCoordinates(double x, double y, double z);
     int getConsoleMinHeight();
     void updateOverride(SliderBox *slider, int value, char command);
-    void jogStep();
+    void jogStep(double accel=1.0);
     void updateJogTitle();
 };
 

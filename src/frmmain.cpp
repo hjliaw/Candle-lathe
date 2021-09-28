@@ -917,6 +917,8 @@ int frmMain::bufferLength()
 
 void frmMain::onSerialPortReadyRead()
 {
+	static double accel = 1;
+	
     while (m_serialPort.canReadLine()) {
         QString data = m_serialPort.readLine().trimmed();
 
@@ -985,7 +987,12 @@ void frmMain::onSerialPortReadyRead()
 				else{
 					ui->btnRUNSTOP->setStyleSheet( ":pressed{ background-color: rgb(130, 130, 130); }" );
 				}
-								
+
+				if( status != JOG ) accel = 1;
+				// HJL: tried to stop jog as soon as possible
+				if( status == JOG && ! m_jogging )
+					    m_serialPort.write(QByteArray(1, char(0x85)));
+
                 ui->chkTestMode->setEnabled(status != RUN && !m_processingFile);
                 ui->chkTestMode->setChecked(status == CHECK);
                 ui->cmdFilePause->setChecked(status == HOLD0 || status == HOLD1 || status == QUEUE);
@@ -1256,10 +1263,13 @@ void frmMain::onSerialPortReadyRead()
 					// try: add a flag to sync
 					
                     if (ca.command.toUpper().contains("$J=") && ca.tableIndex == -2 && m_jogging ) {
-                        jogStep();
+						accel *= 1.025;
+						if( accel > 100.0 ) accel = 100.0;
+                        jogStep( accel );
                     }
 					else{
-						m_serialPort.write(QByteArray(1, char(0x85)));   // over-kill ?
+						//accel = 1;  can trip inside jog cycle ?
+						// m_serialPort.write(QByteArray(1, char(0x85)));   // over-kill ?
 					}
 
                     // Process parser status
@@ -4126,7 +4136,7 @@ void frmMain::updateOverride(SliderBox *slider, int value, char command)
     }
 }
 
-void frmMain::jogStep()
+void frmMain::jogStep(double accel)
 {
     if (m_jogVector.length() == 0) return;
 
@@ -4143,7 +4153,7 @@ void frmMain::jogStep()
 		// scale up step to 2,4,8  trying to make rpi smooth
 		// not working, and caused ubuntu to overshoot as well
 		// 
-        QVector3D vec = m_jogVector.normalized() * s * 18.12345;  
+        QVector3D vec = m_jogVector.normalized() * s * accel / 16 ; //   100/16 ~ 8  
 
 		// qDebug() << "jog" << speed << v << acc << dt <<s;
 
@@ -4200,13 +4210,11 @@ void frmMain::on_cmdXPlus_pressed()    // mill XPlus ->  lathe Z+
     jogStep();
 }
 
-void frmMain::clearJog(){     // todo: remove timer and move back or enhance
+void frmMain::clearJog(){     // todo: remove timer -> always fail ?
 	m_jogging = false;
 	
 	m_queue.clear();
 	m_serialPort.write(QByteArray(1, char(0x85)));
-	m_serialPort.write("\r");
-	m_serialPort.flush();
 
 	qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " clearJog";
 	qDebug() << QString("WPos x=%1 z=%2").arg( ui->txtWPosX->text() ).arg( ui->txtWPosZ->text() );
@@ -4223,7 +4231,12 @@ void frmMain::on_cmdXPlus_released()   // want to cancel jog in cont mode
 			
 		m_queue.clear();
 		//m_serialPort.write(QByteArray(1, char(0x85)));   // sometimes not working ??
-		clearJog();
+
+		// move to SLOT, w/o dealy -> always fail, 150-ms delay, seems fine
+		// two shots 50ms+175ms fails often ??
+
+		// try new stop jog and shorter time
+		QTimer::singleShot( 50, this, SLOT( clearJog() ) );
 	}
 }
 
@@ -4247,8 +4260,8 @@ void frmMain::on_cmdXMinus_released()
 
 		//m_queue.clear();
 		//m_serialPort.write(QByteArray(1, char(0x85)));
-		//QTimer::singleShot( 100, this, SLOT( clearJog()));   NOT always 
-		clearJog();
+		
+		QTimer::singleShot(  50, this, SLOT( clearJog()));   // 150-ms seems fine on ubuntu
 	}
 
 }
