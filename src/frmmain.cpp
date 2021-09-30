@@ -170,8 +170,8 @@ frmMain::frmMain(QWidget *parent) :
     });
 
     ui->slbRapidOverride->setRatio(1);
-    ui->slbRapidOverride->setMinimum(50);
-    ui->slbRapidOverride->setMaximum(150);
+    ui->slbRapidOverride->setMinimum(25);
+    ui->slbRapidOverride->setMaximum(100);
     ui->slbRapidOverride->setCurrentValue(100);
     ui->slbRapidOverride->setTitle(tr(" Rapid speed"));
     ui->slbRapidOverride->setSuffix("%");
@@ -807,7 +807,6 @@ void frmMain::openPort()
 
 void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 {
-
 	//qDebug() << "sendCmd:" << command;
 			
     if (!m_serialPort.isOpen() || !m_resetCompleted) return;
@@ -816,10 +815,8 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 
     // Commands queue
     if ((bufferLength() + command.length() + 1) > BUFFERLENGTH) {
-        qDebug() << "queue:" << command;
-
+        //qDebug() << "queue:" << command;
         CommandQueue cq;
-
         cq.command = command;
         cq.tableIndex = tableIndex;
         cq.showInConsole = showInConsole;
@@ -2175,7 +2172,7 @@ void frmMain::on_cmdFileAbort_clicked()
 	// BUG caused by HJ, why go into chkTestMode (sim mode) ?
 	
     if (!ui->chkTestMode->isChecked()) {
-		qDebug() << "abort with serial write";
+		qDebug() << "feed hold";
 		m_serialPort.write("!");
 		//grblReset();   // hack, but still needs manually unlock afterwards ?? 
     } else {
