@@ -68,3 +68,6 @@ cat cndl_ruf.log | ./proc.pl | grep ERROR
 ** observations
    grbl jog cancel may not work, add 100ms delay seems better
    over-kill with flooded jog-cancel ok, but still jerky ?
+** tested in garage, cont mode works as expected, but not step mode
+   in step mode, jog got canceled when touch is lifted
+   also step size depends on unit, should display mm/inch

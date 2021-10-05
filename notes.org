@@ -1,12 +1,20 @@
-cd cnc
-git clone https://github.com/Denvi/Candle.git
-cd Candle/src/
+* A simplified GRBL lathe controller
+  design goal: simple UI, works well with large display as well as small touch screen
+
+* modified from https://github.com/Denvi/Candle.git
+
+* to compile (tested on Ubuntu 20.04)
 
 sudo apt-get install build-essential 
 sudo apt-get install qt5-default 
 sudo apt-get install qtcreator
 sudo apt-get install libqt5serialport5-dev libqt5serialport5
 
+cd src
 qmake candle.pro 
 make
+
+* to run 
 ./Candle
+
+
