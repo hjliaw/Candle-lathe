@@ -1,3 +1,5 @@
+All my debug and development notes, way too much details for most users.  Read at your own risk. 
+
 * commands
   rsync -avz --exclude "*.o" --exclude "moc_*" --exclude "ui_*" /home/hjack/cnc/candle/src/* .
 * [fixed] font too small (at least on screen size at 1920x1080)
