@@ -40,6 +40,7 @@
 #include "ui_frmmain.h"
 
 static double accel = 1;
+int user_query = 0;
 
 frmMain::frmMain(QWidget *parent) :
     QMainWindow(parent),
@@ -856,9 +857,9 @@ void frmMain::sendCommand(QString command, int tableIndex, bool showInConsole)
 
     m_serialPort.write( (command + "\r").toLatin1() );
 
-	//if( command.contains("$G") ) return;           // debug jog mode
-	//qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz")
-	//		 << " SEND " << command << " ST= " << ui->txtStatus->text() << " z= " << ui->txtWPosZ->text();
+	if( command.contains("$G") ) return;           // debug jog mode
+	qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz")
+			 << " SEND " << command << " ST= " << ui->txtStatus->text() << " z= " << ui->txtWPosZ->text();
 }
 
 void frmMain::grblReset()
@@ -930,7 +931,8 @@ void frmMain::onSerialPortReadyRead()
         }
 
 		if (data.length() > 0) {
-			// qDebug() << "RCVD " << data;
+			if( user_query )
+				qDebug() << "RCVD " << data;
 		}
 
         // Status response
@@ -942,6 +944,8 @@ void frmMain::onSerialPortReadyRead()
             // Update machine coordinates
             static QRegExp mpx("MPos:([^,]*),([^,]*),([^,^>^|]*)");
             if (mpx.indexIn(data) != -1) {
+
+				user_query = 0;
 
 				double xm, ym, zm;
 				xm = mpx.cap(1).toDouble() * m_grblScale;
@@ -2547,6 +2551,11 @@ void frmMain::on_cmdCommandSend_clicked()
 
     ui->cboCommand->storeText();
     ui->cboCommand->setCurrentText("");
+
+	if( command.contains("??") ){
+		qDebug() << "user query position info";
+		user_query = 1;  // flag to help print pos fro debug
+	}
     sendCommand(command, -1);
 }
 
@@ -3437,8 +3446,8 @@ void frmMain::m_stopJog(){  // internal stopJog function, merge with UI function
 
 void frmMain::m_clearJog(){
 	m_serialPort.write(QByteArray(1, char(0x85)));	
-	//qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " clearJog";
-	//qDebug() << QString("WPos x=%1 z=%2").arg( ui->txtWPosX->text() ).arg( ui->txtWPosZ->text() );
+	qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss,zzz") << " clearJog";
+	qDebug() << QString("WPos x=%1 z=%2").arg( ui->txtWPosX->text() ).arg( ui->txtWPosZ->text() );
 }
 
 //---------------------------------------------------------------------------------------------------
