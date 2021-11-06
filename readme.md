@@ -1,8 +1,7 @@
 Candle-lathe
 -----------
-GRBL lathe controller 
+GRBL lathe controller, modified from https://github.com/Denvi/Candle
 
-modified from https://github.com/Denvi/Candle 
+Simplified screen layout for lathe mode
 
-"Candle" main window:
-![screenshot](/screenshots/screenshot_ballhandl.png)
+![screenshot](/screenshots/screenshot_ballhandle.png)
