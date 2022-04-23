@@ -33,7 +33,7 @@ It's a bit slow to compile Qt even on RPi 4. Fortunately, with a little bit more
 ```  
   export QT_QPA_EGLFS_ALWAYS_SET_MODE="1"
 ```  
-* I run my RPi CNC controller without keyboard and mouse.  Hence no X11, but with the following added to /rc/local to auto start on power up.
+* I run my RPi CNC controller without keyboard and mouse.  Hence no X11, but with the following added to /etc/rc.local to auto start on power up.
 ```
   (
     export QT_QPA_EGLFS_ALWAYS_SET_MODE="1"
