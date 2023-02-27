@@ -73,3 +73,11 @@ cat cndl_ruf.log | ./proc.pl | grep ERROR
 ** tested in garage, cont mode works as expected, but not step mode
    in step mode, jog got canceled when touch is lifted
    also step size depends on unit, should display mm/inch
+
+* 20230225 rpi
+** usb auto mout at /media/usb0..3
+   sudo apt-get install usbmount
+   sudo emacs  /lib/systemd/system/systemd-udevd.service
+
+** samba server
+   
