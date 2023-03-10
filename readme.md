@@ -4,16 +4,24 @@ GRBL lathe controller, modified from https://github.com/Denvi/Candle
 
 simple UI, works well with both small touch screen and large computer scren
 
-To compile on Ubuntu (20.04)
+To compile on Ubuntu 
 ------------------------------
-install Qt5
+install Qt5 (Ubuntu 20.04)
 ```
 sudo apt-get install build-essential 
 sudo apt-get install qt5-default 
 sudo apt-get install qtcreator
 sudo apt-get install libqt5serialport5-dev libqt5serialport5
 ```
-build and run
+
+install Qt5 (Ubuntu 22.04)
+```
+sudo apt install -y qtcreator qtbase5-dev qt5-qmake cmake
+sudo apt-get install build-essential
+sudo apt-get install libqt5serialport5-dev libqt5serialport5
+```
+
+build and run (all Ubuntu versions)
 ```
 git clone https://github.com/hjliaw/Candle-lathe.git
 cd Candle-lathe/src

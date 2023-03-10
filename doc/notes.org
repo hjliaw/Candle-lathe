@@ -79,5 +79,6 @@ cat cndl_ruf.log | ./proc.pl | grep ERROR
    sudo apt-get install usbmount
    sudo emacs  /lib/systemd/system/systemd-udevd.service
 
-** samba server
-   
+** added samba server
+   maily from 
+* github replaced Master with main to be PC, use git push main or gpushmain
