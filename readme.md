@@ -1,8 +1,8 @@
-Candle-lathe
--------------
-GRBL lathe controller, modified from https://github.com/Denvi/Candle
+![screenshot](/screenshots/screenshot_ballhandle_small.png)
 
-simple UI, works well with both small touch screen and large computer scren
+This is a GRBL lathe controller, modified from https://github.com/Denvi/Candle
+
+simple UI, works well with both small touch screen and large computer screen. Tested on Ubuntu 20.04 an 22.04, Raspberry Pi 3 and 4, Windows-10.
 
 To compile on Ubuntu 
 ------------------------------
@@ -49,15 +49,9 @@ It's a bit slow to compile Qt even on RPi 4. Fortunately, with a little bit more
     ./Candle 2> /home/pi/cndl_err.log >> /home/pi/cndl_out.log &
   )
 ```
-Download pre-compiled SD image for RPi
---------------------------------------
-[see this file](doc/rpi_img.md)
 
-
-
-main screen 
----------------
-![screenshot](/screenshots/screenshot_ballhandle_small.png)
+Alternatively, see [doc/rpi_img.md](doc/rpi_img.md) for downloading a pre-compiled SD image for RPi.
 
 Generate g-code using GrblGru
 -----------------------------
+under construction
