@@ -49,7 +49,15 @@ It's a bit slow to compile Qt even on RPi 4. Fortunately, with a little bit more
     ./Candle 2> /home/pi/cndl_err.log >> /home/pi/cndl_out.log &
   )
 ```
+Download pre-compiled SD image for RPi
+--------------------------------------
+[see this file](doc/rpi_img.md)
+
+
 
 main screen 
 ---------------
 ![screenshot](/screenshots/screenshot_ballhandle_small.png)
+
+Generate g-code using GrblGru
+-----------------------------
