@@ -177,11 +177,11 @@ QVector3D GcodePreprocessorUtils::updatePointWithCommand(const QVector3D &initia
 
     if (absoluteMode) {
         if (!qIsNaN(x)) newPoint.setX(x);
-        if (!qIsNaN(y)) newPoint.setY(y);
+        newPoint.setY(0); //if (!qIsNaN(y))  newPoint.setY(y);
         if (!qIsNaN(z)) newPoint.setZ(z);
     } else {
         if (!qIsNaN(x)) newPoint.setX(newPoint.x() + x);
-        if (!qIsNaN(y)) newPoint.setY(newPoint.y() + y);
+        newPoint.setY(0); //if (!qIsNaN(y)) newPoint.setY(newPoint.y() + y);
         if (!qIsNaN(z)) newPoint.setZ(newPoint.z() + z);
     }
 
