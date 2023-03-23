@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>480</height>
+    <width>815</width>
+    <height>513</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -280,6 +280,25 @@ QTabBar::tab:selected { color: #FFFFFF; }
                   <height>380</height>
                  </size>
                 </property>
+                <widget class="QToolButton" name="cmdFit">
+                 <property name="geometry">
+                  <rect>
+                   <x>520</x>
+                   <y>50</y>
+                   <width>50</width>
+                   <height>50</height>
+                  </rect>
+                 </property>
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>...</string>
+                 </property>
+                </widget>
                </widget>
               </item>
              </layout>
@@ -1901,7 +1920,7 @@ padding-right: 8;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>815</width>
      <height>26</height>
     </rect>
    </property>

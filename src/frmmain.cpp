@@ -125,7 +125,7 @@ frmMain::frmMain(QWidget *parent) :
     //ui->cmdYPlus->setBackColor(ui->cmdXMinus->backColor());
 
 	// removed
-    //ui->cmdFit->setParent(ui->glwVisualizer);
+    ui->cmdFit->setParent(ui->glwVisualizer);
     //ui->cmdIsometric->setParent(ui->glwVisualizer);
     //ui->cmdTop->setParent(ui->glwVisualizer);
     //ui->cmdFront->setParent(ui->glwVisualizer);
@@ -1590,8 +1590,8 @@ void frmMain::placeVisualizerButtons()
 	//    ui->cmdTop->move(ui->cmdIsometric->geometry().left() - ui->cmdTop->width() - 8, 8);
 	//    ui->cmdLeft->move(ui->glwVisualizer->width() - ui->cmdLeft->width() - 8, ui->cmdIsometric->geometry().bottom() + 8);
 	//    ui->cmdFront->move(ui->cmdLeft->geometry().left() - ui->cmdFront->width() - 8, ui->cmdIsometric->geometry().bottom() + 8);
-	//    ui->cmdFit->move(ui->cmdTop->geometry().left() - ui->cmdFit->width() - 10, 10);
-	//    ui->cmdFit->move(ui->glwVisualizer->width() - ui->cmdFit->width() - 8, ui->cmdLeft->geometry().bottom() + 8);
+
+	ui->cmdFit->move( 10, ui->glwVisualizer->height() - ui->cmdFit->height() -10);
 }
 
 void frmMain::showEvent(QShowEvent *se)
@@ -2011,10 +2011,10 @@ void frmMain::clearTable()
     m_programModel.insertRow(0);
 }
 
-//void frmMain::on_cmdFit_clicked()
-//{
-//   ui->glwVisualizer->fitDrawable(m_currentDrawer);
-//}
+void frmMain::on_cmdFit_clicked()
+{
+   ui->glwVisualizer->fitDrawable(m_currentDrawer);
+}
 
 void frmMain::on_btnRUNSTOP_clicked()
 {
@@ -2452,14 +2452,14 @@ void frmMain::applySettings() {
                 .arg(normal.name()).arg(highlight.name())
                 .arg(base.name()));
 
-	//ui->cmdFit->setIcon(QIcon(":/images/fit_1.png"));
+	ui->cmdFit->setIcon(QIcon(":/images/fit_1.png"));
     //ui->cmdIsometric->setIcon(QIcon(":/images/cube.png"));
     //ui->cmdFront->setIcon(QIcon(":/images/cubeFront.png"));
     //ui->cmdLeft->setIcon(QIcon(":/images/cubeLeft.png"));
     //ui->cmdTop->setIcon(QIcon(":/images/cubeTop.png"));
 
     if (!light) {
-        //Util::invertButtonIconColors(ui->cmdFit);
+        Util::invertButtonIconColors(ui->cmdFit);
         //Util::invertButtonIconColors(ui->cmdIsometric);
         //Util::invertButtonIconColors(ui->cmdFront);
         //Util::invertButtonIconColors(ui->cmdLeft);
@@ -2933,10 +2933,10 @@ void frmMain::on_actFileSave_triggered()
     // }
 }
 
-// void frmMain::on_cmdTop_clicked()
-// {
+//void frmMain::on_cmdTop_clicked()
+//{
 //     ui->glwVisualizer->setTopView();
-// }
+//}
 
 // void frmMain::on_cmdFront_clicked()
 // {

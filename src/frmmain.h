@@ -114,7 +114,7 @@ private slots:
 	void on_actPowerOff_triggered();
     void on_actFileExit_triggered();
     void on_cmdFileOpen_clicked();
-    //void on_cmdFit_clicked();
+    void on_cmdFit_clicked();
     void on_cmdFileSend_clicked();
 	void on_btnRUNSTOP_clicked();
 	
@@ -141,10 +141,12 @@ private slots:
     void on_actFileSaveAs_triggered();
     void on_actFileSave_triggered();
     void on_actFileSaveTransformedAs_triggered();
+    
     //void on_cmdTop_clicked();
     //void on_cmdFront_clicked();
     //void on_cmdLeft_clicked();
     //void on_cmdIsometric_clicked();
+    
     void on_actAbout_triggered();
     void on_grpOverriding_toggled(bool checked);
     void on_grpSpindle_toggled(bool checked);
