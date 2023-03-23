@@ -52,6 +52,11 @@ It's a bit slow to compile Qt even on RPi 4. Fortunately, with a little bit more
 
 Alternatively, see [doc/rpi_img.md](doc/rpi_img.md) for downloading a pre-compiled SD image for RPi.
 
+Compiling on Windows
+--------------------
+Under construction. Pre-compiled binary is available upon request.
+
+
 Generate g-code using GrblGru
 -----------------------------
-under construction
+There are a lot of online documents and videos about GrblGru.  This [GrblGru_lathe_guide](doc/grblgru_guide/GrblGru_lathe_guide.pdf) is for lthe only, and particularly for using with Candle-Lathe mode.
