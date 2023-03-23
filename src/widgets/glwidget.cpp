@@ -574,7 +574,9 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         if (m_xRot < -90) m_xRot = -90;
         if (m_xRot > 90) m_xRot = 90;
 
-		//qDebug() << "xRot=" << m_xRot << ", yRot=" << m_yRot;
+		m_xRot = m_yRot = 0;  // no rotation
+		
+		qDebug() << "xRot=" << m_xRot << ", yRot=" << m_yRot;
 		
         updateView();
         emit rotationChanged();
@@ -584,7 +586,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         m_xPan = m_xLastPan - (event->pos().x() - m_lastPos.x()) * 1 / (double)width();
         m_yPan = m_yLastPan + (event->pos().y() - m_lastPos.y()) * 1 / (double)height();
 
-		//qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan  << " zoom=" << m_zoom;
+		qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan  << " zoom=" << m_zoom;
 		
         updateProjection();
     }
