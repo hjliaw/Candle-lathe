@@ -511,17 +511,21 @@ void GLWidget::paintEvent(QPaintEvent *pe) {
 
 	painter.fillRect(x, 0, 200, 3*linespace, m_colorBackground );
 	
+    // sometimes upn startup Wpos reset to strange value
+    double MXZ = 1e4;  // 10 meter
+    if( m_xWpos < MXZ && m_xWpos > -MXZ && m_zWpos < MXZ && m_zWpos > -MXZ ){
 
-	if( m_xyzUnit == 0 ){
-		painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.2f mm", m_xWpos) );
-		painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z=%+8.2f mm", m_zWpos) );
-	}
-	else{
-		painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.3f\"", m_xWpos/25.4) );
-		painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z=%+8.3f\"", m_zWpos/25.4) );
-	}
-	
-    painter.drawText(QPoint(x, y+linespace*2 ), m_speedState);
+        if( m_xyzUnit == 0 ){
+            painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.2f mm", m_xWpos) );
+            painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z=%+8.2f mm", m_zWpos) );
+        }
+        else{
+            painter.drawText(QPoint(x, y), 	         QString().sprintf("X=%+8.3f\"", m_xWpos/25.4) );
+            painter.drawText(QPoint(x, y+linespace), QString().sprintf("Z=%+8.3f\"", m_zWpos/25.4) );
+        }
+        
+        painter.drawText(QPoint(x, y+linespace*2 ), m_speedState);
+    }
 
    	// draw cross at center (for debug)
 	//painter.drawLine(0, this->height()/2, this->width(), this->height()/2 );
@@ -586,7 +590,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
         m_xPan = m_xLastPan - (event->pos().x() - m_lastPos.x()) * 1 / (double)width();
         m_yPan = m_yLastPan + (event->pos().y() - m_lastPos.y()) * 1 / (double)height();
 
-		qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan  << " zoom=" << m_zoom;
+		//qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan  << " zoom=" << m_zoom;
 		
         updateProjection();
     }
@@ -611,7 +615,7 @@ void GLWidget::wheelEvent(QWheelEvent *we)
         m_zoom *= ZOOMSTEP;
     }
 
-	qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan << ", zoom=" << m_zoom;
+	//qDebug() << "xPan=" << m_xPan << ", yPan=" << m_yPan << ", zoom=" << m_zoom;
 
     updateProjection();
     updateView();
