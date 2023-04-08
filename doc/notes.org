@@ -82,3 +82,7 @@ cat cndl_ruf.log | ./proc.pl | grep ERROR
 ** added samba server
    maily from 
 * github replaced Master with main to be PC, use git push main or gpushmain
+* 20230407 x-compile on Ubuntu 20.04 (note: relative tool path and rpi->qtrpi)
+  git clone
+  cd Candle-lathe/src
+  ../../qt-everywhere-src-5.15.0/configure -release -opengl es2  -eglfs -device linux-rasp-pi4-v3d-g++ -device-option CROSS_COMPILE=~/qtrpi/tools/gcc-linaro-7.4.1-2019.02-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- -sysroot ~/qtrpi/sysroot -prefix /usr/local/qt5.15 -extprefix ~/qtrpi/qt5.15 -opensource -confirm-license -skip qtscript -skip qtwayland -skip qtwebengine -nomake tests -make libs -pkg-config -no-use-gold-linker -v -recheck
