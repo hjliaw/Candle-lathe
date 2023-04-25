@@ -52,11 +52,27 @@ It's a bit slow to compile Qt even on RPi 4. Fortunately, with a little bit more
 
 Alternatively, see [doc/rpi_img.md](doc/rpi_img.md) for downloading a pre-compiled SD image for RPi.
 
-Compiling on Windows
---------------------
-Under construction. Pre-compiled binary is available upon request.
+Compiling on Windows-10
+-----------------------
+Below is a brief description, not step by step instructions --- you will need some help from Google or ChatGPT.
+Pre-compiled binary is available upon request.
 
+	created Qt account
+	install Qt5.15.2 and MinGW
+	8GB of download, takes a long long time
+	
+	install MinGW according to https://www.ics.uci.edu/~pattis/common/handouts/mingweclipse/mingw.html
+	(note the PATH definition)
+
+	install git, then clone project from github (may be bale to do this in MinGW)
+	
+	start Qt 5.15.2 (MinGW 8.1.0 32-bit) from Windows Start, inside Qt folder
+	cd canle-lathe/src
+	qmake candle.pro
+	make
+	
+	finished, executable in release\Candle.exe  connect to COM4/115200, connects !
 
 Generate g-code using GrblGru
 -----------------------------
-There are a lot of online documents and videos about GrblGru.  This [GrblGru_lathe_guide](doc/grblgru_guide/GrblGru_lathe_guide.pdf) is for lthe only, and particularly for using with Candle-Lathe mode.
+There are a lot of online documents and videos about GrblGru.  This [GrblGru_lathe_guide](doc/grblgru_guide/GrblGru_lathe_guide.pdf) is for lathe only, and particularly for using with ezNC-2.

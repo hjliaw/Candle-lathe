@@ -89,3 +89,6 @@ cat cndl_ruf.log | ./proc.pl | grep ERROR
   ../../qt5.15/bin/qmake candle.pro 
   make
   scp Candle pi@qtpi.local:~/candle/.
+* high DPI screen
+** ubuntu  export QT_SCALE_FACTOR=2.0
+** windows set  QT_SCALE_FACTOR=2
