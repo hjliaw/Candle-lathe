@@ -1,8 +1,8 @@
 ![screenshot](/screenshots/screenshot_ballhandle_small.png)
 
-This is a GRBL lathe controller, modified from https://github.com/Denvi/Candle
+GRBL lathe controller, modified from https://github.com/Denvi/Candle
 
-simple UI, works well with both small touch screen and large computer screen. Tested on Ubuntu 20.04 an 22.04, Raspberry Pi 3 and 4, Windows-10.
+Simple UI, works well with both small touch screen and large computer screen. Tested on Ubuntu 20.04 and 22.04, Raspberry Pi 3 and 4, Windows-10.
 
 To compile on Ubuntu 
 ------------------------------
@@ -54,25 +54,25 @@ Alternatively, see [doc/rpi_img.md](doc/rpi_img.md) for downloading a pre-compil
 
 Compiling on Windows-10
 -----------------------
-Below is a brief description, not step by step instructions --- you will need some help from Google or ChatGPT.
+Below is a brief description, not step by step instructions.  You may need other online resources about Qt5 on Windows-10.
 Pre-compiled binary is available upon request.
 
 	created Qt account
-	install Qt5.15.2 and MinGW
-	8GB of download, takes a long long time
+	install Qt5.15.2 and MinGW  (8GB, takes a long long time to dwonload)
 	
-	install MinGW according to https://www.ics.uci.edu/~pattis/common/handouts/mingweclipse/mingw.html
-	(note the PATH definition)
+	install MinGW according to
+	https://www.ics.uci.edu/~pattis/common/handouts/mingweclipse/mingw.html
+	note the PATH definition
 
-	install git, then clone project from github (may be bale to do this in MinGW)
+	install git, then clone project from github (I did that in PowerShell, should be able to do this in MinGW)
 	
-	start Qt 5.15.2 (MinGW 8.1.0 32-bit) from Windows Start, inside Qt folder
+	start Qt 5.15.2 (MinGW 8.1.0 32-bit) from Windows Start, (it's one of the options in Start->Qt folder)
 	cd canle-lathe/src
 	qmake candle.pro
 	make
 	
-	finished, executable in release\Candle.exe  connect to COM4/115200, connects !
+	takes a while to finish; afterwards, executable is release\Candle.exe  connect to COM4/115200 (your COM port number may be different)
 
 Generate g-code using GrblGru
 -----------------------------
-There are a lot of online documents and videos about GrblGru.  This [GrblGru_lathe_guide](doc/grblgru_guide/GrblGru_lathe_guide.pdf) is for lathe only, and particularly for using with ezNC-2.
+There are a lot of online documents and videos about GrblGru.  This guide [GrblGru_lathe_guide](doc/grblgru_guide/GrblGru_lathe_guide.pdf) is for lathe only, in particularly for using with ezNC-2.
