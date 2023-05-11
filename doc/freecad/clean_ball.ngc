@@ -1,0 +1,39 @@
+(Exported by FreeCAD)
+(Post Processor: grbl_post)
+(Output Time:2021-03-19 13:27:05.684205)
+(Begin preamble)
+G17 G90
+G21
+(Begin operation: Fixture)
+(Path: Fixture)
+G54
+(Finish operation: Fixture)
+(Begin operation: my_right_sharp001)
+(Path: my_right_sharp001)
+(my_right_sharp001)
+(Begin toolchange)
+( M6 T1.0 )
+M3 S0.0
+(Finish operation: my_right_sharp001)
+(Begin operation: TurnProfile)
+(Path: TurnProfile)
+F30.0
+(TurnProfile)
+G18
+G0 X-0.000 Y0.000 Z0.400
+G3 X4.983 Z-1.846 I0.000 K-6.650
+G0 Z2
+(TODO: reverse arc)
+G18
+G0 X-0.000 Y0.000 Z0.200
+G3 X4.783 Z-1.922 I0.000 K-6.450
+G0 Z2
+G18
+G0 X0.000 Y0.000 Z-0.000
+G3 X4.583 Z-2.000 I0.000 K-6.250
+G0 X6.25 Z2
+(Finish operation: TurnProfile)
+(Begin postamble)
+M5
+G17 G90
+M2
