@@ -3,6 +3,8 @@
 # GrblGru lathe V1.0 usually generates finish cuts with segments
 # post process to smooth it out with curve fit
 
+# can be applied multiple times
+
 # what if gcode unit=inch ?
 # todo: avoid curve fit when large and small sloped        
 
@@ -171,9 +173,10 @@ else:
     print("finish feedrate not found" , file=sys.stderr )
     sys.exit(1)
 
-# spl wants increaseing 1st arg (conventionl x, z here)
 
 for fidx in range(finPass+1):
+    # spl wants increaseing 1st arg (conventionlly x, but z here)
+    
     mrz= mz[fidx][::-1]   # mz.reverse() NOT working     
     mrx= mx[fidx][::-1]
 
@@ -188,11 +191,10 @@ for fidx in range(finPass+1):
         znew = 1e6
         xpos = re.findall( r'[X](.?\d+.\d+)', line)
         zpos = re.findall( r'[Z](.?\d+.\d+)', line)
+        if zpos: znew = float( zpos[0])
 
-        if zpos:
-            znew = float( zpos[0])
-
-        # asumption: finish pass, z goes from 0 to negative in gcode
+        # asumption: z goes from 0 to negative dring finish
+        
         if znew >= zmax :
             smoothed = False
             print( line.strip() )
@@ -208,9 +210,8 @@ for fidx in range(finPass+1):
         else:
             print( line.strip() )
 
-
 # show plots
-# todo: plot the whole gcode
+# todo: plot the whole gcode, as well show deviation after curve fit
 
 #plt.plot(mrz, mrx, 'r+', lw=1)
 #plt.plot( zs, xs, 'g', lw=1)
