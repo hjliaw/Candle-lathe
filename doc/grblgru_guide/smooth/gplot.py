@@ -112,42 +112,49 @@ def smooth(lines, zrange):
 
         # process finish passes
         if fin :
-            if back2start(line):
-                fp += 1
-
+            if back2start(line): fp += 1
             finLines[fp].append(nline)
-
+            
             if xpos and zpos and znew < zmax and znew > zmin :   # get (last) finish feedrate
                 finFR = re.findall( r'[F](.?\d+.\d+)', line)
 
-            if znew < zmax and znew > zmin :  # 2D array
+            if znew < zmax and znew > zmin :
                 mx[fp].append( xnew )
                 mz[fp].append( znew )
         else:
             print( nline )
-            fin = re.findall( r'( Finish )', line )
+            fin = re.findall( r'( Finish )', line ) # keep looking for finish cut(s)
 
     #----------------------------------------------------------------------------------------------
 
     if finFR :
-        dbg_print("finish feedrate= %s" % finFR[0] )
+        dbg_print("finish feedrate = %s" % finFR[0] )
     else:
         dbg_print("finish feedrate not found")
         sys.exit(1)
 
     for fidx in range(finPass+1):
-        # spl wants increaseing 1st arg (conventionlly x, but z here)
+        # spl wants increaseing 1st arg (conventionlly x, but is z here for lathe)
 
-        mrz= mz[fidx][::-1]   # mz.reverse() NOT working     
+        mrz= mz[fidx][::-1]   # .reverse() NOT working     
         mrx= mx[fidx][::-1]
 
         if len(mrz) > 2 :
             spl = UnivariateSpline(mrz, mrx )
             zs = np.linspace( min(mz[fidx]), max(mz[fidx]), int( abs(zmax-zmin)*10) )    # every 0.1mm
             xs = spl(zs)
-
-            if smthdc[fidx] :  smthdc[fidx].remove()
-            smthdc[fidx], = plt.plot( zs, xs, 'r-', lw=1)
+            
+            # force end points to meet with shift (linearly scaled)
+            # makes the transition smooth, but may be too close to rough cuts
+            N = len(xs)
+            s0 = mrx[0]  - xs[0]
+            s1 = mrx[-1] - xs[-1]
+            for i in range(N):
+                xs[i] +=  s0 + (s1-s0)*i/(N-1)
+            
+            # clear old trace, then add new
+            if smthdc[fidx] : smthdc[fidx].remove()   
+            smthdc[fidx], = plt.plot( zs, xs, 'r.-', lw=1)
             plt.gcf().canvas.draw_idle()
 
         # process the finish cut
