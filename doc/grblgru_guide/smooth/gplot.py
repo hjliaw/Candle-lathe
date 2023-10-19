@@ -130,36 +130,29 @@ zmax = max( max(fz), max(rz) )
 
 print(  'g-code limit : Z=[%.3f, %.3f]  X= [%.3f, %.3f]' % ( zmin, zmax, xmin, xmax) )
 
-zs1 = 0
-zs2 = 0
+zs = [None,None]
 
 bidx = 0
 bnd = [[], []]
 
 def mouse_event1(event):
-    print(  'Z= %8.3f  X= %8.3f' % (event.xdata, event.ydata))
-    global zs1, bidx, bnd
-    zs1 = event.xdata
+    #print(  'Z= %8.3f  X= %8.3f' % (event.xdata, event.ydata))
+    global zs, bidx, bnd, plt
 
-    if bnd[bidx] : bnd[bidx].remove()
-    bnd[bidx], = plt.plot( [event.xdata, event.xdata], [xmin, xmax], 'r-', lw=1)
-    bidx += 1
-    if bidx > 1 : bidx = 0
-    #plt.show()  #segmentatio fault !
-
-def mouse_event2(event):
-    print(  'Z= %8.3f  X= %8.3f' % (event.xdata, event.ydata))
-    global zs2
-    zs2 = event.xdata
+    if event.button == 3 : # is MouseButton.RIGHT:  not defined
+        if bnd[bidx] : bnd[bidx].remove()
+        bnd[bidx], = plt.plot( [event.xdata, event.xdata], [xmin, xmax], 'r-', lw=1)
+        zs[bidx] = event.xdata    
+        bidx = 1 -bidx
+        plt.gcf().canvas.draw_idle()
 
 def on_key(event):
     if event.key == 'S' :
-        print('smooth range = ', zs1,  zs2)
+        print('smooth range Z = %.3f : %.3f' % (zs[0],  zs[1]))
 
     
 fig = plt.figure()
 cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
-cid = fig.canvas.mpl_connect('button_release_event', mouse_event2)
 cid = fig.canvas.mpl_connect('key_press_event', on_key)
 
 plt.gca().invert_yaxis()
