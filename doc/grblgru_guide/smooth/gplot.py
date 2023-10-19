@@ -119,9 +119,48 @@ for line in Lines:
 
     if not fin :
         fin = re.findall( r'( Finish )', line )
-
         
 #----------------------------------------------------------------------------------------------
+
+xmin = min( min(fx), min(rx) )
+xmax = max( max(fx), max(rx) )
+
+zmin = min( min(fz), min(rz) )
+zmax = max( max(fz), max(rz) )
+
+print(  'g-code limit : Z=[%.3f, %.3f]  X= [%.3f, %.3f]' % ( zmin, zmax, xmin, xmax) )
+
+zs1 = 0
+zs2 = 0
+
+bidx = 0
+bnd = [[], []]
+
+def mouse_event1(event):
+    print(  'Z= %8.3f  X= %8.3f' % (event.xdata, event.ydata))
+    global zs1, bidx, bnd
+    zs1 = event.xdata
+
+    if bnd[bidx] : bnd[bidx].remove()
+    bnd[bidx], = plt.plot( [event.xdata, event.xdata], [xmin, xmax], 'r-', lw=1)
+    bidx += 1
+    if bidx > 1 : bidx = 0
+    #plt.show()  #segmentatio fault !
+
+def mouse_event2(event):
+    print(  'Z= %8.3f  X= %8.3f' % (event.xdata, event.ydata))
+    global zs2
+    zs2 = event.xdata
+
+def on_key(event):
+    if event.key == 'S' :
+        print('smooth range = ', zs1,  zs2)
+
+    
+fig = plt.figure()
+cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
+cid = fig.canvas.mpl_connect('button_release_event', mouse_event2)
+cid = fig.canvas.mpl_connect('key_press_event', on_key)
 
 plt.gca().invert_yaxis()
 plt.plot( rz, rx, 'b-', lw=1)
