@@ -1,0 +1,51 @@
+Tools to post process g-code file from Grblgru
+
+1. TO start
+   Windows10 GUI
+   . download the packaged zip file, extract the folder
+   . use File Explorer to nagigate, and click on the file "gplot.exe"
+   
+   Unix or Windows PowerShell
+   . Install python3 and pip3 (Windows python3 should come with pip), then
+   . pip install matplotlib
+   . pip install scipy
+
+   . cd cnc/grbl/ (or the directory with the script and g-code)
+   . python -m gplot
+
+2. Simple User guide
+
+   Select the g-code file to plot or process, the g-code will be plotted, 
+   where rough cuts are in blue lines, while finish cuts green lines with dots.
+
+   It's best to enlarge the plot to show more details, but maximize the plot is not recommended.
+   As there may be error or warning messages displayed on one of the window.
+ 
+   On the plot, use the zoom (magnifying glass) or pan (cross with arrows) button and left mouse button
+   to examine the g-code.
+
+   Sometimes GrblGru generates segments of straight lines in finish cuts which is supposed to be curves.
+   To smooth out a region, move mouse and right mouse button to define the region.
+   After you click the right button, up to two red lines will show up to indicate the boundary.
+   No need for precise position, the red line will snap to closest data point.
+   Also, you can continue to use right-clicks to refine the selection.
+
+   After the desired region is selected, press upper case 'S' or 'H' to smooth it out in the horizontal direction.
+   The result new curve is displayed as red lines with dots.
+   FYI, lower case 's' is Python's built-in shot key to save the plot in a file.
+
+   Press upper case 'V' to smooth out in the vertical direction. This works better if the curve is steep.
+
+   Only one section of "simple" curve can be smoothed out at a time, otherwise, gplot will throw an error.
+   A simple curve doens't change direction, and has no sharp corners.
+
+   After a successful curve fit (red lines), a new file with similiar file name will be generated.
+   For example, if the original file is "test.gc", the the generated file is "test_1.gc".
+   If the selected file is "test_1.gc", then the output file will be "test_2.gc".
+   Note that existing file with the expected name will be over-written.
+   
+   
+
+   Currently, 'gplot' can only smooth out one region.
+   Run run it again on the processed g-code to smooth out a different region.
+   For example, select 'test_1.gc', and the processed file will be 'test_2.gc', etc...

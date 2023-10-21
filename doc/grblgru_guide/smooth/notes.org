@@ -1,0 +1,5 @@
+* pyinstaller works, but exe output is tagged as virus by windows !
+
+* cxfreeze runs fine, note the long path name !
+  C:\Users\User\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts\cxfreeze.exe -c gplot.py
+  todo: add that to PATH
