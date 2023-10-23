@@ -77,7 +77,8 @@ def decreasing( a, b):
     return ai, bi
 
 def save_new():
-    global nfname
+    global nfname, nLines, nfile_saved
+    nfile_saved = False
     if not nLines :
         dbg_print("no data generated yet, do nothing" )
         return
@@ -88,6 +89,8 @@ def save_new():
 
     ngcfile.close()
     dbg_print("New gcode file %s geerated\n" % nfname )
+    nfile_saved = True
+    nLines = []
 
 def smooth(lines, zrange, xrange, dir):
     global nLines, smthdc
@@ -408,9 +411,9 @@ def on_key(event):
 
     if event.key == 's':
         save_new()
-        nfile_saved = True
-        plt.close()
-        #gplot(nfname)     WILL CRASH
+        if nfile_saved:
+            plt.close()
+            #gplot(nfname)     WILL CRASH
 
     if event.key == 'q' or event.key == 'Q' :
         sys.exit(0)
@@ -422,20 +425,16 @@ def gplot(fn):
     global rufcuts, fincuts, fnsel_nopath, nfile_saved
     
     load_file( fn )
-    
     nfile_saved = False
-    ar = (abs(xmax-xmin)/abs(zmax-zmin))
 
-    dbg_print("foo1")
-    fig = plt.figure(num=fnsel_nopath, figsize=(16, 16*ar*1.2 ))  # space for title
-    dbg_print("foo2")
+    #ar = (abs(xmax-xmin)/abs(zmax-zmin))
+    #fig = plt.figure(num=fnsel_nopath, figsize=(16, 16*ar*1.2 ))  # space for title
+    #ax = fig.subplots()
+    
+    fig, ax = plt.subplots()
+    ax.format_coord=format_coord
     cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
     cid = fig.canvas.mpl_connect('key_press_event', on_key)
-
-    dbg_print("foo3")
-        
-    ax=fig.add_subplot(111)
-    ax.format_coord=format_coord
 
     plt.xlabel("Z (lathe spindle)")  # if moved into main, generate extra empty figure 
     plt.ylabel("X (cross slide)")
@@ -459,6 +458,8 @@ plt.rcParams['keymap.zoom'] = 'z'
 plt.rcParams['keymap.home'] = 'A'      # 'h'-fit no zoom out
 plt.rcParams['keymap.forward'] = 'W'   # 'v'-fit no forward
 plt.rcParams['keymap.save'] = '$'
+
+plt.rcParams['figure.figsize'] = [12, 8]
 
 ofn = []  if len(sys.argv) < 2  else sys.argv[1]
 nfile_saved = False
