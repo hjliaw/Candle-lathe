@@ -158,7 +158,7 @@ def smooth(lines, zrange, xrange, dir):
             mrz, mrx = increasing( mz[fidx], mx[fidx])
 
         if len(mrz) > 2 :
-            nn = 2 * len(mrz)
+            nn = 2*len(mrz)
             try:
                 if dir == 'v':
                     spl = UnivariateSpline(mrx, mrz )
@@ -203,17 +203,21 @@ def smooth(lines, zrange, xrange, dir):
 
         smoothed = False
         for line in finLines[fidx]:
+            # skip "smoothed" lines, they will mes up var smoothed 
+            if re.findall( r'smoothed', line): continue
             znew = 1e6
+            xnew = 1e6
             xpos = re.findall( r'[X](.?\d+.\d+)', line)
             zpos = re.findall( r'[Z](.?\d+.\d+)', line)
             if zpos: znew = float( zpos[0])
+            if xpos: xnew = float( xpos[0])
 
             # asumption: z goes from 0 to negative dring finish
 
             if znew >= zmax:
                 smoothed = False               # may not be set if zmax > 0
                 ngcfile.write( line + '\n' )
-            elif znew >= zmin :
+            elif znew >= zmin and xnew <= xmax:
                 if not smoothed :
                     Nzs = len(zs)
                     dbg_print("DBG: Nzs= %d" % Nzs )
@@ -383,6 +387,12 @@ def on_key(event):
         dbg_print('smooth range : X=[%.3f, %.3f]' % (Xs[0],  Xs[1]) )
         smooth( Lines, Zs, Xs, event.key )
 
+    if event.key == 'R':
+        vis = not rufcuts.get_visible()
+        print( "DBG vis = ", vis )
+        rufcuts.set_visible(vis)
+        plt.draw()
+        
     if event.key == 'q' or event.key == 'Q' :
         sys.exit(0)
         
@@ -390,10 +400,25 @@ fig = plt.figure(figsize=(12,8))  #plt.figure()
 cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
 cid = fig.canvas.mpl_connect('key_press_event', on_key)
 
+plt.rcParams['keymap.zoom'] = 'z'
+plt.rcParams['keymap.home'] = 'A'      # 'h'-fit no zoom out
+plt.rcParams['keymap.forward'] = 'W'   # 'v'-fit no forward
+
 #fig.canvas.set_window_title('Test')
 
 plt.gca().invert_yaxis()
-plt.plot( rz, rx, 'b-', lw=1)
-plt.plot( fz, fx, 'g.-', lw=1)
+rufcuts, = plt.plot( rz, rx, 'b--',  lw=0.5, label="rough")
+fincuts, = plt.plot( fz, fx, 'g.-', lw=1, label="finish")
+
+# leg = plt.legend(loc='upper left', fancybox=True)
+# for line in leg.get_lines():
+    # line.set_picker(True)
+# def onpick(event):
+    # legline = event.artist
+    # vis = not legline.get_visible()
+    # legline.set_visible(vis)
+    # plt.draw()
+# plt.gcf().canvas.mpl_connect('pick_event', onpick)
+
 plt.show()
 

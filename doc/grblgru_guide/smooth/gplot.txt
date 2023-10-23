@@ -1,0 +1,51 @@
+1. Install python3 (Windows python3 should come with pip)
+
+2. Open power shell, type the following to install additional modules
+
+   pip install matplotlib
+   pip install scipy
+
+3. In power shell, goto the directory containing gplot.py and the g-code files to be processed
+   for example "cd $home\cnc\grbl", as mine are stored at $home\cnc\grbl\.  Then type: 
+
+   python -m gplot.py KnobReel2.gc
+
+   which will plot the g-code, where rough cuts are blue lines, while finish cuts in green with dots.
+
+   It's best to enlarge the plot to show more details, but maximize the plot is not recommended.
+   As there may be error or warning messages displayed one the PowerShell window.
+ 
+   Use the zoom (magnifying glass) or pan (cross with arrows) button and left mouse button to examine the g-code.
+
+   Sometimes GrblGru generates segments of straight lines in finish cuts which is supposed to be curves.
+   To smooth out a region, move mouse and right mouse button to define the region.
+   After you click the right button, up to two red lines will show up to indicate the boundary.
+   No need for precise position, the red line will snap to closest data point.
+   Also, you can continue to use right-clicks to refine the selection.
+
+   After the desired region is selected, press upper case 'S' or 'H' to smooth it out in the horizontal direction.
+   The result new curve is displayed as red lines with dots.
+
+   Press upper case 'V' to smooth out in the vertical direction.  This works better if the curve is very steep.
+
+   Only one section of "simple" curve can be smoothed out at a time. Otherwise, gplot will throw an error on PowerShell.
+
+   After a successful curve fit (red lines), a new file "*_N.*" (with the same file extension) will be saved automatically.
+
+   Lower case 's' is the built-in function in Python plot to save the plot.
+
+4. Currently, 'gplot' can only smooth out one region.
+   Run run it again on the processed g-code to smooth out a different region, for example:
+
+   python -m gplot.py KnobReel2_1.gc
+
+   Output of the above will be automatically saved as KnobReel2_2.gc. To examine the file: 
+
+   python -m gplot.py KnobReel2_2.gc
+
+
+
+* other notes
+1. pyinstaller runs, but exe is tagged as virus by windows
+2. cxfreeze runs fine, note the long path name !
+   C:\Users\User\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.10_qbz5n2kfra8p0\LocalCache\local-packages\Python310\Scripts\cxfreeze.exe -c gplot.py
