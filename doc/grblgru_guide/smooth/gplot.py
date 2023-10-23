@@ -402,13 +402,21 @@ def on_key(event):
         rufcuts.set_visible(vis)
         plt.draw()
 
+    if event.key == 'L':
+        plt.close()
+        gplot([])      # CRASH ?
+
     if event.key == 's':
         save_new()
         nfile_saved = True
+        plt.close()
         #gplot(nfname)     WILL CRASH
 
     if event.key == 'q' or event.key == 'Q' :
         sys.exit(0)
+
+def format_coord(x,y):
+    return "Z={:.2f} X={:.2f}".format(x,y)
 
 def gplot(fn):
     global rufcuts, fincuts, fnsel_nopath, nfile_saved
@@ -417,25 +425,22 @@ def gplot(fn):
     
     nfile_saved = False
     ar = (abs(xmax-xmin)/abs(zmax-zmin))
-    
+
+    dbg_print("foo1")
     fig = plt.figure(num=fnsel_nopath, figsize=(16, 16*ar*1.2 ))  # space for title
+    dbg_print("foo2")
     cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
     cid = fig.canvas.mpl_connect('key_press_event', on_key)
 
+    dbg_print("foo3")
+        
     ax=fig.add_subplot(111)
-    def format_coord(x,y):
-        return "Z={:.2f} X={:.2f}".format(x,y)
     ax.format_coord=format_coord
 
-    plt.rcParams['keymap.zoom'] = 'z'
-    plt.rcParams['keymap.home'] = 'A'      # 'h'-fit no zoom out
-    plt.rcParams['keymap.forward'] = 'W'   # 'v'-fit no forward
-    plt.rcParams['keymap.save'] = '$'
-
-    plt.xlabel("lathe-Z (spindle)")
+    plt.xlabel("Z (lathe spindle)")  # if moved into main, generate extra empty figure 
     plt.ylabel("X (cross slide)")
-    plt.title(fnsel_nopath)
 
+    plt.title(fnsel_nopath)
     plt.gca().invert_yaxis()
     plt.gca().set_aspect('equal')
     rufcuts, = plt.plot( rz, rx, 'b--',  lw=0.2, label="rough")
@@ -449,6 +454,11 @@ def gplot(fn):
 
 root = tk.Tk()
 root.withdraw()
+
+plt.rcParams['keymap.zoom'] = 'z'
+plt.rcParams['keymap.home'] = 'A'      # 'h'-fit no zoom out
+plt.rcParams['keymap.forward'] = 'W'   # 'v'-fit no forward
+plt.rcParams['keymap.save'] = '$'
 
 ofn = []  if len(sys.argv) < 2  else sys.argv[1]
 nfile_saved = False
