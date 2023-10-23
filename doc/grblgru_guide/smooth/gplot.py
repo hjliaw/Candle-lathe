@@ -405,16 +405,20 @@ def on_key(event):
     if event.key == 's':
         save_new()
         nfile_saved = True
+        #gplot(nfname)     WILL CRASH
 
     if event.key == 'q' or event.key == 'Q' :
         sys.exit(0)
 
 def gplot(fn):
-    global rufcuts, fincuts
+    global rufcuts, fincuts, fnsel_nopath, nfile_saved
+    
     load_file( fn )
-
+    
+    nfile_saved = False
     ar = (abs(xmax-xmin)/abs(zmax-zmin))
-    fig = plt.figure(num="g-plot", figsize=(16, 16*ar*1.2 ))  # space for title
+    
+    fig = plt.figure(num=fnsel_nopath, figsize=(16, 16*ar*1.2 ))  # space for title
     cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
     cid = fig.canvas.mpl_connect('key_press_event', on_key)
 
@@ -437,8 +441,7 @@ def gplot(fn):
     rufcuts, = plt.plot( rz, rx, 'b--',  lw=0.2, label="rough")
     fincuts, = plt.plot( fz, fx, 'g.-', lw=1, label="finish")
 
-    plt.show()
-
+    plt.show()   # blocking
     
 #---------------------------------------------------------------------------
 # here we go
@@ -446,21 +449,15 @@ def gplot(fn):
 
 root = tk.Tk()
 root.withdraw()
-ofn = []
-if len(sys.argv) > 1 :  ofn = sys.argv[1]
+
+ofn = []  if len(sys.argv) < 2  else sys.argv[1]
+nfile_saved = False
 
 while True:
-    nfile_saved = False
     gplot(ofn)
-    
-    while not nfile_saved:   # will stay here until killed
-        time.sleep(0.2)
-
-    rufcuts.remove()
-    fincuts.remove()
-
-    bnd[0].remove()
-    bnd[1].remove()
-    
-    ofn = nfname
+    if nfile_saved:
+        ofn = nfname
+        nfile_saved = False   # new plot
+    else:
+        break
 
