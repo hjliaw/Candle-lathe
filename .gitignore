@@ -77,3 +77,4 @@ TAGS
 *.log
 crashed/
 TBS/
+*.gc
