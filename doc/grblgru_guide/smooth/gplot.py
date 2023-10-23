@@ -12,6 +12,7 @@ import struct
 import sys
 import re
 import os
+import time
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,6 +27,8 @@ finPass = 0         # number of final passes
 zmin, zmax, xmin, xmax = -1e6, +1e6, -1e6, +1e6   # g-code range
 nfname = ""
 smthdc = [[] for i in range(100)]    # plt obj, assumes finPass < 100
+Lines=[]
+nLines = []
 
 def dbg_print(msg):
     print( "    %s" % msg, file=sys.stderr )
@@ -73,14 +76,25 @@ def decreasing( a, b):
         ai, bi = a[::-1], b[::-1]
     return ai, bi
 
-def smooth(lines, zrange, xrange, dir):
-
+def save_new():
+    global nfname
+    if not nLines :
+        dbg_print("no data generated yet, do nothing" )
+        return
+        
     ngcfile = open( nfname, 'w')
+    for nline in nLines:
+                ngcfile.write(nline)
+
+    ngcfile.close()
+    dbg_print("New gcode file %s geerated\n" % nfname )
+
+def smooth(lines, zrange, xrange, dir):
+    global nLines, smthdc
+    nLines = []
     
     finPass = finish_passes(lines)
     dbg_print("DBG: finish passes= %d" % finPass )
-
-    global smthdc
     mx       = [[] for i in range(finPass+1)]
     mz       = [[] for i in range(finPass+1)]
     finLines = [[] for i in range(finPass+1)]    # +1 to hold the final return gcodes
@@ -129,14 +143,12 @@ def smooth(lines, zrange, xrange, dir):
             if back2start(line): fp += 1
             finLines[fp].append(nline)
             
-            if xpos and zpos and znew < zmax and znew > zmin :   # get (last) finish feedrate
+            if xpos and zpos and znew < zmax and znew > zmin :
                 mx[fp].append( xnew )
                 mz[fp].append( znew )
         else:
-            ngcfile.write( nline + '\n' )
+            nLines.append( nline + '\n' )
             fin = re.findall( r'( Finish )', line ) # keep looking for finish cut(s)
-
-    #----------------------------------------------------------------------------------------------
 
     finFR = finish_feedrate(lines)
             
@@ -149,7 +161,8 @@ def smooth(lines, zrange, xrange, dir):
         plt.gcf().canvas.draw_idle()
 
     for fidx in range(finPass+1):
-        # spl wants increaseing 1st arg (conventionlly x, but is z here for lathe)
+        # todo: try both, and use the one with least error
+        # spl wants increaseing 1st arg
 
         if dir == 'v':    # vertical fit lathe-X as the variable
             mrx, mrz = increasing( mx[fidx], mz[fidx])
@@ -197,13 +210,11 @@ def smooth(lines, zrange, xrange, dir):
             smthdc[fidx], = plt.plot( zs, xs, 'r.-', lw=1)
             plt.gcf().canvas.draw_idle()
 
-
         # process the finish cut
 
         smoothed = False
         for line in finLines[fidx]:
-            # skip "smoothed" lines, they will mes up var smoothed 
-            if re.findall( r'smoothed', line): continue
+            if re.findall( r'smoothed', line): continue   # otherwise, will mess up var 'smoothed'  
             znew = 1e6
             xnew = 1e6
             xpos = re.findall( r'[X](.?\d+.\d+)', line)
@@ -215,27 +226,29 @@ def smooth(lines, zrange, xrange, dir):
 
             if znew >= zmax:
                 smoothed = False               # may not be set if zmax > 0
-                ngcfile.write( line + '\n' )
+                #ngcfile.write( line + '\n' )
+                nLines.append( line + '\n')
             elif znew >= zmin and xnew <= xmax:
                 if not smoothed :
                     Nzs = len(zs)
                     dbg_print("DBG: Nzs= %d" % Nzs )
-                    ngcfile.write( "( smoothed curve begins )\n" )
-
+                    #ngcfile.write( "( smoothed curve begins )\n" )
+                    nLines.append( "( smoothed curve begins )\n" )
                     # ensure z in decreasing order
                     zs, xs = decreasing( zs, xs)
                     for i in range(Nzs):
-                        ngcfile.write( "F%s X%.3f Z%.3f\n" % (finFR, xs[i], zs[i]) )
-                        
-                    ngcfile.write( "( smoothed curve ends )\n" )
+                        #ngcfile.write( "F%s X%.3f Z%.3f\n" % (finFR, xs[i], zs[i]) )
+                        nLines.append(  "F%s X%.3f Z%.3f\n" % (finFR, xs[i], zs[i]) )
+                    #ngcfile.write( "( smoothed curve ends )\n" )
+                    nLines.append( "( smoothed curve ends )\n" )
                     smoothed = True
             else:
-                ngcfile.write( line + '\n' )
-
+                #ngcfile.write( line + '\n' )
+                nLines.append( line + '\n')
     #----------------------------------------------------------------------------------------------
     
-    ngcfile.close()
-    dbg_print("New gcode file %s geerated\n" % nfname )
+    #ngcfile.close()
+    #dbg_print("New gcode file %s geerated\n" % nfname )
 
 def extract_data(lines):
     xnew, znew = 0, 0
@@ -283,8 +296,8 @@ def finish_feedrate(lines):   # get (last) frrerate during finish
     else : return 0.0
 
 def load_file(fname):
+    global Lines, fnsel, fnsel_nopath, nfname
     while True:
-        global Lines, fnsel, fnsel_nopath
         if fname :
             fnsel = fname
         else:
@@ -306,6 +319,7 @@ def load_file(fname):
             if messagebox.askyesno("Error", msg ):
                 sys.exit(1)
 
+        dbg_print( "gcode = %s" % fnsel_nopath )
         dbg_print( "fin FR= %f" % finish_feedrate(Lines) )
 
         if finish_feedrate(Lines) > 0.0:
@@ -325,9 +339,8 @@ def load_file(fname):
     else:
         nfname =  "%s_1.%s" % (fbase, fext)
 
-
-def init_vars():
-    global Lines, rx, rz, fx, fz
+#def init_vars():
+    global rx, rz, fx, fz
     global xmin, xmax, zmin, zmax
     global Zs, Xs, bidx, bnd
     
@@ -374,7 +387,10 @@ def mouse_event1(event):
         bidx = 1 -bidx
         plt.gcf().canvas.draw_idle()
 
+nfile_saved = False
+
 def on_key(event):
+    global nfile_saved
     if event.key == 'S' or event.key == 'h' or event.key == 'v' :
         dbg_print('smooth range : Z=[%.3f, %.3f]' % (Zs[0],  Zs[1]) )
         dbg_print('smooth range : X=[%.3f, %.3f]' % (Xs[0],  Xs[1]) )
@@ -385,43 +401,66 @@ def on_key(event):
         print( "DBG vis = ", vis )
         rufcuts.set_visible(vis)
         plt.draw()
-        
+
+    if event.key == 's':
+        save_new()
+        nfile_saved = True
+
     if event.key == 'q' or event.key == 'Q' :
         sys.exit(0)
 
+def gplot(fn):
+    global rufcuts, fincuts
+    load_file( fn )
+
+    ar = (abs(xmax-xmin)/abs(zmax-zmin))
+    fig = plt.figure(num="g-plot", figsize=(16, 16*ar*1.2 ))  # space for title
+    cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
+    cid = fig.canvas.mpl_connect('key_press_event', on_key)
+
+    ax=fig.add_subplot(111)
+    def format_coord(x,y):
+        return "Z={:.2f} X={:.2f}".format(x,y)
+    ax.format_coord=format_coord
+
+    plt.rcParams['keymap.zoom'] = 'z'
+    plt.rcParams['keymap.home'] = 'A'      # 'h'-fit no zoom out
+    plt.rcParams['keymap.forward'] = 'W'   # 'v'-fit no forward
+    plt.rcParams['keymap.save'] = '$'
+
+    plt.xlabel("lathe-Z (spindle)")
+    plt.ylabel("X (cross slide)")
+    plt.title(fnsel_nopath)
+
+    plt.gca().invert_yaxis()
+    plt.gca().set_aspect('equal')
+    rufcuts, = plt.plot( rz, rx, 'b--',  lw=0.2, label="rough")
+    fincuts, = plt.plot( fz, fx, 'g.-', lw=1, label="finish")
+
+    plt.show()
+
+    
 #---------------------------------------------------------------------------
 # here we go
 #---------------------------------------------------------------------------
 
 root = tk.Tk()
 root.withdraw()
+ofn = []
+if len(sys.argv) > 1 :  ofn = sys.argv[1]
 
-load_file( [] if len(sys.argv)<2 else sys.argv[1] )
-init_vars()
+while True:
+    nfile_saved = False
+    gplot(ofn)
+    
+    while not nfile_saved:   # will stay here until killed
+        time.sleep(0.2)
 
-ar = (abs(xmax-xmin)/abs(zmax-zmin))
-fig = plt.figure(num="g-plot", figsize=(16, 16*ar*1.2 ))  # space for title
-cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
-cid = fig.canvas.mpl_connect('key_press_event', on_key)
+    rufcuts.remove()
+    fincuts.remove()
 
-ax=fig.add_subplot(111)
-def format_coord(x,y):
-    return "Z={:.2f} X={:.2f}".format(x,y)
-ax.format_coord=format_coord
-
-plt.rcParams['keymap.zoom'] = 'z'
-plt.rcParams['keymap.home'] = 'A'      # 'h'-fit no zoom out
-plt.rcParams['keymap.forward'] = 'W'   # 'v'-fit no forward
-plt.rcParams['keymap.save'] = '$'
-
-plt.xlabel("lathe-Z (spindle)")
-plt.ylabel("X (cross slide)")
-plt.title(fnsel_nopath)
-
-plt.gca().invert_yaxis()
-plt.gca().set_aspect('equal')
-rufcuts, = plt.plot( rz, rx, 'b--',  lw=0.2, label="rough")
-fincuts, = plt.plot( fz, fx, 'g.-', lw=1, label="finish")
-
-plt.show()
+    bnd[0].remove()
+    bnd[1].remove()
+    
+    ofn = nfname
 
