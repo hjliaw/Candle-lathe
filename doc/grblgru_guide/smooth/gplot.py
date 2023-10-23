@@ -400,13 +400,19 @@ load_file( [] if len(sys.argv)<2 else sys.argv[1] )
 init_vars()
 
 ar = (abs(xmax-xmin)/abs(zmax-zmin))
-fig = plt.figure(num="g-plot", figsize=(16, 16*ar*1.2 ))  # need space for title
+fig = plt.figure(num="g-plot", figsize=(16, 16*ar*1.2 ))  # space for title
 cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
 cid = fig.canvas.mpl_connect('key_press_event', on_key)
+
+ax=fig.add_subplot(111)
+def format_coord(x,y):
+    return "Z={:.2f} X={:.2f}".format(x,y)
+ax.format_coord=format_coord
 
 plt.rcParams['keymap.zoom'] = 'z'
 plt.rcParams['keymap.home'] = 'A'      # 'h'-fit no zoom out
 plt.rcParams['keymap.forward'] = 'W'   # 'v'-fit no forward
+plt.rcParams['keymap.save'] = '$'
 
 plt.xlabel("lathe-Z (spindle)")
 plt.ylabel("X (cross slide)")
