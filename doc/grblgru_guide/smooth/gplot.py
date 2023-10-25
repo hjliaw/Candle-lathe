@@ -28,7 +28,6 @@ NewFname = ""
 SmthdC = [[] for i in range(100)]    # plt obj, assumes FinPass < 100
 Lines=[]
 NewLines = []
-
 NPF = 1.5            # new points factor
 
 nfile_saved = False
@@ -86,7 +85,14 @@ def save_new():
         msg = "Nothing new to save. \n\nHint: right click to define region to smooth, 'v' or 'h' key to smooth"
         messagebox.showwarning("No New Data", msg )
         return
-        
+
+    # check if file exists
+    if os.path.isfile( NewFname ):
+        msg = "\"%s\" already exists\n\nover-write?" % os.path.basename(NewFname)
+        if not messagebox.askyesno("File Exists", msg ):
+            NewFname = filedialog.asksaveasfilename( initialfile = NewFname,
+                                          filetypes=[("G-Code","*.gc"),("G-Code","*.ngc"),("G-Code","*.nc")] )
+
     ngcfile = open( NewFname, 'w')
     for nline in NewLines:
                 ngcfile.write(nline)
@@ -413,7 +419,8 @@ def on_key(event):
     if event.key == 's':
         save_new()
         if nfile_saved:
-            messagebox.showinfo("Info", "G-code file \"%s\" saved\n\n click to load new file" % NewFname )
+            msg = "G-code file \"%s\" saved\n\n click to load new file" % os.path.basename(NewFname )
+            messagebox.showinfo("Info", msg )
             plt.close()
 
     if event.key == 'q' or event.key == 'Q' :
