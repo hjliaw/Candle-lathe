@@ -3,9 +3,8 @@
 # GrblGru lathe V1.0 usually generates finish cuts with segments
 # post process to smooth it out with curve fit
 
-# can be applied multiple times
+# what if gcode unit=inch ? shold still works, will break if mixed metric and imperial
 
-# what if gcode unit=inch ?
 # todo: avoid curve fit when large and small sloped        
 
 import struct
@@ -22,13 +21,17 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 
-xbs = 0.0           # x-axis backlash (z-axis is not critical for lathe)
-finPass = 0         # number of final passes
-zmin, zmax, xmin, xmax = -1e6, +1e6, -1e6, +1e6   # g-code range
-nfname = ""
-smthdc = [[] for i in range(100)]    # plt obj, assumes finPass < 100
+Xbs = 0.0           # x-axis backlash (z-axis is not critical for lathe)
+FinPass = 0         # number of final passes
+Zmin, Zmax, Xmin, Xmax = -1e6, +1e6, -1e6, +1e6   # g-code range
+NewFname = ""
+SmthdC = [[] for i in range(100)]    # plt obj, assumes FinPass < 100
 Lines=[]
-nLines = []
+NewLines = []
+
+NPF = 1.5            # new points factor
+
+nfile_saved = False
 
 def dbg_print(msg):
     print( "    %s" % msg, file=sys.stderr )
@@ -77,39 +80,40 @@ def decreasing( a, b):
     return ai, bi
 
 def save_new():
-    global nfname, nLines, nfile_saved
+    global NewFname, NewLines, nfile_saved
     nfile_saved = False
-    if not nLines :
-        dbg_print("no data generated yet, do nothing" )
+    if not NewLines :
+        msg = "Nothing new to save. \n\nHint: right click to define region to smooth, 'v' or 'h' key to smooth"
+        messagebox.showwarning("No New Data", msg )
         return
         
-    ngcfile = open( nfname, 'w')
-    for nline in nLines:
+    ngcfile = open( NewFname, 'w')
+    for nline in NewLines:
                 ngcfile.write(nline)
 
     ngcfile.close()
-    dbg_print("New gcode file %s geerated\n" % nfname )
+    #dbg_print("New gcode file %s geerated\n" % NewFname )
     nfile_saved = True
-    nLines = []
+    NewLines = []
 
 def smooth(lines, zrange, xrange, dir):
-    global nLines, smthdc
-    nLines = []
+    global NewLines, SmthdC, NPF
+    NewLines = []
     
-    finPass = finish_passes(lines)
-    dbg_print("DBG: finish passes= %d" % finPass )
-    mx       = [[] for i in range(finPass+1)]
-    mz       = [[] for i in range(finPass+1)]
-    finLines = [[] for i in range(finPass+1)]    # +1 to hold the final return gcodes
+    FinPass = finish_passes(lines)
+    dbg_print("DBG: finish passes= %d" % FinPass )
+    mx       = [[] for i in range(FinPass+1)]
+    mz       = [[] for i in range(FinPass+1)]
+    finLines = [[] for i in range(FinPass+1)]    # +1 to hold the final return gcodes
     
     fin = []
-    fp = 0               # 0..finPass-1
+    fp = 0               # 0..FinPass-1
 
-    zmax = max(zrange) + 1e-4   # in this function, z-region to be smoothed
-    zmin = min(zrange) - 1e-4
+    Zmax = max(zrange) + 1e-4   # in this function, z-region to be smoothed
+    Zmin = min(zrange) - 1e-4
 
-    xmax = max(xrange) + 1e-4   # in this function, z-region to be smoothed
-    xmin = min(xrange) - 1e-4
+    Xmax = max(xrange) + 1e-4   # in this function, z-region to be smoothed
+    Xmin = min(xrange) - 1e-4
 
     comp = False
     xold, xnew, zold, znew = [0.0]*4
@@ -126,8 +130,8 @@ def smooth(lines, zrange, xrange, dir):
                 if ( not comp and xnew > xold ): comp = True
                 if (     comp and xnew < xold ): comp = False
 
-            if (comp and xbs > 1e-6):
-                xcomp = xnew + xbs
+            if (comp and Xbs > 1e-6):
+                xcomp = xnew + Xbs
                 comment =  "     ; BKLS X%s -> X%.3f" % (xpos[0], xcomp)
             else:
                 xcomp = xnew    
@@ -146,40 +150,43 @@ def smooth(lines, zrange, xrange, dir):
             if back2start(line): fp += 1
             finLines[fp].append(nline)
             
-            if xpos and zpos and znew < zmax and znew > zmin :
+            if xpos and zpos and znew < Zmax and znew > Zmin :
                 mx[fp].append( xnew )
                 mz[fp].append( znew )
         else:
-            nLines.append( nline + '\n' )
+            NewLines.append( nline + '\n' )
             fin = re.findall( r'( Finish )', line ) # keep looking for finish cut(s)
 
     finFR = finish_feedrate(lines)
             
-    for fidx in range(finPass+1):
+    for fidx in range(FinPass+1):
         if len(mz[fidx]) > 2 :
             try:
-                if smthdc[fidx] : smthdc[fidx].remove() 
+                if SmthdC[fidx] : SmthdC[fidx].remove() 
             except:
-                dbg_print( "no curve to delete")
+                dbg_print( "warning: no curve to delete (unusal, but happens)")
         plt.gcf().canvas.draw_idle()
 
-    for fidx in range(finPass+1):
+    for fidx in range(FinPass+1):
         # todo: try both, and use the one with least error
-        # spl wants increaseing 1st arg
 
+        # u-spline wants requires 1st arg
         if dir == 'v':    # vertical fit lathe-X as the variable
             mrx, mrz = increasing( mx[fidx], mz[fidx])
         else :            # horizontal (only 'S' or 'H' will be passed here
             mrz, mrx = increasing( mz[fidx], mx[fidx])
 
         if len(mrz) > 2 :
-            nn = 2*len(mrz)
+            nn = int(NPF*len(mrz))
+            if nn < 2 :
+                nn = 2
+                NPF=NPF*1.5   # not necessary, but prevet NPF from becoming 0
             try:
                 if dir == 'v':
                     spl = UnivariateSpline(mrx, mrz )
                     xs = np.linspace( min(mx[fidx]), max(mx[fidx]), nn )    
                     zs = spl(xs)
-                else:  # normal horizontal curve fit
+                else:  # 'h'
                     spl = UnivariateSpline(mrz, mrx )
                     zs = np.linspace( min(mz[fidx]), max(mz[fidx]), nn )
                     xs = spl(zs)
@@ -210,7 +217,7 @@ def smooth(lines, zrange, xrange, dir):
             for i in range(N):
                 xs[i] +=  s0 + (s1-s0)*i/(N-1)
             
-            smthdc[fidx], = plt.plot( zs, xs, 'r.-', lw=1)
+            SmthdC[fidx], = plt.plot( zs, xs, 'r.-', lw=1)
             plt.gcf().canvas.draw_idle()
 
         # process the finish cut
@@ -225,33 +232,22 @@ def smooth(lines, zrange, xrange, dir):
             if zpos: znew = float( zpos[0])
             if xpos: xnew = float( xpos[0])
 
-            # asumption: z goes from 0 to negative dring finish
+            # requirement: z goes from 0 to negative during finish cut(s)
 
-            if znew >= zmax:
-                smoothed = False               # may not be set if zmax > 0
-                #ngcfile.write( line + '\n' )
-                nLines.append( line + '\n')
-            elif znew >= zmin and xnew <= xmax:
+            if znew >= Zmax:
+                smoothed = False               # may not be set if Zmax > 0
+                NewLines.append( line + '\n')
+            elif znew >= Zmin and xnew <= Xmax:
                 if not smoothed :
-                    Nzs = len(zs)
-                    dbg_print("DBG: Nzs= %d" % Nzs )
-                    #ngcfile.write( "( smoothed curve begins )\n" )
-                    nLines.append( "( smoothed curve begins )\n" )
-                    # ensure z in decreasing order
                     zs, xs = decreasing( zs, xs)
-                    for i in range(Nzs):
-                        #ngcfile.write( "F%s X%.3f Z%.3f\n" % (finFR, xs[i], zs[i]) )
-                        nLines.append(  "F%s X%.3f Z%.3f\n" % (finFR, xs[i], zs[i]) )
-                    #ngcfile.write( "( smoothed curve ends )\n" )
-                    nLines.append( "( smoothed curve ends )\n" )
+                    NewLines.append( "( smoothed curve begins )\n" )
+                    Nzs = len(zs)
+                    dbg_print( "No. of data pints: old= %d -> new= %d" % (len(mz[fidx]), Nzs) ) 
+                    for i in range(Nzs): NewLines.append(  "F%s X%.3f Z%.3f\n" % (finFR, xs[i], zs[i]) )
+                    NewLines.append( "( smoothed curve ends )\n" )
                     smoothed = True
             else:
-                #ngcfile.write( line + '\n' )
-                nLines.append( line + '\n')
-    #----------------------------------------------------------------------------------------------
-    
-    #ngcfile.close()
-    #dbg_print("New gcode file %s geerated\n" % nfname )
+                NewLines.append( line + '\n')
 
 def extract_data(lines):
     xnew, znew = 0, 0
@@ -261,11 +257,8 @@ def extract_data(lines):
         if not_real_finish(line):  fin=[]
 
         if xpos := re.findall( r'[X](.?\d+.\d+)', line) :
-            xold = xnew
             xnew = float( xpos[0])
-
         if zpos := re.findall( r'[Z](.?\d+.\d+)', line) :
-            zold = znew
             znew = float( zpos[0])
 
         if xpos or zpos :
@@ -281,7 +274,7 @@ def extract_data(lines):
             
     return rx, rz, fx, fz
 
-# scan the lines multiple times, should be ok, as lathe files are relatively small
+# scan the lines multiple times, as lathe g-codes are small
 
 def finish_feedrate(lines):   # get (last) frrerate during finish
     fr, fin = [], []
@@ -299,7 +292,7 @@ def finish_feedrate(lines):   # get (last) frrerate during finish
     else : return 0.0
 
 def load_file(fname):
-    global Lines, fnsel, fnsel_nopath, nfname
+    global Lines, fnsel, fnsel_nopath, NewFname
     while True:
         if fname :
             fnsel = fname
@@ -318,7 +311,7 @@ def load_file(fname):
                 break
 
         if finish_passes(Lines) < 1:
-            msg = "No finish pass found in \"%s\" \n\n abort ?" % fnsel_nopath    # todo: reload
+            msg = "No finish pass found in \"%s\" \n\n Exit ?" % fnsel_nopath    # todo: reload
             if messagebox.askyesno("Error", msg ):
                 sys.exit(1)
 
@@ -328,7 +321,7 @@ def load_file(fname):
         if finish_feedrate(Lines) > 0.0:
             break
         else:
-            msg = "No feedrate found in finish cut(s), \"%s\" \n\n exit ?" % fnsel_nopath
+            msg = "No feedrate found in finish cut(s), \"%s\" \n\n Exit ?" % fnsel_nopath
             if messagebox.askyesno("Error", msg ):
                 sys.exit(1)
         
@@ -338,22 +331,21 @@ def load_file(fname):
 
     if underN := re.findall( r'_(\d+)$', fbase) :
         cnt = int(underN[0])
-        nfname = "%s%d.%s" % (fbase[:-len(underN[0])], cnt+1, fext)
+        NewFname = "%s%d.%s" % (fbase[:-len(underN[0])], cnt+1, fext)
     else:
-        nfname =  "%s_1.%s" % (fbase, fext)
+        NewFname =  "%s_1.%s" % (fbase, fext)
 
-#def init_vars():
     global rx, rz, fx, fz
-    global xmin, xmax, zmin, zmax
+    global Xmin, Xmax, Zmin, Zmax
     global Zs, Xs, bidx, bnd
     
     rx, rz, fx, fz = extract_data(Lines)
 
-    xmin = min( min(fx), min(rx) )
-    xmax = max( max(fx), max(rx) )
-    zmin = min( min(fz), min(rz) )
-    zmax = max( max(fz), max(rz) )
-    dbg_print(  'g-code limit : Z=[%.3f, %.3f]  X= [%.3f, %.3f]' % ( zmin, zmax, xmin, xmax) )
+    Xmin = min( min(fx), min(rx) )
+    Xmax = max( max(fx), max(rx) )
+    Zmin = min( min(fz), min(rz) )
+    Zmax = max( max(fz), max(rz) )
+    dbg_print(  'g-code limit : Z=[%.3f, %.3f]  X= [%.3f, %.3f]' % ( Zmin, Zmax, Xmin, Xmax) )
 
     Zs = [None,None]
     Xs = [None,None]
@@ -384,37 +376,45 @@ def mouse_event1(event):
             if abs(zn-Zs[1]) < 0.2*abs(zn-Zs[0]): bidx = 1
         
         if bnd[bidx] : bnd[bidx].remove()
-        bnd[bidx], = plt.plot( [zn, zn], [xmin, xmax], 'r-', lw=1)
+        bnd[bidx], = plt.plot( [zn, zn], [Xmin, Xmax], 'r-', lw=1)
         Zs[bidx] = zn   #event.xdata
         Xs[bidx] = xn   #event.ydata    
         bidx = 1 -bidx
         plt.gcf().canvas.draw_idle()
 
-nfile_saved = False
+
 
 def on_key(event):
-    global nfile_saved
+    global nfile_saved, saved_key
     if event.key == 'S' or event.key == 'h' or event.key == 'v' :
         dbg_print('smooth range : Z=[%.3f, %.3f]' % (Zs[0],  Zs[1]) )
         dbg_print('smooth range : X=[%.3f, %.3f]' % (Xs[0],  Xs[1]) )
+        saved_key = event.key
         smooth( Lines, Zs, Xs, event.key )
 
-    if event.key == 'R':
+    if event.key == 'R':   # toggle rough cut
         vis = not rufcuts.get_visible()
         print( "DBG vis = ", vis )
         rufcuts.set_visible(vis)
         plt.draw()
 
-    if event.key == 'L':
+    if event.key == 'L':  # load new file
         plt.close()
-        gplot([])      # CRASH ?
+        gplot([])         # CRASH !?
+
+    if event.key == '+' or event.key == '-':  # more|less points
+        global NPF
+        if NewLines :
+            if event.key == '+' : NPF = NPF * 1.5; mol = "more"
+            if event.key == '-' : NPF = NPF / 1.5; mol = "less"
+            dbg_print( "smooth with %s data points" % mol )
+            smooth( Lines, Zs, Xs, saved_key )
 
     if event.key == 's':
         save_new()
         if nfile_saved:
-            messagebox.showinfo("Info", "New gcode file \"%s\" generated\n\n click to show new file" % nfname )
+            messagebox.showinfo("Info", "G-code file \"%s\" saved\n\n click to load new file" % NewFname )
             plt.close()
-            #gplot(nfname)     WILL CRASH
 
     if event.key == 'q' or event.key == 'Q' :
         sys.exit(0)
@@ -428,7 +428,7 @@ def gplot(fn):
     load_file( fn )
     nfile_saved = False
 
-    #ar = (abs(xmax-xmin)/abs(zmax-zmin))
+    #ar = (abs(Xmax-Xmin)/abs(Zmax-Zmin))   NOT useful, esp after zoomed in
     #fig = plt.figure(num=fnsel_nopath, figsize=(16, 16*ar*1.2 ))  # space for title
     #ax = fig.subplots()
     
@@ -465,13 +465,13 @@ plt.rcParams['keymap.save'] = '$'
 plt.rcParams['figure.figsize'] = [12, 8]
 
 ofn = []  if len(sys.argv) < 2  else sys.argv[1]
-nfile_saved = False
 
+nfile_saved = False
 while True:
     gplot(ofn)
     if nfile_saved:
-        ofn = nfname
+        ofn = NewFname
         nfile_saved = False   # new plot
     else:
-        break
+        break   # exit as plot closed w/o new data
 
