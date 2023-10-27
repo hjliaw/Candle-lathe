@@ -5,10 +5,11 @@
 
 # what if gcode unit=inch ? shold still works, will break if mixed metric and imperial
 
-# todo: avoid curve fit when large and small sloped        
+# TODO:
+# 1. auto curve fit
 
-# After 'pip3 install PyQt5', the toolbar is moved to top of the windows
-# and figure seems to be much bigger (or could be full-screen ?) 
+# After 'pip3 install PyQt5', toolbr looks diff, window is expanded full-screen,
+# can be override with env var    "MPLBACKEND=GTK4Agg ./gplot.py  KnobReel2.gc" 
 
 import struct
 import sys
@@ -41,7 +42,7 @@ SmthdC = [[] for i in range(100)]    # plt obj, assumes FinPass < 100
 Lines=[]
 NewLines = []
 NPF = 1.5            # new points factor
-
+SDia = -1e6          # stock diameter
 nfile_saved = False
 
 # class MyToolbar(NavigationToolbar2Tk):
@@ -289,12 +290,17 @@ def smooth(lines, zrange, xrange, dir):
                 NewLines.append( line + '\n')
 
 def extract_data(lines):
+    global SDia
     xnew, znew = 0, 0
     rx, rz, fx, fz = [[] for i in range(4)]
     fin = []
     for line in lines:
         if not_real_finish(line):  fin=[]
 
+        if stdia := re.findall( r'diameter = (.?\d+.\d+)', line) :
+            SDia = float(stdia[0])
+            dbg_print( "Start diameter = %.3f" % SDia )
+            
         if xpos := re.findall( r'[X](.?\d+.\d+)', line) :
             xnew = float( xpos[0])
         if zpos := re.findall( r'[Z](.?\d+.\d+)', line) :
@@ -480,10 +486,6 @@ def gplot(fn):
     load_file( fn )
     nfile_saved = False
 
-    #ar = (abs(Xmax-Xmin)/abs(Zmax-Zmin))   NOT useful, esp after zoomed in
-    #fig = plt.figure(num=fnsel_nopath, figsize=(16, 16*ar*1.2 ))  # space for title
-    #ax = fig.subplots()
-    
     fig, ax = plt.subplots()
     fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.98)
 
@@ -493,24 +495,12 @@ def gplot(fn):
 
     fig.canvas.manager.set_window_title('gplot')
 
-    tm = fig.canvas.manager.toolmanager   # finally some tool buttons can be removed
+    tm = fig.canvas.manager.toolmanager   # finally, one whole day !
     tm.remove_tool('subplots')
     tm.remove_tool('help')
     tm.remove_tool('save')
     tm.add_tool("save", SaveGcode)
     fig.canvas.manager.toolbar.add_tool( tm.get_tool("save"), "toolgroup")
-
-    # before Qt installation, matplotlib.backends.backend_gtk4.SaveFigureGTK4
-    # after                   matplotlib.backends.backend_qt.SaveFigureQt
-    # can be changed
-    #    "MPLBACKEND=GTK4Agg ./gplot.py  KnobReel2.gc" 
-    #    "MPLBACKEND=QtAgg   ./gplot.py  KnobReel2.gc"
-
-    stm = tm.tools['save']
-    print(stm)   
-    print( type(stm) )
-
-    #sys.exit(2)
 
     plt.xlabel("Z (lathe spindle)")  # if moved into main, generate extra empty figure 
     plt.ylabel("X (cross slide)")
@@ -519,18 +509,12 @@ def gplot(fn):
     plt.gca().invert_yaxis()
     plt.gca().set_aspect('equal')
     rufcuts, = plt.plot( rz, rx, 'b--', lw=0.2, label="rough")
-    fincuts, = plt.plot( fz, fx, 'g.-', lw=1.0,   label="finish")
+    fincuts, = plt.plot( fz, fx, 'g.-', lw=1.0, label="finish")
 
-    # add button, unfortunately  mess up subsequent plt
-    #axsave = fig.add_axes([0.7, 0.05, 0.2, 0.05])
-    #img = Image.open("disk.gif")
+    if SDia > 0:  # mirrored half if stock dia is detected
+        mfx = [-SDia - x for x in fx]
+        mfincuts, = plt.plot( fz, mfx, 'k-', lw=0.2,   label="mfinish")
 
-    #axsave = ax.inset_axes([.7, -.4, .2, .1],)   # position fine, but mess up curve fit ??
-    #bsave = Button(ax=axsave, label='Save gcode' )  #, image=img)
-    #bsave.on_clicked(foo)
-
-    # gee, this is so hard to tweak,
-    
     plt.show()   # blocking
     
 #---------------------------------------------------------------------------
@@ -555,5 +539,5 @@ while True:
         ofn = NewFname
         nfile_saved = False   # new plot
     else:
-        break   # exit as plot closed w/o new data
+        break   # exit, as plot closed w/o new data to save
 
