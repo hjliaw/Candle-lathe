@@ -17,6 +17,7 @@ import os
 import time
 
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 from scipy.interpolate import UnivariateSpline
 
@@ -26,7 +27,10 @@ from tkinter import messagebox
 
 #import tkinter.ttk as ttk    # who use this ?
 
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+#from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+
+from matplotlib.backend_tools import ToolBase
+matplotlib.rcParams["toolbar"] = "toolmanager"
 
 
 Xbs = 0.0           # x-axis backlash (z-axis is not critical for lathe)
@@ -40,25 +44,25 @@ NPF = 1.5            # new points factor
 
 nfile_saved = False
 
-class MyToolbar(NavigationToolbar2Tk):
+# class MyToolbar(NavigationToolbar2Tk):
 
-    def __init__(self, canvas, parent):
-        self.toolitems = (
-            ('Home', 'Reset original view', 'home', 'home'),
-            ('Back', 'Back to previous view', 'back', 'back'),
-            ('Forward', 'Forward to next view', 'forward', 'forward'),
-            (None, None, None, None),
-            ('Pan', 'Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect', 'move', 'pan'),
-            ('Zoom', 'Zoom to rectangle\nx/y fixes axis', 'zoom_to_rect', 'zoom'),
-            ('Subplots', 'Configure subplots', 'subplots', 'configure_subplots'),
-            (None, None, None, None),
-            ('Save', 'Save g-code', 'filesave', 'mysave_file')
-        )
-        super().__init__(canvas, parent)
+#     def __init__(self, canvas, parent):
+#         self.toolitems = (
+#             ('Home', 'Reset original view', 'home', 'home'),
+#             ('Back', 'Back to previous view', 'back', 'back'),
+#             ('Forward', 'Forward to next view', 'forward', 'forward'),
+#             (None, None, None, None),
+#             ('Pan', 'Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect', 'move', 'pan'),
+#             ('Zoom', 'Zoom to rectangle\nx/y fixes axis', 'zoom_to_rect', 'zoom'),
+#             ('Subplots', 'Configure subplots', 'subplots', 'configure_subplots'),
+#             (None, None, None, None),
+#             ('Save', 'Save g-code', 'filesave', 'mysave_file')
+#         )
+#         super().__init__(canvas, parent)
 
-    def mysave_file(self):
-        print("TBD, save g-code file...")
-        msg.showwarning("Warning", "TBD, save g-code")
+#     def mysave_file(self):
+#         print("TBD, save g-code file...")
+#         msg.showwarning("Warning", "TBD, save g-code")
         
 
 def dbg_print(msg):
@@ -111,7 +115,7 @@ def save_new():
     global NewFname, NewLines, nfile_saved
     nfile_saved = False
     if not NewLines :
-        msg = "Nothing new to save. \n\nHint: right click to define region to smooth, 'v' or 'h' key to smooth"
+        msg = "Nothing new to save. \n\nHint: right clicks to define region, 'v' or 'h' key to smooth"
         messagebox.showwarning("No New Data", msg )
         return
 
@@ -448,7 +452,7 @@ def on_key(event):
     if event.key == 's':
         save_new()
         if nfile_saved:
-            msg = "G-code file \"%s\" saved\n\n click to load new file" % os.path.basename(NewFname )
+            msg = "G-code file \"%s\" saved\n\n OK to load new file" % os.path.basename(NewFname )
             messagebox.showinfo("Info", msg )
             plt.close()
 
@@ -457,6 +461,18 @@ def on_key(event):
 
 def format_coord(x,y):
     return "Z={:.2f} X={:.2f}".format(x,y)
+
+class SaveGcode(ToolBase):   # to be merged with key-event 's'
+    default_keymap = 'M'
+    description = 'Save Modified G-Code'
+    image='filesave'  # see ~/.local/lib/python3.10/site-packages/matplotlib/backend_tools.py
+    def trigger(self, *args, **kwargs):
+        save_new()
+        if nfile_saved:
+            msg = "G-code file \"%s\" saved\n\n click to load new file" % os.path.basename(NewFname )
+            messagebox.showinfo("Info", msg )
+            plt.close()
+
 
 def gplot(fn):
     global rufcuts, fincuts, fnsel_nopath, nfile_saved
@@ -476,30 +492,25 @@ def gplot(fn):
     cid = fig.canvas.mpl_connect('key_press_event', on_key)
 
     fig.canvas.manager.set_window_title('gplot')
-    
-    #fig.canvas.toolbar.save = foo  NOT working
 
-    # not working
-    # toolbar = fig.canvas.manager.toolbar
-    # print( toolbar.toolitems )
-    # toolbar.toolitems =(
-    #         ('Home', 'Reset original view', 'home', 'home'),
-    #         ('Back', 'Back to previous view', 'back', 'back'),
-    #         ('Forward', 'Forward to next view', 'forward', 'forward'),
-    #         (None, None, None, None),
-    #         ('Pan', 'Left button pans', 'move', 'pan'),
-    #         ('Zoom', 'Zoom to rectangle', 'zoom_to_rect', 'zoom'),
-    #         (None, None, None, None),
-    #         ('Save', 'Save g-code', 'filesave', 'mysave_gcde')
-    # )
-    # print( toolbar.toolitems )  # changed, no effect ?
-    # toolbar.update()
+    tm = fig.canvas.manager.toolmanager   # finally some tool buttons can be removed
+    tm.remove_tool('subplots')
+    tm.remove_tool('help')
+    tm.remove_tool('save')
+    tm.add_tool("save", SaveGcode)
+    fig.canvas.manager.toolbar.add_tool( tm.get_tool("save"), "toolgroup")
 
-    # also runs but o effect
-    #items = fig.canvas.toolbar.toolitems
-    #new_tools = [items[0], items[3], items[4], items[5]]
-    #fig.canvas.toolbar.toolitems = new_tools
-    #fig.canvas.toolbar.update()
+    # before Qt installation, matplotlib.backends.backend_gtk4.SaveFigureGTK4
+    # after                   matplotlib.backends.backend_qt.SaveFigureQt
+    # can be changed
+    #    "MPLBACKEND=GTK4Agg ./gplot.py  KnobReel2.gc" 
+    #    "MPLBACKEND=QtAgg   ./gplot.py  KnobReel2.gc"
+
+    stm = tm.tools['save']
+    print(stm)   
+    print( type(stm) )
+
+    #sys.exit(2)
 
     plt.xlabel("Z (lathe spindle)")  # if moved into main, generate extra empty figure 
     plt.ylabel("X (cross slide)")
