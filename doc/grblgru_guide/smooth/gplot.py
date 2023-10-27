@@ -7,6 +7,9 @@
 
 # todo: avoid curve fit when large and small sloped        
 
+# After 'pip3 install PyQt5', the toolbar is moved to top of the windows
+# and figure seems to be much bigger (or could be full-screen ?) 
+
 import struct
 import sys
 import re
@@ -21,6 +24,11 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
 
+#import tkinter.ttk as ttk    # who use this ?
+
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+
+
 Xbs = 0.0           # x-axis backlash (z-axis is not critical for lathe)
 FinPass = 0         # number of final passes
 Zmin, Zmax, Xmin, Xmax = -1e6, +1e6, -1e6, +1e6   # g-code range
@@ -31,6 +39,27 @@ NewLines = []
 NPF = 1.5            # new points factor
 
 nfile_saved = False
+
+class MyToolbar(NavigationToolbar2Tk):
+
+    def __init__(self, canvas, parent):
+        self.toolitems = (
+            ('Home', 'Reset original view', 'home', 'home'),
+            ('Back', 'Back to previous view', 'back', 'back'),
+            ('Forward', 'Forward to next view', 'forward', 'forward'),
+            (None, None, None, None),
+            ('Pan', 'Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect', 'move', 'pan'),
+            ('Zoom', 'Zoom to rectangle\nx/y fixes axis', 'zoom_to_rect', 'zoom'),
+            ('Subplots', 'Configure subplots', 'subplots', 'configure_subplots'),
+            (None, None, None, None),
+            ('Save', 'Save g-code', 'filesave', 'mysave_file')
+        )
+        super().__init__(canvas, parent)
+
+    def mysave_file(self):
+        print("TBD, save g-code file...")
+        msg.showwarning("Warning", "TBD, save g-code")
+        
 
 def dbg_print(msg):
     print( "    %s" % msg, file=sys.stderr )
@@ -440,11 +469,37 @@ def gplot(fn):
     #ax = fig.subplots()
     
     fig, ax = plt.subplots()
+    fig.subplots_adjust(bottom=0.05, top=0.95, left=0.05, right=0.98)
+
     ax.format_coord=format_coord
     cid = fig.canvas.mpl_connect('button_press_event', mouse_event1)
     cid = fig.canvas.mpl_connect('key_press_event', on_key)
 
     fig.canvas.manager.set_window_title('gplot')
+    
+    #fig.canvas.toolbar.save = foo  NOT working
+
+    # not working
+    # toolbar = fig.canvas.manager.toolbar
+    # print( toolbar.toolitems )
+    # toolbar.toolitems =(
+    #         ('Home', 'Reset original view', 'home', 'home'),
+    #         ('Back', 'Back to previous view', 'back', 'back'),
+    #         ('Forward', 'Forward to next view', 'forward', 'forward'),
+    #         (None, None, None, None),
+    #         ('Pan', 'Left button pans', 'move', 'pan'),
+    #         ('Zoom', 'Zoom to rectangle', 'zoom_to_rect', 'zoom'),
+    #         (None, None, None, None),
+    #         ('Save', 'Save g-code', 'filesave', 'mysave_gcde')
+    # )
+    # print( toolbar.toolitems )  # changed, no effect ?
+    # toolbar.update()
+
+    # also runs but o effect
+    #items = fig.canvas.toolbar.toolitems
+    #new_tools = [items[0], items[3], items[4], items[5]]
+    #fig.canvas.toolbar.toolitems = new_tools
+    #fig.canvas.toolbar.update()
 
     plt.xlabel("Z (lathe spindle)")  # if moved into main, generate extra empty figure 
     plt.ylabel("X (cross slide)")
@@ -452,9 +507,19 @@ def gplot(fn):
     
     plt.gca().invert_yaxis()
     plt.gca().set_aspect('equal')
-    rufcuts, = plt.plot( rz, rx, 'b--',  lw=0.2, label="rough")
-    fincuts, = plt.plot( fz, fx, 'g.-', lw=1, label="finish")
+    rufcuts, = plt.plot( rz, rx, 'b--', lw=0.2, label="rough")
+    fincuts, = plt.plot( fz, fx, 'g.-', lw=1.0,   label="finish")
 
+    # add button, unfortunately  mess up subsequent plt
+    #axsave = fig.add_axes([0.7, 0.05, 0.2, 0.05])
+    #img = Image.open("disk.gif")
+
+    #axsave = ax.inset_axes([.7, -.4, .2, .1],)   # position fine, but mess up curve fit ??
+    #bsave = Button(ax=axsave, label='Save gcode' )  #, image=img)
+    #bsave.on_clicked(foo)
+
+    # gee, this is so hard to tweak,
+    
     plt.show()   # blocking
     
 #---------------------------------------------------------------------------
@@ -464,11 +529,10 @@ def gplot(fn):
 root = tk.Tk()
 root.withdraw()
 
+plt.rcParams['keymap.home'] = 'A'      # 'h' fit
+plt.rcParams['keymap.forward'] = 'W'   # 'v' fit
+plt.rcParams['keymap.save'] = '$'      # 's' to save g-code, not figure
 plt.rcParams['keymap.zoom'] = 'z'
-plt.rcParams['keymap.home'] = 'A'      # 'h'-fit no zoom out
-plt.rcParams['keymap.forward'] = 'W'   # 'v'-fit no forward
-plt.rcParams['keymap.save'] = '$'
-
 plt.rcParams['figure.figsize'] = [12, 8]
 
 ofn = []  if len(sys.argv) < 2  else sys.argv[1]
